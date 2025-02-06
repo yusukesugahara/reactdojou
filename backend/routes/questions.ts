@@ -1,37 +1,37 @@
-const express = require('express');
-const mongoose = require('mongoose');
+import express, { Request, Response,  NextFunction } from "express";
+
+import mongoose from "mongoose";
 const Question = require('../models/Question');
 const Collection = require('../models/Collection');
 const router = express.Router();
 
 // ランダムな問題を取得
-router.get('/random', async (req, res) => {
+router.get('/random', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { collectionId } = req.query;
 
   try {
-    // collectionId を ObjectId に変換
-    const objectId = mongoose.Types.ObjectId.isValid(collectionId)
-      ? new mongoose.Types.ObjectId(collectionId)
-      : null;
-
-    if (!objectId) {
-      return res.status(400).json({ message: '無効なコレクションIDです' });
+    // collectionId の検証
+    if (!mongoose.Types.ObjectId.isValid(collectionId as string)) {
+      res.status(400).json({ message: '無効なコレクションIDです' });
+      return;
     }
 
-    const collection = await Collection.findById(objectId);
-
+    // コレクションの取得
+    const collection = await Collection.findById(collectionId);
     if (!collection) {
-      return res.status(404).json({ message: 'コレクションが見つかりませんでした' });
+      res.status(404).json({ message: 'コレクションが見つかりませんでした' });
+      return;
     }
 
     // ランダムな問題を取得
     const randomQuestion = await Question.aggregate([
-      { $match: { _id: { $in: collection.questionIds } } },
+      { $match: { collectionId: new mongoose.Types.ObjectId(collectionId as string) } },
       { $sample: { size: 1 } },
     ]);
 
     if (randomQuestion.length === 0) {
-      return res.status(404).json({ message: '問題が見つかりませんでした' });
+      res.status(404).json({ message: '問題が見つかりませんでした' });
+      return;
     }
 
     res.json(randomQuestion[0]);
@@ -56,7 +56,7 @@ router.get('/', async (req, res) => {
 module.exports = router;
 
 
-router.post('/:id/submit', async (req, res) => {
+router.post('/:id/submit', async (req: Request, res: Response, next: NextFunction): Promise<void> =>{
   const { id } = req.params;
   const { answer } = req.body;
 
@@ -64,12 +64,16 @@ router.post('/:id/submit', async (req, res) => {
     const question = await Question.findById(id);
 
     if (!question) {
-      return res.status(404).json({ message: '問題が見つかりませんでした' });
+      res.status(404).json({ message: '問題が見つかりませんでした' });
+      return;
     }
 
     const isCorrect = question.answerCode === parseInt(answer, 10);
 
-    res.json({ correct: isCorrect });
+    res.json({ 
+      correct: isCorrect,
+      correctNumber: question.answerCode,
+    });
   } catch (error) {
     console.error('正解判定エラー:', error);
     res.status(500).json({ message: '正解判定に失敗しました' });

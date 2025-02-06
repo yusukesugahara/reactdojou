@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 // サブスキーマ定義: { number, text } の形
 const OptionSchema = new mongoose.Schema(

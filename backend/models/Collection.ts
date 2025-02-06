@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const CollectionSchema = new mongoose.Schema({
   name: { type: String, required: true }, // 問題集名
