@@ -5,4 +5,4 @@ const CollectionSchema = new mongoose.Schema({
   description: { type: String }, // 問題集の説明
 });
 
-module.exports = mongoose.model('Collection', CollectionSchema);
+export default mongoose.model('Collection', CollectionSchema);
