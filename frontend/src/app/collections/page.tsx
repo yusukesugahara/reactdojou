@@ -2,13 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
-type Collection = {
-  id: string;
-  name: string;
-  description: string;
-  questionCount?: number;
-};
+import { Collection } from "@/app/type/collections";
 
 export default function CollectionsPage() {
   const [collections, setCollections] = useState<Collection[]>([]);

@@ -1,16 +1,10 @@
 import express, { Request, Response,  NextFunction } from "express";
 import mongoose from "mongoose";
-const Collection = require('../models/Collection');
-const Question = require('../models/Question');
+import Collection from "../models/Collection";
+import Question from "../models/Question";
 
 const router = express.Router();
 
-type Collection = {
-  _id: string;
-  name: string;
-  description: string,
-  count: number,
-}
 
 // 問題集一覧を取得
 router.get('/', async (req, res) => {
@@ -19,7 +13,7 @@ router.get('/', async (req, res) => {
 
     // 各問題集に属する問題数をカウント
     const result = await Promise.all(
-      collections.map(async (collection: Collection) => {
+      collections.map(async (collection) => {
         const count = await Question.countDocuments({ collectionId: collection._id });
         return {
           id: collection._id,

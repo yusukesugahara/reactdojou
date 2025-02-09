@@ -1,14 +1,14 @@
 import express, { Request, Response,  NextFunction } from "express";
 
 import mongoose from "mongoose";
-const Question = require('../models/Question');
-const Collection = require('../models/Collection');
+import Question from '../models/Question';
+import Collection from '../models/Collection';
 const router = express.Router();
 
 // ランダムな問題を取得
 router.get('/random', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { collectionId } = req.query;
-
+  
   try {
     // collectionId の検証
     if (!mongoose.Types.ObjectId.isValid(collectionId as string)) {
@@ -17,7 +17,7 @@ router.get('/random', async (req: Request, res: Response, next: NextFunction): P
     }
 
     // コレクションの取得
-    const collection = await Collection.findById(collectionId);
+    const collection = await Collection.findById(new mongoose.Types.ObjectId(collectionId as string));
     if (!collection) {
       res.status(404).json({ message: 'コレクションが見つかりませんでした' });
       return;

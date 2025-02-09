@@ -18,7 +18,6 @@ export default function DashboardPage() {
         console.error('問題集の取得に失敗しました:', error);
       }
     };
-
     fetchCollections();
   }, []);
 

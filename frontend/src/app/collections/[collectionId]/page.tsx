@@ -8,7 +8,6 @@ export default function QuizPage({ params }: QuizPageProps) {
   // URL パラメータから collectionId を取得
   const paramsData = React.use(params);
   const collectionId = paramsData.collectionId;
-  const router = useRouter();
 
   // 状態管理
   const [question, setQuestion] = useState<Question | null>(null);
