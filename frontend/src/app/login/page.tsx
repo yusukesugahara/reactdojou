@@ -3,12 +3,7 @@
 import { login } from '@/app/actions/auth'
 import { useActionState, useEffect } from 'react'
 import { useRouter } from "next/navigation";
-
-type ErrorResponse = {
-  email?: string[];
-  password?: string[];
-  general?: string[];
-};
+import { ErrorResponse } from "@/app/type/errorResponse"; 
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(login as any, { success: false, errors: {} as ErrorResponse});

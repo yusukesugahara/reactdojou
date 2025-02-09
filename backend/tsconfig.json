@@ -4,7 +4,8 @@
     "target": "es2019",
     "outDir": "dist",
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "types": ["node"]
   },
   "include": ["server.ts"]  // もしくは "include": ["./**/*.ts"]
 }

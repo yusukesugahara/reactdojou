@@ -29,4 +29,4 @@ const QuestionSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Question', QuestionSchema);
+export default mongoose.model('Question', QuestionSchema);
