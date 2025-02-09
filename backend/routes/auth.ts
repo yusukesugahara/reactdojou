@@ -1,19 +1,19 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
+import express, { Request, Response,  NextFunction } from "express";
+import bcrypt from "bcryptjs";
 const User = require('../models/User');
 
 const router = express.Router();
 
 // サインアップエンドポイント
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { name, email, password } = req.body;
 
-  const bodyText = await request.text(); // リクエストボディをテキスト形式で確認
-  console.log('リクエストボディ:', bodyText);
+  const bodyText = await req.body; // リクエストボディをテキスト形式で確認
 
   // 入力バリデーション
   if (!name || !email || !password) {
-    return res.status(400).json({ message: 'すべてのフィールドを入力してください' });
+     res.status(400).json({ message: 'すべてのフィールドを入力してください' });
+     return;
   }
   
 
@@ -21,7 +21,8 @@ router.post('/signup', async (req, res) => {
     // 既存ユーザーの確認
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'このメールアドレスは既に登録されています' });
+      res.status(409).json({ message: 'このメールアドレスは既に登録されています' });
+      return;
     }
 
     // パスワードのハッシュ化
@@ -52,25 +53,28 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
 // ログインエンドポイント
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, password } = req.body;
 
   // 入力バリデーション
   if (!email || !password) {
-    return res.status(400).json({ message: 'すべてのフィールドを入力してください' });
+    res.status(400).json({ message: 'すべてのフィールドを入力してください' });
+    return;
   }
 
   try {
     // ユーザーをデータベースから検索
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'ユーザーが見つかりません' });
+      res.status(404).json({ message: 'ユーザーが見つかりません' });
+      return;
     }
 
     // パスワードを検証
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'パスワードが正しくありません' });
+      res.status(401).json({ message: 'パスワードが正しくありません' });
+      return;
     }
 
     // JWTトークンを生成

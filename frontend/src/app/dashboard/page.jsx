@@ -4,11 +4,22 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  const [user, setUser] = useState(null);
+  const [collections, setCollections] = useState([]); 
 
   useEffect(() => {
-    // 仮のユーザーデータ
-    setUser({ name: '山田 太郎' });
+    // 問題集データの取得
+    const fetchCollections = async () => {
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        const response = await fetch(`${backendUrl}/api/collections`);
+        const data = await response.json();
+        setCollections(data);
+      } catch (error) {
+        console.error('問題集の取得に失敗しました:', error);
+      }
+    };
+
+    fetchCollections();
   }, []);
 
   return (
@@ -17,9 +28,6 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold">ダッシュボード</h1>
       </header>
       <main className="w-full max-w-4xl p-5">
-        <h2 className="text-2xl font-bold mb-4">
-          ようこそ、{user?.name || 'ユーザー'} さん！
-        </h2>
         <nav className="space-y-4">
           <Link
             href="/quiz"
@@ -33,13 +41,33 @@ export default function DashboardPage() {
           >
             プロフィールを編集
           </Link>
-          <Link
-            href="/quiz/create"
-            className="block bg-red-500 text-white py-3 text-center rounded hover:bg-red-600"
-          >
-            クイズを作成する
-          </Link>
         </nav>
+        <section>
+          <h3 className="text-xl font-bold mb-4 mt-4">問題集一覧</h3>
+          {collections.length === 0 ? (
+            <p className="text-gray-700">問題集が見つかりません。</p>
+          ) : (
+            <ul className="space-y-3">
+              {collections.map((collection) => (
+                <li
+                  key={collection.id}
+                  className="bg-white p-4 shadow rounded flex justify-between items-center"
+                >
+                  <div>
+                    <h4 className="text-lg font-bold">{collection.name}</h4>
+                    <p className="text-gray-600">{collection.description}</p>
+                  </div>
+                  <Link
+                    href={`/collections/${collection.id}`}
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                  >
+                    選択
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </main>
     </div>
   );
