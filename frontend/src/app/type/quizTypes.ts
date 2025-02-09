@@ -5,8 +5,9 @@ type Params = {
 
 export type QuizPageProps = {
   // params が Promise<Params> として渡される場合
-  params: Promise<Params>;
-  collectionId: string;
+  params: {
+    collectionId: string;
+  };
 };
 
 // 各選択肢の型定義

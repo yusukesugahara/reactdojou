@@ -2,12 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { QuizPageProps, Option, Question } from "@/app/type/quizTypes"
+import { QuizPageProps, Option, Question } from "@/app/type/quizTypes";
+
+/**
+ * 進捗ベースで1問ずつ問題を取得し、回答を送信するサンプル
+ * - GET /questions/:collectionId?userId=... : Progressがなければ作成し、次の問題を返す
+ * - POST /questions/:collectionId/questions/:questionId/submit : 回答を送信して正誤判定
+ */
 
 export default function QuizPage({ params }: QuizPageProps) {
   // URL パラメータから collectionId を取得
-  const paramsData = React.use(params);
-  const collectionId = paramsData.collectionId;
+  const { collectionId } = params;
+
+  // ユーザーID (本来はログイン情報から取得)
+  const [userId] = useState("USER_123");
 
   // 状態管理
   const [question, setQuestion] = useState<Question | null>(null);
@@ -17,8 +25,13 @@ export default function QuizPage({ params }: QuizPageProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
-  // 問題をバックエンドから取得する関数
+  // クイズが完了したかどうか
+  const [completed, setCompleted] = useState<boolean>(false);
+
+  // ---- 問題をバックエンドから取得する関数 ----
   const fetchQuestion = async () => {
+    if (!collectionId || !userId) return;
+
     setLoading(true);
     setError("");
     setFeedback("");
@@ -27,14 +40,26 @@ export default function QuizPage({ params }: QuizPageProps) {
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      // Progress管理で次の問題を取得するルート
+      // 例: GET /questions/:collectionId?userId=USER_123
       const response = await fetch(
-        `${backendUrl}/api/questions/random?collectionId=${collectionId}`
+        `${backendUrl}/api/questions/${collectionId}?userId=${userId}`
       );
       const data = await response.json();
+
       if (!response.ok || !data) {
-        throw new Error(data.message || "問題が見つかりませんでした");
+        throw new Error(data.message || "問題が取得できませんでした");
       }
-      setQuestion(data as Question);
+
+      if (data.completed) {
+        // すでに全問終了
+        setCompleted(true);
+        setQuestion(null);
+      } else {
+        // 取得した問題を state にセット
+        setQuestion(data.question);
+        setCompleted(false);
+      }
     } catch (err: any) {
       console.error("クイズの取得に失敗しました:", err);
       setError(err.message || "クイズの取得に失敗しました");
@@ -43,14 +68,14 @@ export default function QuizPage({ params }: QuizPageProps) {
     }
   };
 
-  // 初回および collectionId 変更時に問題を取得
+  // 初回 or collectionId 変更時に問題を取得
   useEffect(() => {
     if (collectionId) {
       fetchQuestion();
     }
   }, [collectionId]);
 
-  // 回答送信処理
+  // ---- 回答送信処理 ----
   const handleSubmit = async () => {
     if (!selectedOption) {
       setFeedback("選択肢を選んでください");
@@ -64,8 +89,9 @@ export default function QuizPage({ params }: QuizPageProps) {
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      // 回答送信ルート: POST /questions/:collectionId/questions/:questionId/submit
       const response = await fetch(
-        `${backendUrl}/api/questions/${question._id}/submit`,
+        `${backendUrl}/api/questions/${collectionId}/questions/${question._id}/submit`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -73,6 +99,7 @@ export default function QuizPage({ params }: QuizPageProps) {
         }
       );
       const result = await response.json();
+
       if (!response.ok) {
         throw new Error(result.message || "回答送信エラー");
       }
@@ -80,7 +107,7 @@ export default function QuizPage({ params }: QuizPageProps) {
       const isCorrect: boolean = result.correct;
       const correctNumber: number = result.correctNumber;
 
-      // 選択肢リストから正解の選択肢を番号で検索
+      // 選択肢リストから正解の選択肢を検索
       const correctOption = question.options.find(
         (opt) => opt.number === correctNumber
       );
@@ -102,12 +129,13 @@ export default function QuizPage({ params }: QuizPageProps) {
     }
   };
 
-  // 次の問題へ移動
+  // ---- 次の問題へ移動 ----
+  // 再度 fetchQuestion() を呼び、バックエンドがProgressを進める
   const handleNextQuestion = () => {
     fetchQuestion();
   };
 
-  // ローディング中は読み込み中メッセージを表示
+  // ローディング中は読み込み中メッセージ
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -116,20 +144,38 @@ export default function QuizPage({ params }: QuizPageProps) {
     );
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
+
+  // 全問完了している場合
+  if (completed) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-blue-600 text-lg">全ての問題が終了しました！</p>
+      </div>
+    );
+  }
+
+  // 問題表示
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50">
       <div className="max-w-2xl w-full p-6 bg-white shadow rounded mt-10">
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-
         {question ? (
           <>
-            {/* 問題集名および問題番号の表示 */}
+            {/* 問題集名 & 問題番号 */}
             <div className="mb-4 text-gray-700">
               <span className="font-bold mr-2">
                 {question.collectionName || "問題集"}
               </span>
               {question.totalQuestions
-                ? ` (${question.totalQuestions}問中${question.currentIndex || 1}問目)`
+                ? ` (${question.totalQuestions}問中${
+                    question.currentIndex || 1
+                  }問目)`
                 : ""}
             </div>
 
@@ -174,7 +220,7 @@ export default function QuizPage({ params }: QuizPageProps) {
 
             {feedback && <p className="mt-4 text-center">{feedback}</p>}
 
-            {/* 回答後、常に解説を表示 */}
+            {/* 回答後に解説を表示 */}
             {isAnswered && (
               <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
                 <h3 className="font-bold mb-2">解説</h3>
@@ -182,7 +228,7 @@ export default function QuizPage({ params }: QuizPageProps) {
               </div>
             )}
 
-            {/* 回答後、次の問題へボタンを表示 */}
+            {/* 次の問題へ */}
             {isAnswered && (
               <button
                 onClick={handleNextQuestion}
