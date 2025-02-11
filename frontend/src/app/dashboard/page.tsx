@@ -1,25 +1,65 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Collection } from "@/app/type/collections";
+import Link from "next/link";
 
 export default function DashboardPage() {
-  const [collections, setCollections] = useState([]); 
+  const [collections, setCollections] = useState<Array<Collection>>([]);
+  const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
-    // 問題集データの取得
-    const fetchCollections = async () => {
+    // データをまとめて取得する関数
+    async function fetchData() {
       try {
+        // 1) ログイン確認
+        const checkRes = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/check`,
+          { credentials: "include" } // Cookieを送信
+        );
+        if (!checkRes.ok) {
+          // 未ログイン or トークン無効
+          setAuthError("ログインが必要です");
+          return;
+        }
+
+        // 2) 問題集データの取得
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-        const response = await fetch(`${backendUrl}/api/collections`);
-        const data = await response.json();
+        const res = await fetch(`${backendUrl}/api/collections`, {
+          credentials: "include", // Cookie送信
+        });
+        if (!res.ok) {
+          throw new Error("問題集の取得に失敗しました");
+        }
+        const data = await res.json();
         setCollections(data);
       } catch (error) {
-        console.error('問題集の取得に失敗しました:', error);
+        console.error("エラー:", error);
+      } finally {
+        setLoading(false);
       }
-    };
-    fetchCollections();
+    }
+
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (authError) {
+      // ログインしていなければログインページへ
+      router.push("/login");
+    }
+  }, [authError, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p>読み込み中...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50">

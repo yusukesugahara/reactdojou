@@ -1,5 +1,6 @@
 import express, { Request, Response,  NextFunction } from "express";
 import mongoose from "mongoose";
+import { decodeJwt } from 'jose';
 import Collection from "../models/Collection";
 import Question from "../models/Question";
 import Progress from '../models/Progress';
@@ -14,12 +15,16 @@ router.get('/', async (req: Request, res: Response): Promise<void> =>  {
   try {
     // ユーザーIDをクエリパラメータで受け取る (例: /?userId=USER_123)
     // 実際にはJWTやセッションから取得するなど要件に合わせて実装
-    const { userId } = req.query;
+    const user = decodeJwt(req.cookies?.authToken || '');
+    const userId = user.id;
+    if (!userId) {
+      res.status(401).json({ message: 'ログインしてください' });
+      return;
+    }
     if (!userId) {
       res.status(400).json({ message: 'userId が必要です' });
       return ;
     }
-
     // 全コレクション(問題集)を取得
     const collections = await Collection.find();
 
