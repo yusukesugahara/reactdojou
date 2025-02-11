@@ -1,6 +1,6 @@
 import express, { Request, Response,  NextFunction } from "express";
-
 import mongoose from "mongoose";
+import { decodeJwt } from 'jose';
 import Question from '../models/Question';
 import Collection from '../models/Collection';
 import Progress from '../models/Progress';
@@ -15,10 +15,11 @@ const router = express.Router();
  * - あれば currentIndex の問題を返し、次の問題へ進める (currentIndex++)
  * - 全問題を解き終わったら completed=true
  */
-router.get('/questions/:collectionId', async (req: Request, res: Response): Promise<void> => {
+router.get('/:collectionId', async (req: Request, res: Response): Promise<void> => {
   try {
     const { collectionId } = req.params;
-    const { userId } = req.query; // 例: /questions/abc123?userId=USER_01
+    const user = decodeJwt(req.cookies?.authToken || '');
+    const userId = user.id;
 
     if (!userId) {
       res.status(400).json({ message: 'userIdが必要です' });
@@ -136,7 +137,7 @@ router.get('/questions/:collectionId', async (req: Request, res: Response): Prom
 router.post('/:id/submit', async (req: Request, res: Response, next: NextFunction): Promise<void> =>{
   const { id } = req.params;
   const { answer } = req.body;
-
+  console.log(res)
   try {
     const question = await Question.findById(id);
 

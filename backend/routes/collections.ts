@@ -7,14 +7,9 @@ import Progress from '../models/Progress';
 
 const router = express.Router();
 
-/**
- * 問題集一覧 (ユーザーの進捗や何周クリアしたか込みで返す)
- * GET /?userId=xxx
- */
 router.get('/', async (req: Request, res: Response): Promise<void> =>  {
   try {
-    // ユーザーIDをクエリパラメータで受け取る (例: /?userId=USER_123)
-    // 実際にはJWTやセッションから取得するなど要件に合わせて実装
+
     const user = decodeJwt(req.cookies?.authToken || '');
     const userId = user.id;
     if (!userId) {

@@ -1,17 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { QuizPageProps, Question } from "@/app/type/quizTypes";
+import { getQuestionServerAction, getQuestionAnswerServerAction } from "@/app/collections/[collectionId]/actions";
+import { Question } from "@/app/type/quizTypes";
 
-export default function QuizPage({ params }: QuizPageProps) {
-  const { collectionId } = params;
+type QuizPageClientProps = {
+};
 
-  // ユーザーIDを持たせるステート
-  const [userId, setUserId] = useState<string | null>(null);
-  const [authError, setAuthError] = useState<string>("");
-
-  // クイズ用の状態管理
+export default function QuizPage({ params }: { params: Promise<{ collectionId: string }> }) {
+  // -----------------------------
+  // State管理やuseEffectなど、すべてクライアント側で使える
+  // -----------------------------
+  const collectionId  = use(params).collectionId;
+  console.log(collectionId)
+  // クイズ関連
   const [question, setQuestion] = useState<Question | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
@@ -20,42 +23,11 @@ export default function QuizPage({ params }: QuizPageProps) {
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
 
-  const router = useRouter();
-
   // -----------------------------
-  // 1) ログインチェック
-  // -----------------------------
-  useEffect(() => {
-    async function checkLogin() {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/check`,
-          {
-            // Cookieを送受信
-            credentials: "include",
-          }
-        );
-        if (!res.ok) {
-          // 未ログイン or トークン無効など
-          setAuthError("ログインが必要です。");
-          return;
-        }
-        const data = await res.json();
-        // 例: data.user.id がユーザーID
-        setUserId(data.user.id);
-      } catch (err) {
-        console.error(err);
-        setAuthError("認証情報を取得できませんでした。");
-      }
-    }
-    checkLogin();
-  }, []);
-
-  // -----------------------------
-  // 2) 問題を取得する関数
+  // 1) 問題を取得
   // -----------------------------
   const fetchQuestion = async () => {
-    if (!collectionId || !userId) return; // userId がまだ null なら待機
+    if (!collectionId) return;
 
     setLoading(true);
     setError("");
@@ -64,18 +36,9 @@ export default function QuizPage({ params }: QuizPageProps) {
     setIsAnswered(false);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      // クイズ取得 (Progress管理)
-      // GET /questions/:collectionId?userId=USERID
-      const response = await fetch(
-        `${backendUrl}/api/questions/${collectionId}?userId=${userId}`,
-        {
-          credentials: "include", // Cookie送受信
-        }
-      );
-      const data = await response.json();
+      const data = await getQuestionServerAction(collectionId);
 
-      if (!response.ok || !data) {
+      if (!data) {
         throw new Error(data.message || "問題が取得できませんでした");
       }
 
@@ -88,7 +51,7 @@ export default function QuizPage({ params }: QuizPageProps) {
         setCompleted(false);
       }
     } catch (err: any) {
-      console.error("クイズの取得に失敗しました:", err);
+      console.error("クイズの取得に失敗:", err);
       setError(err.message || "クイズの取得に失敗しました");
     } finally {
       setLoading(false);
@@ -96,18 +59,17 @@ export default function QuizPage({ params }: QuizPageProps) {
   };
 
   // -----------------------------
-  // 3) 初回 or collectionId 変更時に fetchQuestion 呼び出し
+  // 2) 初回 & collectionId 変更時の呼び出し
   // -----------------------------
   useEffect(() => {
-    // userId がセットされた後に fetchQuestion を呼ぶ
-    // (userId が null の間は呼ばない)
-    if (collectionId && userId) {
+    // CookieにトークンがあるかどうかをチェックするならここでOK
+    if (collectionId) {
       fetchQuestion();
     }
-  }, [collectionId, userId]);
+  }, [collectionId]);
 
   // -----------------------------
-  // 4) 回答送信処理
+  // 3) 回答送信
   // -----------------------------
   const handleSubmit = async () => {
     if (!selectedOption) {
@@ -120,21 +82,7 @@ export default function QuizPage({ params }: QuizPageProps) {
     }
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      const response = await fetch(
-        `${backendUrl}/api/questions/${collectionId}/questions/${question._id}/submit`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include", // Cookie送受信
-          body: JSON.stringify({ answer: selectedOption }),
-        }
-      );
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "回答送信エラー");
-      }
+      const result = await getQuestionAnswerServerAction(collectionId, question._id, selectedOption )
 
       const isCorrect = result.correct;
       const correctNumber = result.correctNumber;
@@ -154,43 +102,27 @@ export default function QuizPage({ params }: QuizPageProps) {
 
       setIsAnswered(true);
     } catch (error: any) {
-      console.error("回答の送信に失敗しました:", error);
+      console.error("回答の送信に失敗:", error);
       setFeedback("回答の送信に失敗しました");
     }
   };
 
   // -----------------------------
-  // 5) 次の問題へ
+  // 4) 次の問題へ
   // -----------------------------
   const handleNextQuestion = () => {
     fetchQuestion();
   };
 
   // -----------------------------
-  // 6) UI描画
+  // 5) UI描画
   // -----------------------------
-  // ログインエラー時
-  if (authError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-red-500">{authError}</p>
-        <button onClick={() => router.push("/login")} className="ml-4">
-          ログインへ
-        </button>
-      </div>
-    );
-  }
-
   // ローディング中
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p>読み込み中...</p>
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center">読み込み中...</div>;
   }
 
-  // エラー(問題取得エラーなど)
+  // エラー
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -214,14 +146,13 @@ export default function QuizPage({ params }: QuizPageProps) {
       <div className="max-w-2xl w-full p-6 bg-white shadow rounded mt-10">
         {question ? (
           <>
+            {/* タイトルや問題文 */}
             <div className="mb-4 text-gray-700">
               <span className="font-bold mr-2">
                 {question.collectionName || "問題集"}
               </span>
               {question.totalQuestions
-                ? ` (${question.totalQuestions}問中${
-                    question.currentIndex || 1
-                  }問目)`
+                ? ` (${question.totalQuestions}問中${question.currentIndex || 1}問目)`
                 : ""}
             </div>
 
@@ -235,6 +166,7 @@ export default function QuizPage({ params }: QuizPageProps) {
               </pre>
             )}
 
+            {/* 選択肢 */}
             <div className="space-y-2 mb-4">
               {question.options.map((option) => (
                 <label key={option.number} className="block">
@@ -252,6 +184,7 @@ export default function QuizPage({ params }: QuizPageProps) {
               ))}
             </div>
 
+            {/* 回答ボタン */}
             <button
               onClick={handleSubmit}
               className={`w-full py-2 rounded ${
@@ -264,8 +197,10 @@ export default function QuizPage({ params }: QuizPageProps) {
               {isAnswered ? "回答済み" : "回答を送信"}
             </button>
 
+            {/* フィードバック */}
             {feedback && <p className="mt-4 text-center">{feedback}</p>}
 
+            {/* 解説 */}
             {isAnswered && (
               <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
                 <h3 className="font-bold mb-2">解説</h3>
@@ -273,6 +208,7 @@ export default function QuizPage({ params }: QuizPageProps) {
               </div>
             )}
 
+            {/* 次の問題ボタン */}
             {isAnswered && (
               <button
                 onClick={handleNextQuestion}

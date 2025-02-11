@@ -28,9 +28,8 @@ export default function DashboardPage() {
 
         // 2) 問題集データの取得
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-        const res = await fetch(`${backendUrl}/api/collections`, {
-          credentials: "include", // Cookie送信
-        });
+        const res = await fetch(`${backendUrl}/api/collections`, 
+          {credentials: "include",});
         if (!res.ok) {
           throw new Error("問題集の取得に失敗しました");
         }
