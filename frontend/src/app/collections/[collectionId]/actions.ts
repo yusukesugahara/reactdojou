@@ -35,8 +35,7 @@ export async function getQuestionAnswerServerAction(collectionId: string, questi
   // クライアントの Cookie からトークンを取得
   const cookieStore = await cookies();
   const authToken = cookieStore.get("authToken")?.value || "";
-  console.log(selectedOption)
-  console.log(questionId)
+
   // 外部の Express API にリクエスト
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const res = await fetch(`${backendUrl}/api/questions/${questionId}/submit`, {
