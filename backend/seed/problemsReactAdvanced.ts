@@ -1808,4 +1808,4 @@ function handleEvent(e) {
   }
 ];
 
-module.exports = problemsReactAdvanced;
+export default  problemsReactAdvanced;

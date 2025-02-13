@@ -2022,4 +2022,4 @@ function Greeting() {
   }
 ]
 
-module.exports = problemsReactBeginner;
+export default  problemsReactBeginner;

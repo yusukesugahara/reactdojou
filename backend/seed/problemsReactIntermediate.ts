@@ -1948,4 +1948,4 @@ function App() {
   }
 ];
 
-module.exports = problemsReactIntermediate;
+export default  problemsReactIntermediate;
