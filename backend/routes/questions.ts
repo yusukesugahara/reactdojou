@@ -4,6 +4,7 @@ import { decodeJwt } from 'jose';
 import Question from '../models/Question';
 import Collection from '../models/Collection';
 import Progress from '../models/Progress';
+import Result from '../models/Result';
 const router = express.Router();
 
 
@@ -135,12 +136,11 @@ router.get('/:collectionId', async (req: Request, res: Response): Promise<void> 
   }
 });
 
-router.post('/:id/submit', async (req: Request, res: Response, next: NextFunction): Promise<void> =>{
-  const { id } = req.params;
-  const { answer } = req.body;
+router.post('/submit', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { answer, userId, questionId } = req.body;
 
   try {
-    const question = await Question.findById(id);
+    const question = await Question.findById(questionId);
 
     if (!question) {
       res.status(404).json({ message: '問題が見つかりませんでした' });
@@ -149,10 +149,16 @@ router.post('/:id/submit', async (req: Request, res: Response, next: NextFunctio
 
     const isCorrect = question.answerCode === parseInt(answer, 10);
 
-    res.json({ 
-      correct: isCorrect,
+    // 成績をデータベースに記録
+    const result = new Result({ userId, questionId, isCorrect });
+    await result.save();
+
+    res.json({
+      message: "回答が記録されました",
+      isCorrect,
       correctNumber: question.answerCode,
     });
+
   } catch (error) {
     console.error('正解判定エラー:', error);
     res.status(500).json({ message: '正解判定に失敗しました' });

@@ -88,6 +88,14 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction): P
       maxAge: 3600 * 1000, // 1時間 (ミリ秒)
       sameSite: "lax", 
     });
+        
+    // **ユーザーIDを別のクッキーに保存**
+    res.cookie("userId", user._id.toString(), {
+      httpOnly: true, // JavaScriptからのアクセスを禁止
+      // secure: process.env.NODE_ENV === "production",
+      maxAge: 3600 * 1000, // 1時間 (ミリ秒)
+      sameSite: "lax",
+    });
 
     res.status(200).json({ message: "ログイン成功" });
   } catch (error) {

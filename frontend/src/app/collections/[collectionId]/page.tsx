@@ -83,7 +83,7 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
     try {
       const result = await getQuestionAnswerServerAction(collectionId, question._id, selectedOption )
 
-      const isCorrect = result.correct;
+      const isCorrect = result.isCorrect;
       const correctNumber = result.correctNumber;
       const correctOption = question.options.find(
         (opt) => opt.number === correctNumber
