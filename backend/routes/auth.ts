@@ -149,4 +149,4 @@ router.get('/check', async (req: Request, res: Response, next: NextFunction): Pr
 });
 
 
-module.exports = router;
+export default router; 

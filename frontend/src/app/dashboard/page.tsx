@@ -68,16 +68,16 @@ export default function DashboardPage() {
       <main className="w-full max-w-4xl p-5">
         <nav className="space-y-4">
           <Link
-            href="/quiz"
-            className="block bg-yellow-500 text-white py-3 text-center rounded hover:bg-yellow-600"
-          >
-            クイズを始める
-          </Link>
-          <Link
             href="/profile"
             className="block bg-green-500 text-white py-3 text-center rounded hover:bg-green-600"
           >
             プロフィールを編集
+          </Link>
+          <Link
+            href="/results"
+            className="block bg-pink-500 text-white py-3 text-center rounded hover:bg-pink-600"
+          >
+           成績表
           </Link>
         </nav>
         <section>

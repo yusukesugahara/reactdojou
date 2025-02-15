@@ -34,7 +34,7 @@ export async function getQuestionAnswerServerAction(collectionId: string, questi
   const cookieStore = await cookies();
   const authToken = cookieStore.get("authToken")?.value || "";
   const userId = cookieStore.get("userId")?.value || "";
-  console.log(userId)
+
   // 外部の Express API にリクエスト
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const res = await fetch(`${backendUrl}/api/questions/submit`, {

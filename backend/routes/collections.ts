@@ -84,4 +84,4 @@ router.post('/:collectionId/questions/:questionId/submit', async (req: Request, 
   }
 });
 
-module.exports = router;
+export default router; 

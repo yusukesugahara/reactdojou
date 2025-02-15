@@ -5,9 +5,10 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser"; // ← 追加
 
 // ルート
-const authRoutes = require("./routes/auth");
-const questionRoutes = require("./routes/questions");
-const collectionRoutes = require("./routes/collections");
+import authRoutes from "./routes/auth";
+import questionRoutes from "./routes/questions";
+import collectionRoutes from "./routes/collections";
+import resultsRoutes from "./routes/results";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/collections", collectionRoutes);
+app.use("/api/results", resultsRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
