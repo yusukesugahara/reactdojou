@@ -4,19 +4,17 @@ import React, { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getQuestionServerAction, getQuestionAnswerServerAction } from "@/app/collections/[collectionId]/actions";
 import { Question } from "@/app/type/quizTypes";
-
-type QuizPageClientProps = {
-};
+import { Progress } from "@/app/type/progress";
 
 export default function QuizPage({ params }: { params: Promise<{ collectionId: string }> }) {
   // -----------------------------
   // State管理やuseEffectなど、すべてクライアント側で使える
   // -----------------------------
   const collectionId  = use(params).collectionId;
-  console.log(collectionId)
   // クイズ関連
   const [question, setQuestion] = useState<Question | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("");
+  const [progress, setProgress] = useState<Progress | null>(null);
   const [feedback, setFeedback] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +39,8 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
       if (!data) {
         throw new Error(data.message || "問題が取得できませんでした");
       }
-
+      setProgress(data.progress);
+      console.log(data.collection)
       if (data.completed) {
         // 全問終了
         setCompleted(true);
@@ -151,9 +150,7 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
               <span className="font-bold mr-2">
                 {question.collectionName || "問題集"}
               </span>
-              {question.totalQuestions
-                ? ` (${question.totalQuestions}問中${question.currentIndex || 1}問目)`
-                : ""}
+                <p>100問中{progress?.currentIndex || 1}問目</p>
             </div>
 
             <h1 className="text-2xl font-bold mb-4">クイズに挑戦</h1>

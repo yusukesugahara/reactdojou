@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 
 /** Server Action */
 export async function getQuestionServerAction(collectionId: string) {
-  console.log("Server Action: getQuestionServerAction");
 
   // クライアントの Cookie からトークンを取得
   const cookieStore = await cookies();
@@ -30,7 +29,6 @@ export async function getQuestionServerAction(collectionId: string) {
 
 
 export async function getQuestionAnswerServerAction(collectionId: string, questionId: string, selectedOption: string) {
-  console.log("Server Action: getQuestionServerAction");
 
   // クライアントの Cookie からトークンを取得
   const cookieStore = await cookies();

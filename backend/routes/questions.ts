@@ -125,6 +125,7 @@ router.get('/:collectionId', async (req: Request, res: Response): Promise<void> 
       success: true,
       completed: progress.completed,
       progress,
+      collection,
       question: currentQuestion,
     });
     return ;
@@ -137,7 +138,7 @@ router.get('/:collectionId', async (req: Request, res: Response): Promise<void> 
 router.post('/:id/submit', async (req: Request, res: Response, next: NextFunction): Promise<void> =>{
   const { id } = req.params;
   const { answer } = req.body;
-  console.log(res)
+
   try {
     const question = await Question.findById(id);
 
@@ -157,8 +158,6 @@ router.post('/:id/submit', async (req: Request, res: Response, next: NextFunctio
     res.status(500).json({ message: '正解判定に失敗しました' });
   }
 });
-
-
 
 
 module.exports = router;
