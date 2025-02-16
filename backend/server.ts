@@ -2,35 +2,36 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser"; // ← 追加
 
-// ルートの型定義 (Express.Router) を想定
-const authRoutes = require('./routes/auth');
-const questionRoutes = require('./routes/questions');
-const collectionRoutes = require('./routes/collections');
+// ルート
+import authRoutes from "./routes/auth";
+import questionRoutes from "./routes/questions";
+import collectionRoutes from "./routes/collections";
+import resultsRoutes from "./routes/results";
 
-// .env の読み込み
 dotenv.config();
 
 const app = express();
-console.log(process.env.FRONTEND_URL)
-// CORS 設定
+
+// CORS
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL, 
+    origin: process.env.FRONTEND_URL, // .env などに定義
     credentials: true,
   })
 );
 
-// JSON ボディパーサー
+// 解析
 app.use(express.json());
+app.use(cookieParser());
 
-// MongoDB 接続
+// DB接続
 const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
   console.error("MONGODB_URIが定義されていません");
   process.exit(1);
 }
-
 mongoose
   .connect(mongoUri)
   .then(() => console.log("MongoDBに接続されました"))
@@ -40,8 +41,8 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/collections", collectionRoutes);
+app.use("/api/results", resultsRoutes);
 
-// サーバー起動
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`サーバーがポート${PORT}で起動しました`);

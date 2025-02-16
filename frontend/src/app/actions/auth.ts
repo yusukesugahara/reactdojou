@@ -1,5 +1,6 @@
 import { SignupFormSchema, LoginFormSchema, FormState } from '@/app/lib/definitions'
- 
+
+// ★ サインアップ
 export async function signup(state: FormState, formData: FormData) {
   // Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
@@ -7,102 +8,93 @@ export async function signup(state: FormState, formData: FormData) {
     email: formData.get('email'),
     password: formData.get('password'),
   })
- 
-  // If any form fields are invalid, return early
+
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
- 
-  // 検証済みデータを取り出す
-  const { name, email, password } = validatedFields.data;
 
-  // バックエンドへのユーザー作成リクエスト
+  // データを取り出す
+  const { name, email, password } = validatedFields.data
+
   try {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     const response = await fetch(`${backendUrl}/api/auth/signup`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
+      // ★ Cookie の送受信用
+      credentials: 'include',
+      body: JSON.stringify({ name, email, password }),
+    })
 
-    // レスポンスが正常でない場合、エラー情報を返す
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json()
       return {
         errors: {
-          general: [errorData.message || "サインアップに失敗しました"],
+          general: [errorData.message || 'サインアップに失敗しました'],
         },
       }
     }
 
-    // 正常にユーザーが作成できた場合は成功を返す
-    return { success: true };
+    // 正常にユーザーが作成できた
+    return { success: true }
   } catch (error) {
-    console.error("サインアップエラー:", error);
+    console.error('サインアップエラー:', error)
     return {
       errors: {
-        general: ["ネットワークエラーが発生しました。"],
+        general: ['ネットワークエラーが発生しました。'],
       },
     }
   }
 }
 
+// ★ ログイン
 export async function login(state: FormState, formData: FormData) {
   // Validate form fields
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
   })
- 
-  // If any form fields are invalid, return early
+
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
- 
-  // 検証済みデータを取り出す
-  const { email, password } = validatedFields.data;
 
-  // バックエンドへのユーザー作成リクエスト
+  // データを取り出す
+  const { email, password } = validatedFields.data
+
   try {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     const response = await fetch(`${backendUrl}/api/auth/login`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+      // ★ Cookie の送受信用
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
+    })
 
-    // レスポンスが正常でない場合、エラー情報を返す
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json()
       return {
         errors: {
-          general: [errorData.message || "ログインに失敗しました"],
+          general: [errorData.message || 'ログインに失敗しました'],
         },
       }
     }
 
-    // 正常にユーザーが作成できた場合は成功を返す
-    return { success: true };
+    return { success: true }
   } catch (error) {
-    console.error("ログインエラー:", error);
+    console.error('ログインエラー:', error)
     return {
       errors: {
-        general: ["ネットワークエラーが発生しました。"],
+        general: ['ネットワークエラーが発生しました。'],
       },
     }
   }
