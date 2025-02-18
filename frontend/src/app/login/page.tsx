@@ -10,7 +10,7 @@ export default function LoginPage() {
   //   - state: アクション実行結果 (success, errorsなど)
   //   - action: フォームの "action={action}" で使う関数
   //   - pending: 非同期処理中かどうか
-  const [state, action, pending] = useActionState(login as any, {
+  const [state, action, pending] = useActionState(login, {
     success: false,
     errors: {} as ErrorResponse
   });

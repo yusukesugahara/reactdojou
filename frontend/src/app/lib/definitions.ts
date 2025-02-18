@@ -20,13 +20,12 @@ export const LoginFormSchema = z.object({
   password: z.string().min(6, { message: "パスワードは6文字以上必要です" }),
 });
  
-export type FormState =
-  | {
-      errors?: {
-        name?: string[]
-        email?: string[]
-        password?: string[]
-      }
-      message?: string
-    }
-  | undefined
+export type FormState = {
+  success: boolean;
+  errors: {
+    name?: string[];
+    email?: string[];
+    password?: string[];
+    general?: string[];
+  }
+}
