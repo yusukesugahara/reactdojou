@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser"; // ← 追加
+import cookieParser from "cookie-parser";
 
 // ルート
 import authRoutes from "./routes/auth";

@@ -1,7 +1,8 @@
+"use server"
 import { SignupFormSchema, LoginFormSchema, FormState } from '@/app/lib/definitions'
 
 // ★ サインアップ
-export async function signup(state: FormState, formData: FormData) {
+export async function signup(_state: FormState, formData: FormData) : Promise<FormState> {
   // Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
@@ -12,6 +13,7 @@ export async function signup(state: FormState, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
+      success: false
     }
   }
 
@@ -36,23 +38,25 @@ export async function signup(state: FormState, formData: FormData) {
         errors: {
           general: [errorData.message || 'サインアップに失敗しました'],
         },
+        success: false
       }
     }
 
     // 正常にユーザーが作成できた
-    return { success: true }
+    return { success: true , errors: {} }
   } catch (error) {
     console.error('サインアップエラー:', error)
     return {
       errors: {
         general: ['ネットワークエラーが発生しました。'],
       },
+      success: false
     }
   }
 }
 
 // ★ ログイン
-export async function login(state: FormState, formData: FormData) {
+export async function login(_state: FormState,  formData: FormData): Promise<FormState> {
   // Validate form fields
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
@@ -62,6 +66,7 @@ export async function login(state: FormState, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
+      success: false
     }
   }
 
@@ -86,16 +91,18 @@ export async function login(state: FormState, formData: FormData) {
         errors: {
           general: [errorData.message || 'ログインに失敗しました'],
         },
+        success:false
       }
     }
 
-    return { success: true }
+    return { success: true , errors:{}}
   } catch (error) {
     console.error('ログインエラー:', error)
     return {
       errors: {
         general: ['ネットワークエラーが発生しました。'],
       },
+      success: false
     }
   }
 }

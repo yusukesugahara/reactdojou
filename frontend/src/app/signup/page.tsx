@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { ErrorResponse } from "@/app/type/errorResponse"; 
 
 export default function SignupPage() {
-  const [state, action, pending] = useActionState(signup as any, { success: false, errors: {} as ErrorResponse  });
+  const [state, action, pending] = useActionState(signup, 
+    { success: false, errors: {} as ErrorResponse  });
 
   const router = useRouter();
 
