@@ -6,6 +6,7 @@ export type IProgress = {
   questionOrder: string[]; // 問題ID配列(ランダム順)
   currentIndex: number;
   completed: boolean;
+  completedQuestions: number;
 }
 
 const ProgressSchema = new Schema<IProgress>({
@@ -14,6 +15,7 @@ const ProgressSchema = new Schema<IProgress>({
   questionOrder: [{ type: String }],
   currentIndex: { type: Number, default: 0 },
   completed: { type: Boolean, default: false },
+  completedQuestions: { type: Number, default: 0 },
 });
 
 export default mongoose.model('Progress', ProgressSchema);

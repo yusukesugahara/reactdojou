@@ -17,14 +17,13 @@ export type Option = {
 };
 
 // 問題の型定義
-export type Question = {
+export interface Question {
   _id: string;
-  collectionName?: string;
-  totalQuestions?: number;
-  currentIndex?: number;
   title: string;
   content: string;
+  options: Option[];
   sampleCode?: string;
   explanation?: string;
-  options: Option[];
-};
+  collectionName?: string;
+  isCorrect?: boolean;
+}

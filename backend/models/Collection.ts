@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 
-const CollectionSchema = new mongoose.Schema({
+const collectionSchema = new mongoose.Schema({
   name: { type: String, required: true }, // 問題集名
-  description: { type: String }, // 問題集の説明
+  description: String, // 問題集の説明
+  currentIndex: { type: Number, default: 1 },
+  completed: { type: Boolean, default: false },
+  timesCompleted: { type: Number, default: 0 },
+  questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
+  completedQuestions: { type: Number, default: 0 }
 });
 
-export default mongoose.model('Collection', CollectionSchema);
+export default mongoose.model('Collection', collectionSchema);
