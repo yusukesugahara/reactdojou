@@ -35,7 +35,6 @@ router.get('/', async (req: Request, res: Response): Promise<void> =>  {
         });
 
         const totalQuestions = collection.questions?.length || 0;
-        const completedQuestions = currentProgress?.completedQuestions || 0;
 
         return {
           id: collection._id,
@@ -45,7 +44,6 @@ router.get('/', async (req: Request, res: Response): Promise<void> =>  {
           completed: currentProgress?.completed || false,
           timesCompleted,
           totalQuestions,
-          completedQuestions
         };
       })
     );

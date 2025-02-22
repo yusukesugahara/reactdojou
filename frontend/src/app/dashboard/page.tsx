@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Collection } from "@/app/type/collections";
 import { checkAuth, getCollections } from "@/app/dashboard/actions";
 import Link from "next/link";
+import Header from "@/app/components/Header";
 
 export default function DashboardPage() {
   const [collections, setCollections] = useState<Array<Collection>>([]);
@@ -30,7 +31,7 @@ export default function DashboardPage() {
 
     fetchData();
   }, [router]);
-  console.log(collections)
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -51,24 +52,8 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50">
-      <header className="bg-blue-500 text-white w-full py-4 text-center">
-        <h1 className="text-3xl font-bold">ダッシュボード</h1>
-      </header>
-      <main className="w-full max-w-4xl p-5">
-        <nav className="space-y-4">
-          <Link
-            href="/profile"
-            className="block bg-green-500 text-white py-3 text-center rounded hover:bg-green-600"
-          >
-            プロフィールを編集
-          </Link>
-          <Link
-            href="/results"
-            className="block bg-pink-500 text-white py-3 text-center rounded hover:bg-pink-600"
-          >
-           成績表
-          </Link>
-        </nav>
+      <Header title="ダッシュボード" />
+      <main className="w-full max-w-4xl p-5 caret-transparent">
         <section>
           <h3 className="text-xl font-bold mb-4 mt-4">問題集一覧</h3>
           {collections.length === 0 ? (
@@ -96,12 +81,12 @@ export default function DashboardPage() {
                             <div
                               className="bg-blue-500 h-2 rounded-full"
                               style={{
-                                width: `${((collection.currentIndex - 1  || 0)  / (collection.totalQuestions || 100)) * 100}%`
+                                width: `${(((collection.currentIndex ?? 1) - 1) / (collection.totalQuestions || 100)) * 100}%`
                               }}
                             />
                           </div>
                           <span className="ml-2 text-gray-500">
-                            {((collection.currentIndex - 1 || 0))}/{collection.totalQuestions || 100}問
+                            {((collection.currentIndex ?? 1) - 1)}/{collection.totalQuestions || 100}問
                           </span>
                         </div>
                       </div>

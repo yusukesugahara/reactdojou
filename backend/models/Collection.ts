@@ -7,7 +7,6 @@ const collectionSchema = new mongoose.Schema({
   completed: { type: Boolean, default: false },
   timesCompleted: { type: Number, default: 0 },
   questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
-  completedQuestions: { type: Number, default: 0 }
 });
 
 export default mongoose.model('Collection', collectionSchema);

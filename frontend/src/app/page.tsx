@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
       <header className="text-center mb-10">
-        <h1 className="text-4xl font-bold mb-4">React クイズアプリ</h1>
+        <h1 className="text-4xl font-bold mb-4">Reactどじょう</h1>
         <p className="text-lg text-gray-600">
           ReactやJavaScriptに関するクイズでスキルを試しましょう！
         </p>
@@ -25,12 +25,6 @@ export default function HomePage() {
             className="w-full bg-green-500 text-white py-2 text-center rounded hover:bg-green-600"
           >
             ログイン
-          </Link>
-          <Link
-            href="/quiz"
-            className="w-full bg-yellow-500 text-white py-2 text-center rounded hover:bg-yellow-600"
-          >
-            クイズを始める
           </Link>
         </nav>
       </main>

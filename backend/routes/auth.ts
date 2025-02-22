@@ -117,15 +117,6 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction): P
   }
 });
 
-// ----------------------------
-//  ログアウト
-// ----------------------------
-router.post("/logout", (req: Request, res: Response) => {
-  // 両方のCookieを削除
-  res.clearCookie("authToken");
-  res.clearCookie("userId");
-  res.status(200).json({ message: "ログアウト成功" });
-});
 
 // ----------------------------
 //  ログイン状態チェック (任意)
