@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getQuestionServerAction, getQuestionAnswerServerAction } from "@/app/collections/[collectionId]/actions";
 import { Question } from "@/app/type/quizTypes";
 import { Progress } from "@/app/type/progress";
+import Link from "next/link";
 
 export default function QuizPage({ params }: { params: Promise<{ collectionId: string }> }) {
   // -----------------------------
@@ -20,6 +21,7 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
   const [loading, setLoading] = useState<boolean>(false);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   // -----------------------------
   // 1) 問題を取得
@@ -45,9 +47,11 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
         // 全問終了
         setCompleted(true);
         setQuestion(null);
+        setQuestions(data.questions);
       } else {
         setQuestion(data.question);
         setCompleted(false);
+        setQuestions(data.questions);
       }
     } catch (err: any) {
       console.error("クイズの取得に失敗:", err);
@@ -132,9 +136,54 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
 
   // 全問終了
   if (completed) {
+    const totalQuestions = questions.length;
+    const correctAnswers = questions.filter(q => q.isCorrect).length;
+    const accuracy = Math.round((correctAnswers / totalQuestions) * 100);
+
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-blue-600 text-lg">全ての問題が終了しました！</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+          <h2 className="text-2xl font-bold text-center mb-6">学習完了！</h2>
+          
+          <div className="space-y-4">
+            <div className="text-center">
+              <div className="text-5xl font-bold text-blue-600 mb-2">
+                {accuracy}%
+              </div>
+              <p className="text-gray-600">正答率</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mt-6">
+              <div className="bg-gray-50 p-4 rounded-lg text-center">
+                <div className="text-xl font-semibold text-gray-800">
+                  {correctAnswers}
+                </div>
+                <p className="text-sm text-gray-600">正解</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg text-center">
+                <div className="text-xl font-semibold text-gray-800">
+                  {totalQuestions - correctAnswers}
+                </div>
+                <p className="text-sm text-gray-600">不正解</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-center space-x-4">
+            <Link
+              href="/collections"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              コレクション一覧へ
+            </Link>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              もう一度挑戦
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

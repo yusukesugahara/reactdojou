@@ -8,6 +8,15 @@ const router = express.Router();
 // 環境変数に JWT_SECRET を定義（.env推奨）
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
+// パスワードバリデーション関数の追加
+const isPasswordValid = (password: string): boolean => {
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers;
+};
+
 // ----------------------------
 //  サインアップ
 // ----------------------------
@@ -18,6 +27,14 @@ router.post("/signup", async (req: Request, res: Response, next: NextFunction): 
     // 入力バリデーション
     if (!name || !email || !password) {
       res.status(400).json({ message: "すべてのフィールドを入力してください" });
+      return;
+    }
+
+    // パスワード強度チェックを追加
+    if (!isPasswordValid(password)) {
+      res.status(400).json({ 
+        message: "パスワードは8文字以上で、大文字、小文字、数字を含む必要があります" 
+      });
       return;
     }
 
@@ -76,28 +93,24 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction): P
     }
 
     // JWTトークンを生成
-    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
-      expiresIn: "1h", // トークンの有効期限 1時間
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    // トークンとユーザー情報のみを返す
+    res.status(200).json({
+      message: "ログイン成功",
+      token: token,
+      userId: user._id.toString(),
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
     });
 
-    // トークンをHTTPOnly Cookieに保存
-    // ※Cookie名 "authToken" は任意
-    res.cookie("authToken", token, {
-      httpOnly: true, // JavaScriptからのアクセスを禁止
-      // secure: process.env.NODE_ENV === "production", // HTTPS環境でのみ送信
-      maxAge: 3600 * 1000, // 1時間 (ミリ秒)
-      sameSite: "lax", 
-    });
-        
-    // **ユーザーIDを別のクッキーに保存**
-    res.cookie("userId", user._id.toString(), {
-      httpOnly: true, // JavaScriptからのアクセスを禁止
-      // secure: process.env.NODE_ENV === "production",
-      maxAge: 3600 * 1000, // 1時間 (ミリ秒)
-      sameSite: "lax",
-    });
-
-    res.status(200).json({ message: "ログイン成功" });
   } catch (error) {
     console.error("ログインエラー:", error);
     res.status(500).json({ message: "サーバーエラーが発生しました" });
@@ -108,8 +121,9 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction): P
 //  ログアウト
 // ----------------------------
 router.post("/logout", (req: Request, res: Response) => {
-  // Cookieを削除
+  // 両方のCookieを削除
   res.clearCookie("authToken");
+  res.clearCookie("userId");
   res.status(200).json({ message: "ログアウト成功" });
 });
 
@@ -123,30 +137,12 @@ router.get("/check", async (req: Request, res: Response, next: NextFunction): Pr
     return;
   }
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    // decoded には { id, email, iat, exp } などが含まれる
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
     res.json({ message: "ログイン中", user: decoded });
+    return;
   } catch (err) {
     res.status(401).json({ message: "トークンが無効です" });
   }
 });
-
-// 例: routes/auth.ts
-router.get('/check', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const token = req.cookies.authToken;
-  if (!token) {
-    res.status(401).json({ message: 'Not logged in' });
-    return;
-  }
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
-    res.json({ user: { id: decoded.id, email: decoded.email } });
-    return;
-  } catch (err) {
-    res.status(401).json({ message: 'Invalid token' });
-    return;
-  }
-});
-
 
 export default router; 

@@ -6,21 +6,17 @@ import { useRouter } from "next/navigation";
 import { ErrorResponse } from "@/app/type/errorResponse"; 
 
 export default function LoginPage() {
-  // useActionState: [state, action, pending]
-  //   - state: アクション実行結果 (success, errorsなど)
-  //   - action: フォームの "action={action}" で使う関数
-  //   - pending: 非同期処理中かどうか
   const [state, action, pending] = useActionState(login, {
     success: false,
     errors: {} as ErrorResponse
   });
 
   const router = useRouter();
-
+  console.log(state)
   useEffect(() => {
     if (state.success) {
-      // ログイン成功時にダッシュボードへ遷移
       router.push("/dashboard");
+      console.log("ok")
     }
   }, [state.success, router]);
 
@@ -51,6 +47,9 @@ export default function LoginPage() {
 
         <div>
           <label htmlFor="password" className="block mb-2">パスワード</label>
+          <p className="text-sm text-gray-600 mb-2">
+            ※ 8文字以上、大文字小文字を含む必要があります
+          </p>
           <input
             id="password"
             name="password"

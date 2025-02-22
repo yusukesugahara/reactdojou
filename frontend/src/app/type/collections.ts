@@ -1,6 +1,11 @@
-export type Collection = {
+export interface Collection {
   id: string;
   name: string;
-  description?: string;
+  description: string;
+  currentIndex?: number;        // currentQuestionNumber の代わり
+  completed?: boolean;          // 追加
+  timesCompleted?: number;      // completionCount の代わり
+  totalQuestions?: number;
+  completedQuestions?: number;
   questionCount?: number;
-};
+}
