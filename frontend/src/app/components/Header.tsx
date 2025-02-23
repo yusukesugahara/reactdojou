@@ -14,9 +14,14 @@ export default function Header({ title }: HeaderProps) {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      router.push("/");
-      router.refresh();
+      // サーバーサイドでクッキー削除を実行
+      const result = await logout();
+      
+      if (result.success) {
+        // ログアウト成功時はホームページにリダイレクト
+        router.push("/");
+        router.refresh(); // Next.jsのルーターをリフレッシュ
+      }
     } catch (error) {
       console.error("ログアウトエラー:", error);
       alert("ログアウトに失敗しました。もう一度お試しください。");

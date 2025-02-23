@@ -2,6 +2,8 @@ import express, { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"; // ← require ではなく import で
 import User from "../models/User";
+import { AuthController } from '../controllers/authController';
+import { EmailService } from '../services/emailService';
 
 const router = express.Router();
 
@@ -16,6 +18,8 @@ const isPasswordValid = (password: string): boolean => {
   const hasNumbers = /\d/.test(password);
   return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers;
 };
+
+const authController = new AuthController();
 
 // ----------------------------
 //  サインアップ
@@ -37,10 +41,35 @@ router.post("/signup", async (req: Request, res: Response, next: NextFunction): 
       });
       return;
     }
-
+    
     // 既存ユーザーの確認
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    
+    // 既存ユーザーが未認証の場合、新しい認証トークンを発行して再送信
+    if (existingUser && !existingUser.isEmailVerified) {
+      const newVerificationToken = jwt.sign(
+        { email },
+        JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+
+      // トークンを更新
+      existingUser.verificationToken = newVerificationToken;
+      existingUser.verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      await existingUser.save();
+
+      // 認証メールを再送信
+      const emailService = new EmailService();
+      await emailService.sendVerificationEmail(email, newVerificationToken);
+
+      res.status(200).json({ 
+        message: "未認証のアカウントが存在します。認証メールを再送信しました。" 
+      });
+      return;
+    }
+
+    // 既存の認証済みユーザーの場合
+    if (existingUser && existingUser.isEmailVerified) {
       res.status(409).json({ message: "このメールアドレスは既に登録されています" });
       return;
     }
@@ -48,17 +77,32 @@ router.post("/signup", async (req: Request, res: Response, next: NextFunction): 
     // パスワードのハッシュ化
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // 認証トークンの生成
+    const verificationToken = jwt.sign(
+      { email },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
     // 新しいユーザーの作成
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
+      verificationToken,
+      verificationTokenExpires: new Date(Date.now() + 24 * 60 * 60 * 1000)
     });
 
     // データベースに保存
     await newUser.save();
 
-    res.status(201).json({ message: "アカウント作成に成功しました" });
+    // 認証メールの送信
+    const emailService = new EmailService();
+    await emailService.sendVerificationEmail(email, verificationToken);
+
+    res.status(201).json({ 
+      message: "アカウント作成に成功しました。メールを確認してください。" 
+    });
   } catch (error) {
     console.error("サインアップエラー:", error);
     res.status(500).json({ message: "サーバーエラーが発生しました" });
@@ -133,6 +177,25 @@ router.get("/check", async (req: Request, res: Response, next: NextFunction): Pr
     return;
   } catch (err) {
     res.status(401).json({ message: "トークンが無効です" });
+  }
+});
+
+// メール認証エンドポイントの型定義を追加
+router.post('/verify-email', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    await authController.verifyEmail(req, res);
+  } catch (error) {
+    console.error("メール認証エラー:", error);
+    res.status(500).json({ message: "メール認証中にエラーが発生しました" });
+  }
+});
+
+router.post('/resend-verification', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    await authController.resendVerification(req, res);
+  } catch (error) {
+    console.error("認証メール再送信エラー:", error);
+    res.status(500).json({ message: "認証メールの再送信中にエラーが発生しました" });
   }
 });
 

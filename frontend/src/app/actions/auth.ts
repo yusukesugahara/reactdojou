@@ -126,23 +126,12 @@ export async function login(_state: FormState,  formData: FormData):
 // ログアウト処理を修正
 export async function logout(): Promise<{ success: boolean }> {
   try {
-    const response = NextResponse.json({})
-    response.cookies.set('authToken', '', { 
-      path: '/',
-      maxAge: 0,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    })
-    response.cookies.set('userId', '', { 
-      path: '/',
-      maxAge: 0,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    })
+    const cookieStore = await cookies()
+    
+    // クッキーを削除（引数を1つに）
+    cookieStore.delete('authToken')
+    cookieStore.delete('userId')
 
-    // シンプルなオブジェクトを返す
     return { success: true }
   } catch (error) {
     console.error('ログアウトエラー:', error)
