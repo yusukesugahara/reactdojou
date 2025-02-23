@@ -199,4 +199,24 @@ router.post('/resend-verification', async (req: Request, res: Response, next: Ne
   }
 });
 
+// パスワードリセットメール送信
+router.post('/request-reset', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    await authController.requestPasswordReset(req, res);
+  } catch (error) {
+    console.error("パスワードリセットメール送信エラー:", error);
+    res.status(500).json({ message: "パスワードリセットメールの送信中にエラーが発生しました" });
+  }
+});
+
+// パスワードリセット実行
+router.post('/reset-password', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    await authController.resetPassword(req, res);
+  } catch (error) {
+    console.error("パスワードリセットエラー:", error);
+    res.status(500).json({ message: "パスワードのリセット中にエラーが発生しました" });
+  }
+});
+
 export default router; 

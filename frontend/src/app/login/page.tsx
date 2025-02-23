@@ -4,6 +4,7 @@ import { login } from "@/app/actions/auth"
 import { useEffect, useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { ErrorResponse } from "@/app/type/errorResponse"; 
+import Link from "next/link";
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(login, {
@@ -77,6 +78,12 @@ export default function LoginPage() {
           {pending ? "ログイン中..." : "ログイン"}
         </button>
       </form>
+
+      <div className="mt-4 text-center">
+        <Link href="/forgot-password" className="text-blue-500 hover:text-blue-600">
+          パスワードをお忘れの方はこちら
+        </Link>
+      </div>
     </div>
   );
 }
