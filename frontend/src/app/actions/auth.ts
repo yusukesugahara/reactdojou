@@ -122,3 +122,83 @@ export async function login(_state: FormState,  formData: FormData):
     throw error
   }
 }
+
+// ログアウト処理を修正
+export async function logout(): Promise<{ success: boolean }> {
+  try {
+    const cookieStore = await cookies()
+    
+    // クッキーを削除（引数を1つに）
+    cookieStore.delete('authToken')
+    cookieStore.delete('userId')
+
+    return { success: true }
+  } catch (error) {
+    console.error('ログアウトエラー:', error)
+    throw error
+  }
+}
+
+// パスワードリセットメールの送信
+export async function requestPasswordReset(_state: FormState, formData: FormData) {
+  const email = formData.get('email') as string
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/request-reset`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    })
+
+    if (!res.ok) {
+      return {
+        success: false,
+        errors: {
+          general: ['パスワードリセットメールの送信に失敗しました']
+        }
+      }
+    }
+
+    return { success: true, errors: {} }
+  } catch (error) {
+    return {
+      success: false,
+      errors: {
+        general: ['ネットワークエラーが発生しました']
+      }
+    }
+  }
+}
+
+// パスワードのリセット
+export async function resetPassword(_state: FormState, formData: FormData) {
+  const token = formData.get('token') as string
+  const newPassword = formData.get('newPassword') as string
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, newPassword })
+    })
+
+    if (!res.ok) {
+      const error = await res.json()
+      return {
+        success: false,
+        errors: {
+          general: error.message || 'パスワードのリセットに失敗しました'
+        }
+      }
+    }
+
+    return { success: true, errors: {} }
+  } catch (error) {
+    return {
+      success: false,
+      errors: {
+        general: 'ネットワークエラーが発生しました'
+      }
+    }
+  }
+}

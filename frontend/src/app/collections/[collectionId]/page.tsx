@@ -6,6 +6,7 @@ import { getQuestionServerAction, getQuestionAnswerServerAction } from "@/app/co
 import { Question } from "@/app/type/quizTypes";
 import { Progress } from "@/app/type/progress";
 import Link from "next/link";
+import Header from "@/app/components/Header";
 
 export default function QuizPage({ params }: { params: Promise<{ collectionId: string }> }) {
   // -----------------------------
@@ -42,7 +43,6 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
         throw new Error(data.message || "問題が取得できませんでした");
       }
       setProgress(data.progress);
-      console.log(data.collection)
       if (data.completed) {
         // 全問終了
         setCompleted(true);
@@ -191,7 +191,9 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
   // 問題表示
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50">
-      <div className="max-w-2xl w-full p-6 bg-white shadow rounded mt-10">
+      <Header title="クイズチャレンジ" />
+      
+      <div className="max-w-2xl w-full p-6 bg-white shadow rounded mt-10 caret-transparent">
         {question ? (
           <>
             {/* タイトルや問題文 */}
