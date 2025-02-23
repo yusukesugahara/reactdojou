@@ -22,7 +22,7 @@ export default function LoginPage() {
   }, [state.success, router]);
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-5 border rounded shadow">
+    <div className="max-w-md mx-auto mt-10 p-5 border rounded shadow-lg">
       <h1 className="text-2xl font-bold mb-5">ログイン</h1>
       
       {/* エラーがあれば表示 */}
@@ -37,7 +37,7 @@ export default function LoginPage() {
             id="email"
             name="email"
             type="email"
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -55,7 +55,7 @@ export default function LoginPage() {
             id="password"
             name="password"
             type="password"
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -82,6 +82,11 @@ export default function LoginPage() {
       <div className="mt-4 text-center">
         <Link href="/forgot-password" className="text-blue-500 hover:text-blue-600">
           パスワードをお忘れの方はこちら
+        </Link>
+      </div>
+      <div className="mt-4 text-center">
+        <Link href="/signup" className="text-blue-500 hover:text-blue-600">
+          サインアップはこちら
         </Link>
       </div>
     </div>

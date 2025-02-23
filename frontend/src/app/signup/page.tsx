@@ -4,6 +4,7 @@ import { signup } from "@/app/actions/auth"
 import { useActionState, useEffect } from 'react'
 import { useRouter } from "next/navigation";
 import { ErrorResponse } from "@/app/type/errorResponse"; 
+import Link from "next/link";
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, 
@@ -29,7 +30,14 @@ export default function SignupPage() {
       <form action={action} className="space-y-4">
         <div>
           <label htmlFor="name" className="block mb-2">名前</label>
-          <input id="name" name="name" type="text" placeholder="Name"  className="w-full p-2 border rounded" required />
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Name"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
         </div>
         {state?.errors?.name && <p className="text-red-500 mb-4">{state.errors.name}</p>}
         <div>
@@ -55,6 +63,11 @@ export default function SignupPage() {
           サインアップ
         </button>
       </form>
+      <div className="mt-4 text-center">
+        <Link href="/login" className="text-blue-500 hover:text-blue-600">
+          ログインはこちら
+        </Link>
+      </div>
     </div>
   );
 }

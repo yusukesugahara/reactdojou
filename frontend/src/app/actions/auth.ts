@@ -88,14 +88,23 @@ export async function login(_state: FormState,  formData: FormData):
 
     if (!res.ok) {
       const error = await res.json()
-      throw new Error(error.message || 'ログインに失敗しました')
+      return {
+        success: false,
+        errors: {
+          general: [error.message || 'ログインに失敗しました']
+        }
+      }
     }
 
     const data = await res.json()
-
     // データの存在確認を追加
     if (!data.token || !data.userId) {
-      throw new Error('認証情報が不完全です')
+      return {
+        success: false,
+        errors: {
+          general: ['認証情報が不完全です']
+        }
+      }
     }
 
     // サーバーサイドでHTTPOnlyクッキーを設定
