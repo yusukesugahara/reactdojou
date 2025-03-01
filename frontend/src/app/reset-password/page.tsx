@@ -1,16 +1,21 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useActionState } from 'react'
 import { resetPassword } from '../actions/auth'
 
 export default function ResetPasswordPage() {
-  const router = useRouter()
+  return (
+    <Suspense fallback={<div>読み込み中...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
+  )
+}
+
+function ResetPasswordContent() {
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
-  
-  const [newPassword, setNewPassword] = useState('')
   const [state, action, pending] = useActionState(resetPassword, {
     success: false,
     errors: {}

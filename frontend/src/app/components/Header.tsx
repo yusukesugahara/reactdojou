@@ -35,6 +35,7 @@ export default function Header({ title }: HeaderProps) {
           <Link href="/" className="text-xl font-bold">
             Reactどじょう
           </Link>
+          <h1 className="text-xl">{title}</h1>
         </div>
         
         <nav className="flex items-center space-x-6">

@@ -6,7 +6,6 @@ import { Collection } from "@/app/type/collections";
 
 export default function CollectionsPage() {
   const [collections, setCollections] = useState<Collection[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -21,9 +20,7 @@ export default function CollectionsPage() {
           throw new Error("問題集の取得に失敗しました");
         }
         const data = await response.json();
-        setCollections(data);
-      } catch (err: any) {
-        setError(err.message);
+        setCollections(data);  
       } finally {
         setLoading(false);
       }
@@ -36,10 +33,6 @@ export default function CollectionsPage() {
     return <p className="text-center mt-10">読み込み中...</p>;
   }
 
-  if (error) {
-    return <p className="text-center mt-10 text-red-500">{error}</p>;
-  }
-
   return (
     <div className="max-w-4xl mx-auto mt-10 p-5">
       <h1 className="text-3xl font-bold mb-6">問題集一覧</h1>
@@ -48,7 +41,7 @@ export default function CollectionsPage() {
       ) : (
         <ul className="space-y-4" >
           {collections.map((collection) => (
-            <Link href={`/collections/${collection.id}`}>
+            <Link key="collection.id"  href={`/collections/${collection.id}`}>
               <li key={collection.id} className="p-4 border rounded shadow">
                 <h2 className="text-2xl font-semibold">
                   

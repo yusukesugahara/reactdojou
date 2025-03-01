@@ -11,7 +11,7 @@ export const authService = {
         body: JSON.stringify({ token }),
       });
       return await response.json();
-    } catch (error) {
+    } catch {
       throw new Error('メール認証に失敗しました');
     }
   },
@@ -27,7 +27,7 @@ export const authService = {
         body: JSON.stringify({ email }),
       });
       return await response.json();
-    } catch (error) {
+    } catch {
       throw new Error('認証メールの再送信に失敗しました');
     }
   },

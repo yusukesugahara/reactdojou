@@ -1,7 +1,5 @@
 // URL パラメータの型定義
-type Params = {
-  collectionId: string;
-};
+// 'Params' の行を削除
 
 export type QuizPageProps = {
   // params が Promise<Params> として渡される場合

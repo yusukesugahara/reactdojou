@@ -1,7 +1,6 @@
 "use client";
 
-import React, { use, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { use, useState, useEffect, useCallback } from "react";
 import { getQuestionServerAction, getQuestionAnswerServerAction } from "@/app/collections/[collectionId]/actions";
 import { Question } from "@/app/type/quizTypes";
 import { Progress } from "@/app/type/progress";
@@ -27,7 +26,7 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
   // -----------------------------
   // 1) 問題を取得
   // -----------------------------
-  const fetchQuestion = async () => {
+  const fetchQuestion = useCallback(async () => {
     if (!collectionId) return;
 
     setLoading(true);
@@ -53,13 +52,13 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
         setCompleted(false);
         setQuestions(data.questions);
       }
-    } catch (err: any) {
-      console.error("クイズの取得に失敗:", err);
-      setError(err.message || "クイズの取得に失敗しました");
+    } catch {
+      console.error("クイズの取得に失敗:");
+      setError("クイズの取得に失敗しました");
     } finally {
       setLoading(false);
     }
-  };
+  }, [collectionId]);
 
   // -----------------------------
   // 2) 初回 & collectionId 変更時の呼び出し
@@ -69,7 +68,7 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
     if (collectionId) {
       fetchQuestion();
     }
-  }, [collectionId]);
+  }, [collectionId, fetchQuestion]);
 
   // -----------------------------
   // 3) 回答送信
@@ -104,8 +103,8 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
       }
 
       setIsAnswered(true);
-    } catch (error: any) {
-      console.error("回答の送信に失敗:", error);
+    } catch {
+      console.error("回答の送信に失敗:");
       setFeedback("回答の送信に失敗しました");
     }
   };

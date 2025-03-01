@@ -1,7 +1,7 @@
 "use server"
 import { SignupFormSchema, LoginFormSchema, FormState } from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+
 
 // ★ サインアップ
 export async function signup(_state: FormState, formData: FormData) : Promise<FormState> {
@@ -46,13 +46,13 @@ export async function signup(_state: FormState, formData: FormData) : Promise<Fo
 
     // 正常にユーザーが作成できた
     return { success: true , errors: {} }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('サインアップエラー:', error)
     return {
+      success: false,
       errors: {
-        general: ['ネットワークエラーが発生しました。'],
-      },
-      success: false
+        general: ['ネットワークエラーが発生しました', (error as Error).message || '不明なエラーが発生しました'] // エラー内容を追加
+      }
     }
   }
 }
@@ -169,7 +169,7 @@ export async function requestPasswordReset(_state: FormState, formData: FormData
     }
 
     return { success: true, errors: {} }
-  } catch (error) {
+  } catch {
     return {
       success: false,
       errors: {
@@ -202,11 +202,11 @@ export async function resetPassword(_state: FormState, formData: FormData) {
     }
 
     return { success: true, errors: {} }
-  } catch (error) {
+  } catch{
     return {
       success: false,
       errors: {
-        general: 'ネットワークエラーが発生しました'
+        general: ['ネットワークエラーが発生しました']
       }
     }
   }

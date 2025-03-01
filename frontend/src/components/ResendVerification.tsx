@@ -14,7 +14,7 @@ export const ResendVerification: React.FC = () => {
       await authService.resendVerification(email);
       setStatus('success');
       setMessage('認証メールを再送信しました。メールをご確認ください。');
-    } catch (error) {
+    } catch  {
       setStatus('error');
       setMessage('認証メールの再送信に失敗しました。');
     }

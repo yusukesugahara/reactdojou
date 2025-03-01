@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authService } from '../services/auth';
 
@@ -9,23 +9,23 @@ export const EmailVerification: React.FC = () => {
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
   const [message, setMessage] = useState('メールアドレスを確認中...');
 
+  const verifyEmail = useCallback(async (verificationToken: string) => {
+    try {
+      await authService.verifyEmail(verificationToken);
+      setStatus('success');
+      setMessage('メールアドレスが確認されました');
+      setTimeout(() => router.push('/login'), 3000);
+    } catch {
+      setStatus('error');
+      setMessage('メールアドレスの確認に失敗しました');
+    }
+  }, [router]);
+
   useEffect(() => {
     if (token) {
       verifyEmail(token);
     }
-  }, [token]);
-
-  const verifyEmail = async (verificationToken: string) => {
-    try {
-      const response = await authService.verifyEmail(verificationToken);
-      setStatus('success');
-      setMessage('メールアドレスが確認されました');
-      setTimeout(() => router.push('/login'), 3000);
-    } catch (error) {
-      setStatus('error');
-      setMessage('メールアドレスの確認に失敗しました');
-    }
-  };
+  }, [token, verifyEmail]);
 
   return (
     <div className="email-verification">

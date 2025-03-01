@@ -1,11 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useActionState } from 'react'
 import { resetPassword } from '../../actions/auth'
+import { Suspense } from 'react'
 
-export default function ConfirmPasswordResetPage() {
+export default function ForgotPasswordConfirmPage() {
+  return (
+    <Suspense fallback={<div>読み込み中...</div>}>
+      <ForgotPasswordConfirmContent />
+    </Suspense>
+  )
+}
+
+function ForgotPasswordConfirmContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
