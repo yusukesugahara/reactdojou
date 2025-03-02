@@ -18,3 +18,4 @@ RUN npm run build || echo "No build script"
 
 # server.jsが生成されるはずのパス
 CMD ["node", "dist/server.js"]
+

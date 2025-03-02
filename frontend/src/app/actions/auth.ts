@@ -5,7 +5,6 @@ import { cookies } from 'next/headers'
 
 // ★ サインアップ
 export async function signup(_state: FormState, formData: FormData) : Promise<FormState> {
-  // Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -24,6 +23,7 @@ export async function signup(_state: FormState, formData: FormData) : Promise<Fo
 
   try {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+    console.log(backendUrl);
     const response = await fetch(`${backendUrl}/api/auth/signup`, {
       method: 'POST',
       headers: {
@@ -51,7 +51,7 @@ export async function signup(_state: FormState, formData: FormData) : Promise<Fo
     return {
       success: false,
       errors: {
-        general: ['ネットワークエラーが発生しました', (error as Error).message || '不明なエラーが発生しました'] // エラー内容を追加
+        general: ['ネットワークエラーが発生しました', (error as Error).message || '不明なエラーが発生しました'] ,
       }
     }
   }
@@ -75,61 +75,58 @@ export async function login(_state: FormState,  formData: FormData):
 
   const { email, password } = validatedFields.data
 
-  try {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
-    const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ email, password }),
-    })
 
-    if (!res.ok) {
-      const error = await res.json()
-      return {
-        success: false,
-        errors: {
-          general: [error.message || 'ログインに失敗しました']
-        }
+  const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ email, password }),
+  })
+  console.log(res);
+  if (!res.ok) {
+    const error = await res.json()
+    return {
+      success: false,
+      errors: {
+        general: [error.message || 'ログインに失敗しました']
       }
     }
-
-    const data = await res.json()
-    // データの存在確認を追加
-    if (!data.token || !data.userId) {
-      return {
-        success: false,
-        errors: {
-          general: ['認証情報が不完全です']
-        }
-      }
-    }
-
-    // サーバーサイドでHTTPOnlyクッキーを設定
-    const cookieStore = await cookies();  
-    cookieStore.set('authToken', data.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 24 * 60 * 60
-    });
-
-    cookieStore.set('userId', data.userId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 24 * 60 * 60
-    });
-
-    return { success: true, errors: {} }
-  } catch (error) {
-    console.error('ログインエラー:', error)
-    throw error
   }
+
+  const data = await res.json()
+  // データの存在確認を追加
+  if (!data.token || !data.userId) {
+    return {
+      success: false,
+      errors: {
+        general: ['認証情報が不完全です']
+      }
+    }
+  }
+
+  // サーバーサイドでHTTPOnlyクッキーを設定
+  const cookieStore = await cookies();  
+  cookieStore.set('authToken', data.token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 24 * 60 * 60
+  });
+
+  cookieStore.set('userId', data.userId, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 24 * 60 * 60
+  });
+
+  return { success: true, errors: {} }
+
 }
 
 // ログアウト処理を修正

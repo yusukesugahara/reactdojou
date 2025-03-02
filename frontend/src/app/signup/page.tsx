@@ -13,12 +13,13 @@ export default function SignupPage() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(state);
     if (state.success) {
       // ログイン成功時にダッシュボードへ遷移
       router.push("/dashboard");
     }
-  }, [state.success, router]);
-
+  }, [state, router]);
+  
   return (
     <div className="max-w-md mx-auto mt-10 p-5 border rounded shadow">
       <h1 className="text-2xl font-bold mb-5">サインアップ</h1>
