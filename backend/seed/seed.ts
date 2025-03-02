@@ -4,9 +4,9 @@ import Collection from '../models/Collection';
 
 require('dotenv').config();
 
-const ReactBeginner = require('./problemsReactBeginner');
-const ReactIntermediate = require('./problemsReactIntermediate');
-const ReactAdvanced = require('./problemsReactAdvanced');
+import ReactBeginner from './problemsReactBeginner';
+import ReactIntermediate from './problemsReactIntermediate';
+import ReactAdvanced from './problemsReactAdvanced';
 
 
 const questions = [

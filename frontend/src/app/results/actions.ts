@@ -12,7 +12,7 @@ export async function getLearningStats() {
     throw new Error("認証情報が見つかりません");
   }
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const backendUrl = process.env.BACKEND_URL;
   const res = await fetch(`${backendUrl}/api/results/`, {
     method: "POST",
     headers: {

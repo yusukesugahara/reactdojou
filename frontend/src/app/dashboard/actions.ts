@@ -4,7 +4,7 @@
 import { cookies } from "next/headers";
 
 // 環境変数から正しいバックエンドURLを取得
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.BACKEND_URL || 'http://localhost:5000';
 
 // 認証チェック用のアクション
 export async function checkAuth() {

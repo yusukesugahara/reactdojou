@@ -13,9 +13,6 @@ RUN npm install
 # アプリケーションのソースコードをコピー
 COPY . .
 
-# TypeScriptをJavaScriptにコンパイル
-RUN npm run build || echo "No build script"
-
-# server.jsが生成されるはずのパス
-CMD ["node", "dist/server.js"]
+# 開発モードで実行
+CMD ["npm", "run", "dev"]
 

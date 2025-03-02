@@ -2,7 +2,7 @@
 
 export async function verifyEmail(token: string) {
   try {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
+    const API_BASE_URL = process.env.BACKEND_URL
     const res = await fetch(`${API_BASE_URL}/api/auth/verify-email`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

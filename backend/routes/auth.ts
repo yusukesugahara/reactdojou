@@ -27,7 +27,7 @@ const authController = new AuthController();
 router.post("/signup", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { name, email, password } = req.body;
-
+    console.log(name, email, password);
     // 入力バリデーション
     if (!name || !email || !password) {
       res.status(400).json({ message: "すべてのフィールドを入力してください" });

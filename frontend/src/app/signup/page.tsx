@@ -1,24 +1,13 @@
 "use client";
 
 import { signup } from "@/app/actions/auth"
-import { useActionState, useEffect } from 'react'
-import { useRouter } from "next/navigation";
+import { useActionState } from 'react'
 import { ErrorResponse } from "@/app/type/errorResponse"; 
 import Link from "next/link";
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, 
     { success: false, errors: {} as ErrorResponse  });
-
-  const router = useRouter();
-
-  useEffect(() => {
-    console.log(state);
-    if (state.success) {
-      // ログイン成功時にダッシュボードへ遷移
-      router.push("/dashboard");
-    }
-  }, [state, router]);
   
   return (
     <div className="max-w-md mx-auto mt-10 p-5 border rounded shadow">
@@ -64,6 +53,11 @@ export default function SignupPage() {
           サインアップ
         </button>
       </form>
+      {state.success && !state.errors?.general && (
+        <p className="text-green-500 mb-4">
+          サインアップに成功しました。メールを確認してください。
+        </p>
+      )}
       <div className="mt-4 text-center">
         <Link href="/login" className="text-blue-500 hover:text-blue-600">
           ログインはこちら

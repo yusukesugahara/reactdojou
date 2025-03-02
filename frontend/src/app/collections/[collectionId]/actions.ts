@@ -10,7 +10,7 @@ export async function getQuestionServerAction(collectionId: string) {
   const authToken = cookieStore.get("authToken")?.value || "";
 
   // 外部の Express API にリクエスト
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const backendUrl = process.env.BACKEND_URL;
   const res = await fetch(`${backendUrl}/api/questions/${collectionId}`, {
     method: "GET",
     headers: {
@@ -36,7 +36,7 @@ export async function getQuestionAnswerServerAction(collectionId: string, questi
   const userId = cookieStore.get("userId")?.value || "";
 
   // 外部の Express API にリクエスト
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const backendUrl = process.env.BACKEND_URL;
   const res = await fetch(`${backendUrl}/api/questions/submit`, {
     method: "POST",
     headers: {

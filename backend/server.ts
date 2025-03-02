@@ -17,7 +17,7 @@ const app = express();
 // CORS
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL, // .env などに定義
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // .env などに定義
     credentials: true,
   })
 );

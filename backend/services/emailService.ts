@@ -2,7 +2,7 @@ import transporter from '../config/mail';
 
 export class EmailService {
   async sendVerificationEmail(email: string, token: string) {
-    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
+    const verificationUrl = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/verify-email?token=${token}`;
 
     await transporter.sendMail({
       from: process.env.SMTP_FROM || 'noreply@example.com',
@@ -18,7 +18,7 @@ export class EmailService {
   }
 
   async sendPasswordResetEmail(email: string, token: string) {
-    const resetLink = `${process.env.FRONTEND_URL}/forgot-password/confirm?token=${token}`;
+    const resetLink = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/forgot-password/confirm?token=${token}`;
     
     const mailOptions = {
       from: process.env.NEXT_PUBLIC_GMAIL_USER,
