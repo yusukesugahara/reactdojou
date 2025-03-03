@@ -24,10 +24,7 @@ export async function getLearningStats() {
      }),
   });
 
-  if (!res.ok) {
-    console.error("学習成績取得エラー:", await res.text());
-    throw new Error("学習成績の取得に失敗しました");
-  }
+  console.log(res);
 
   return await res.json();
 }
