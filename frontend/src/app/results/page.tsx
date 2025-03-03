@@ -29,7 +29,10 @@ export default async function ResultsPage() {
           <div className="mb-8">
             <h2 className="text-xl font-semibold">全期間の成績</h2>
             <p className="mt-2 text-lg font-medium">
-              <strong>総合正答率:</strong> {((totalStats.correct / totalStats.total) * 100).toFixed(1)}% 
+              <strong>総合正答率:</strong> 
+              {totalStats.total > 0 
+                ? ((totalStats.correct / totalStats.total) * 100).toFixed(1) + "%"
+                : "データなし"}
               ({totalStats.correct} / {totalStats.total})
             </p>
 

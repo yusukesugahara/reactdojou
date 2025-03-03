@@ -1,9 +1,7 @@
-
 services:
   frontend:
     build:
       context: ./frontend
-      target: dev
     volumes:
       - ./frontend:/app
     env_file:

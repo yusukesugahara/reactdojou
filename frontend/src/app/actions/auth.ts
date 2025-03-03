@@ -127,7 +127,6 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
       body: JSON.stringify({ email, password }),
     });
 
-    // フェッチ自体が失敗した場合
     if (error) {
       console.error('ネットワークエラー:', error);
       return {
@@ -138,7 +137,6 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
       };
     }
 
-    // レスポンスが失敗した場合
     if (!response.ok) {
       let errorData;
       try {

@@ -30,6 +30,10 @@ export default function LoginPage() {
         <p className="text-red-500 mb-4">{state.errors.general.join(", ")}</p>
       )}
 
+      {state && state.success && (
+        <p className="text-green-500 mb-4">ログインに成功しました。</p>
+      )}
+
       <form action={action} className="space-y-4">
         <div>
           <label htmlFor="email" className="block mb-2">メールアドレス</label>

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
 // サブスキーマ定義: { number, text } の形
 const OptionSchema = new mongoose.Schema(
@@ -9,7 +9,20 @@ const OptionSchema = new mongoose.Schema(
   { _id: false } // サブドキュメントに _id を付与しない設定
 );
 
-const QuestionSchema = new mongoose.Schema({
+export interface Question extends Document {
+  title: string;
+  difficulty: string;
+  content: string;
+  sampleCode: string;
+  answerCode: number;
+  explanation: string;
+  options: { number: number; text: string }[];
+  tags: string[];
+  collectionId: mongoose.Schema.Types.ObjectId; // Collection との関連付け
+  createdAt: Date;
+}
+
+const QuestionSchema = new Schema<Question>({
   title: { type: String, required: true },
   difficulty: { type: String, required: true },
   content: { type: String, required: true },
@@ -29,4 +42,5 @@ const QuestionSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model('Question', QuestionSchema);
+const QuestionModel = mongoose.model<Question>('Question', QuestionSchema);
+export default QuestionModel;
