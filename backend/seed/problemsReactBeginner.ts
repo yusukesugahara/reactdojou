@@ -1,2025 +1,1231 @@
 import { TypeProblems } from "../type/typeProblems" ;
 
 const problemsReactBeginner: TypeProblems = 
-[
-  {
-    title: 'JSXで正しい書き方はどれですか？',
-    difficulty: '初級',
-    content: 'JSX内でJavaScript式を埋め込むには波括弧を使用します。下記の選択肢から正しいものを選んでください。',
-    sampleCode: `
-function Greeting() {
-  const name = "Alice";
+  // Set1: reactProblems (10問)
+  [{
+    title: "JSXで正しいコメントの書き方は？",
+    difficulty: "初級",
+    content:
+      "JSX内でコメントを書く場合、どのように記述しますか？以下の選択肢から正しい記述を選んでください。",
+    sampleCode: 
+`function Component() {
   return (
     <div>
-      Hello, ???
+      {/* Comment */}
+      Content
     </div>
   );
-}
-`,
+}`,
     answerCode: 2,
-    explanation: 'JSXでは文字列の結合や変数を埋め込む場合に { } を使います。',
+    explanation:
+      "JSX内ではコメントは{/* Comment */}で記述する必要があります。",
     options: [
-      { number: 1, text: '<div>Hello, name</div>' },
-      { number: 2, text: '<div>Hello, {name}</div>' },
-      { number: 3, text: '<div>Hello, "name"</div>' },
-      { number: 4, text: '<div>Hello, (name)</div>' }
+      { number: 1, text: "<!-- Comment -->" },
+      { number: 2, text: "{/* Comment */}" },
+      { number: 3, text: "// Comment" },
+      { number: 4, text: "{// Comment}" },
     ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "JSX", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'Functional Componentの定義方法',
-    difficulty: '初級',
-    content: 'Reactで関数コンポーネントを定義する正しい方法はどれですか？',
-    sampleCode: `
-  // 以下のうち正しい関数コンポーネントの定義はどれですか？
-    `,
-    answerCode: 2,
-    explanation: '関数コンポーネントはfunctionキーワードを使い、括弧付きの引数とreturnでJSXを返します。',
-    options: [
-      { number: 1, text: 'function MyComponent { return <div>Hello</div>; }' },
-      { number: 2, text: 'function MyComponent() { return <div>Hello</div>; }' },
-      { number: 3, text: 'const MyComponent = () => { <div>Hello</div>; }' },
-      { number: 4, text: 'const MyComponent = new Function("return <div>Hello</div>;");' }
-    ],
-    tags: ['React', 'Functional Component', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'Reactコンポーネントのインポート方法',
-    difficulty: '初級',
-    content: 'Reactコンポーネントを使用するために必要なインポート文はどれですか？',
-    sampleCode: `
-  // どのインポート文が正しいですか？
-    `,
+    title: "Reactコンポーネントの基本的な作成方法",
+    difficulty: "初級",
+    content:
+      "Reactで関数コンポーネントを作成する正しい方法はどれですか？",
+    sampleCode: 
+`function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}`,
     answerCode: 1,
-    explanation: 'React 17以降は必須ではありませんが、基本的にはReactをインポートします。',
+    explanation:
+      "関数コンポーネントはJavaScriptの関数として定義され、propsを引数に取ります。",
     options: [
-      { number: 1, text: 'import React from "react";' },
-      { number: 2, text: 'import { React } from "react";' },
-      { number: 3, text: 'require("react");' },
-      { number: 4, text: 'import * as ReactDOM from "react";' }
+      { number: 1, text: "関数コンポーネントはJavaScriptの関数として定義する" },
+      { number: 2, text: "React.createComponent()を使う" },
+      { number: 3, text: "クラスコンポーネントのみがサポートされる" },
+      { number: 4, text: "コンポーネントはHTMLのタグとして直接書く" },
     ],
-    tags: ['React', 'インポート', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "コンポーネント", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'ReactDOM.renderの使用方法',
-    difficulty: '初級',
-    content: 'ReactアプリをDOMに描画するための正しい方法はどれですか？',
-    sampleCode: `
-  // どのコードが正しい描画方法ですか？
-    `,
-    answerCode: 3,
-    explanation: 'ReactDOM.renderはReact要素を指定したDOMノードに描画します。',
-    options: [
-      { number: 1, text: 'React.render(<App />, document.getElementById("root"));' },
-      { number: 2, text: 'ReactDOM.create(<App />, document.getElementById("root"));' },
-      { number: 3, text: 'ReactDOM.render(<App />, document.getElementById("root"));' },
-      { number: 4, text: 'render(<App />, document.getElementById("root"));' }
-    ],
-    tags: ['React', 'ReactDOM', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'propsの基本使用方法',
-    difficulty: '初級',
-    content: '親コンポーネントから子コンポーネントへデータを渡すために使用される仕組みは何ですか？',
-    sampleCode: `
-  function Child(props) {
-    return <div>{props.message}</div>;
-  }
-    `,
+    title: "propsの正しい利用方法",
+    difficulty: "初級",
+    content:
+      "propsを使用して親から子コンポーネントへデータを渡す正しい方法はどれですか？",
+    sampleCode: 
+`function Greeting(props) {
+  return <h1>Hello, {props.name}</h1>;
+}`,
     answerCode: 1,
-    explanation: 'propsは親から子へデータを渡すためのオブジェクトです。',
+    explanation:
+      "propsは親コンポーネントから子コンポーネントへ一方向にデータを渡すために使用されます。",
     options: [
-      { number: 1, text: 'props' },
-      { number: 2, text: 'state' },
-      { number: 3, text: 'context' },
-      { number: 4, text: 'ref' }
+      { number: 1, text: "propsは親コンポーネントから子コンポーネントへ一方向にデータを渡す" },
+      { number: 2, text: "propsは双方向にデータをやり取りできる" },
+      { number: 3, text: "propsは状態管理に使う" },
+      { number: 4, text: "propsはReactのライフサイクルを制御する" },
     ],
-    tags: ['React', 'props', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "props", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'コンポーネントの再利用性について',
-    difficulty: '初級',
-    content: 'Reactのコンポーネントはどのような利点がありますか？',
-    sampleCode: '',
-    answerCode: 3,
-    explanation: 'コンポーネントは再利用可能なUIパーツとして設計され、複数箇所で利用できます。',
-    options: [
-      { number: 1, text: 'コードの分割ができない' },
-      { number: 2, text: '再利用が困難' },
-      { number: 3, text: '再利用可能なUIパーツを作成できる' },
-      { number: 4, text: 'パフォーマンスが低下する' }
-    ],
-    tags: ['React', 'コンポーネント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'イベントハンドリングの設定',
-    difficulty: '初級',
-    content: 'ボタンがクリックされたときに関数を実行する正しい書き方はどれですか？',
-    sampleCode: `
-  function App() {
-    const handleClick = () => { console.log("Clicked"); };
-    return <button ???>Click me</button>;
-  }
-    `,
-    answerCode: 2,
-    explanation: 'JSXではイベントハンドラをcamelCaseで指定し、関数を渡します。',
-    options: [
-      { number: 1, text: 'onclick="handleClick()"' },
-      { number: 2, text: 'onClick={handleClick}' },
-      { number: 3, text: 'onClick="handleClick()"' },
-      { number: 4, text: 'click={handleClick}' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'useStateの基本的な使い方',
-    difficulty: '初級',
-    content: 'Reactで状態を管理するためのフックはどれですか？',
-    sampleCode: `
-  import React, { ??? } from 'react';
-  function Counter() {
-    const [count, setCount] = ???(0);
-    return <div>{count}</div>;
-  }
-    `,
-    answerCode: 1,
-    explanation: 'useStateフックはReactで状態を管理するために使います。',
-    options: [
-      { number: 1, text: 'useState, useState' },
-      { number: 2, text: 'useEffect, useEffect' },
-      { number: 3, text: 'useContext, useContext' },
-      { number: 4, text: 'useRef, useRef' }
-    ],
-    tags: ['React', 'useState', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'useStateで状態を更新する方法',
-    difficulty: '初級',
-    content: 'useStateフックで管理される状態を更新する正しい方法はどれですか？',
-    sampleCode: `
+    title: "状態変更による再レンダリング",
+    difficulty: "初級",
+    content:
+      "Reactでは状態が変わるとコンポーネントが再レンダリングされます。正しい状態変更方法はどれですか？",
+    sampleCode: 
+`function Counter() {
   const [count, setCount] = useState(0);
-  // 正しく状態を更新する方法は？
-    `,
-    answerCode: 3,
-    explanation: '状態を更新するには、更新関数に新しい値を渡します。',
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}`,
+    answerCode: 1,
+    explanation:
+      "ReactではuseStateフックを使用して状態を管理し、状態の更新によりコンポーネントが再レンダリングされます。",
     options: [
-      { number: 1, text: 'count = count + 1' },
-      { number: 2, text: 'useState(count + 1)' },
-      { number: 3, text: 'setCount(count + 1)' },
-      { number: 4, text: 'updateState(count + 1)' }
+      { number: 1, text: "useStateフックを使用して状態を変更する" },
+      { number: 2, text: "直接変数に新しい値を代入する" },
+      { number: 3, text: "状態は変更されずに常に同じ値を返す" },
+      { number: 4, text: "レンダリングはReactでは自動的に行われない" },
     ],
-    tags: ['React', 'useState', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "useState", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'useEffectの基本的な使い方',
-    difficulty: '初級',
-    content: 'Reactで副作用を扱うためのフックはどれですか？',
-    sampleCode: `
-  import React, { useEffect } from 'react';
-  function App() {
-    useEffect(() => {
-      console.log("Mounted");
-    }, []);
+    title: "イベントハンドラの記述方法",
+    difficulty: "初級",
+    content:
+      "Reactでクリックイベントを扱う際、正しいイベントハンドラの書き方はどれですか？",
+    sampleCode: 
+`function Button() {
+  function handleClick() {
+    alert("Clicked!");
+  }
+  return <button onClick={handleClick}>Click me</button>;
+}`,
+    answerCode: 2,
+    explanation:
+      "Reactではイベントハンドラに関数を直接渡す形式を使用します。",
+    options: [
+      { number: 1, text: "<button onclick='handleClick()'>Click me</button>" },
+      { number: 2, text: "<button onClick={handleClick}>Click me</button>" },
+      { number: 3, text: "<button onClick='handleClick'>Click me</button>" },
+      { number: 4, text: "<button onClick={handleClick()}>Click me</button>" },
+    ],
+    tags: ["React", "イベント", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "リストのレンダリングとkeyの使用",
+    difficulty: "初級",
+    content:
+      "Reactでリストをレンダリングする際、各要素に一意なkeyを設定する理由は何ですか？",
+    sampleCode: 
+`function ItemList({ items }) {
+  return (
+    <ul>
+      {items.map(item => <li key={item.id}>{item.name}</li>)}
+    </ul>
+  );
+}`,
+    answerCode: 1,
+    explanation:
+      "keyは各要素を一意に識別し、レンダリング最適化に役立ちます。",
+    options: [
+      { number: 1, text: "keyは各要素を一意に識別するために使用され、再レンダリングの最適化に役立つ" },
+      { number: 2, text: "keyはCSSのスタイリングに使われる" },
+      { number: 3, text: "keyはイベントハンドラの識別に使用される" },
+      { number: 4, text: "keyはフォームの送信時に必要" },
+    ],
+    tags: ["React", "リスト", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "条件付きレンダリングの方法",
+    difficulty: "初級",
+    content:
+      "Reactで条件に応じたレンダリングを行う一般的な方法はどれですか？",
+    sampleCode: 
+`function Greeting({ isLoggedIn }) {
+  return (
+    <div>
+      {isLoggedIn ? <h1>Welcome back!</h1> : <h1>Please sign up.</h1>}
+    </div>
+  );
+}`,
+    answerCode: 3,
+    explanation:
+      "条件付きレンダリングには三項演算子が一般的に用いられます。",
+    options: [
+      { number: 1, text: "if文を直接JSX内に書く" },
+      { number: 2, text: "switch文を使用する" },
+      { number: 3, text: "三項演算子を使用する" },
+      { number: 4, text: "for文でループしながらレンダリングする" },
+    ],
+    tags: ["React", "条件付きレンダリング", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "React Fragmentsの利用方法",
+    difficulty: "初級",
+    content:
+      "複数の子要素をグループ化するためのReactの仕組みはどれですか？",
+    sampleCode: 
+`function List() {
+  return (
+    <>
+      <li>Item 1</li>
+      <li>Item 2</li>
+    </>
+  );
+}`,
+    answerCode: 4,
+    explanation:
+      "React Fragmentsを使うことで不要なDOM要素を追加せずに複数の子要素をグループ化できます。",
+    options: [
+      { number: 1, text: "divタグでラップする" },
+      { number: 2, text: "spanタグでラップする" },
+      { number: 3, text: "React.Fragmentタグでラップする" },
+      { number: 4, text: "空のタグ <> </> を使用する" },
+    ],
+    tags: ["React", "Fragments", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "JSXにおけるJavaScript式の埋め込み方法",
+    difficulty: "初級",
+    content:
+      "JSX内でJavaScriptの値や式を埋め込む際の正しい記法はどれですか？",
+    sampleCode: 
+`function Sum() {
+  const a = 5;
+  const b = 10;
+  return <div>{a + b}</div>;
+}`,
+    answerCode: 2,
+    explanation:
+      "JSX内では、JavaScript式は中括弧{}で囲んで埋め込む必要があります。",
+    options: [
+      { number: 1, text: "return <div> a + b </div>;" },
+      { number: 2, text: "return <div>{a + b}</div>;" },
+      { number: 3, text: "return <div>(a + b)</div>;" },
+      { number: 4, text: "return <div>[a + b]</div>;" },
+    ],
+    tags: ["React", "JSX", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "コンポーネント間のデータ共有の基本",
+    difficulty: "初級",
+    content:
+      "親コンポーネントから子コンポーネントへデータを渡す際、どの仕組みを使うのが一般的ですか？",
+    sampleCode: 
+`function Parent() {
+  const message = "Hello from Parent!";
+  return <Child message={message} />;
+}
+
+function Child({ message }) {
+  return <div>{message}</div>;
+}`,
+    answerCode: 1,
+    explanation:
+      "親から子へのデータの受け渡しはpropsが最も一般的な方法です。",
+    options: [
+      { number: 1, text: "propsを使用する" },
+      { number: 2, text: "stateを使用する" },
+      { number: 3, text: "コンテキストAPIを使用する" },
+      { number: 4, text: "Reduxを使用する" },
+    ],
+    tags: ["React", "props", "初心者向け"],
+    collectionName: "React 初級",
+  },
+
+  // Set2: reactProblemsAdditional (10問)
+  {
+    title: "useEffectの基本的な使い方",
+    difficulty: "初級",
+    content:
+      "ReactのuseEffectフックを利用して、コンポーネントのマウント時にのみ実行される処理を実装するためにはどのように記述すれば良いですか？",
+    sampleCode:
+`import React, { useEffect } from 'react';
+
+function MyComponent() {
+  useEffect(() => {
+    console.log("Component mounted");
+  }, []);
+  
+  return <div>My Component</div>;
+}`,
+    answerCode: 1,
+    explanation:
+      "依存配列に空配列([])を渡すことで、useEffectはコンポーネントのマウント時にのみ実行されます。",
+    options: [
+      { number: 1, text: "依存配列に空配列を渡すことでマウント時のみ実行する" },
+      { number: 2, text: "依存配列を省略して全レンダリング時に実行する" },
+      { number: 3, text: "useEffectは初回レンダリングでのみ実行されない" },
+      { number: 4, text: "クリーンアップ関数が不要である" },
+    ],
+    tags: ["React", "useEffect", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "defaultPropsの設定方法",
+    difficulty: "初級",
+    content:
+      "Reactで関数コンポーネントにおいて、propsの初期値を設定する一般的な方法はどれですか？",
+    sampleCode:
+`function Greeting({ name }) {
+  return <h1>Hello, {name}</h1>;
+}
+
+Greeting.defaultProps = {
+  name: "Guest"
+};`,
+    answerCode: 2,
+    explanation:
+      "関数コンポーネントでは、コンポーネントのdefaultPropsプロパティにデフォルト値を設定することで、propsの初期値を定義できます。",
+    options: [
+      { number: 1, text: "コンポーネント内で変数を初期化する" },
+      { number: 2, text: "コンポーネントにdefaultPropsを直接設定する" },
+      { number: 3, text: "propsに直接値を渡す" },
+      { number: 4, text: "stateの初期値として設定する" },
+    ],
+    tags: ["React", "defaultProps", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "コンポーネントの再利用性",
+    difficulty: "初級",
+    content:
+      "Reactコンポーネントの再利用性を高めるための基本的な考え方として正しいものはどれですか？",
+    sampleCode:
+`function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
+}`,
+    answerCode: 1,
+    explanation:
+      "propsを活用して汎用的なコンポーネントを作成することで、様々な場面で再利用が可能になります。",
+    options: [
+      { number: 1, text: "propsを利用して汎用的なコンポーネントを作成する" },
+      { number: 2, text: "内部状態に依存させて固有の動作にする" },
+      { number: 3, text: "コンポーネントをハードコーディングする" },
+      { number: 4, text: "CSSを直接埋め込む" },
+    ],
+    tags: ["React", "再利用", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "イベントオブジェクトの利用方法",
+    difficulty: "初級",
+    content:
+      "Reactのイベントハンドラで、イベントオブジェクトを正しく利用する方法はどれですか？",
+    sampleCode:
+`function InputComponent() {
+  function handleChange(event) {
+    console.log(event.target.value);
+  }
+  return <input onChange={handleChange} />;
+}`,
+    answerCode: 3,
+    explanation:
+      "イベントハンドラは、引数として渡されるイベントオブジェクトのtargetプロパティを利用して入力値などの情報を取得します。",
+    options: [
+      { number: 1, text: "イベントオブジェクトは利用せず直接値を取得する" },
+      { number: 2, text: "引数に直接値を渡して処理する" },
+      { number: 3, text: "イベントオブジェクトを引数として受け取り、targetプロパティを利用する" },
+      { number: 4, text: "グローバルオブジェクトからイベント情報を取得する" },
+    ],
+    tags: ["React", "イベント", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "フォームの制御コンポーネント",
+    difficulty: "初級",
+    content:
+      "Reactでフォームを制御コンポーネントとして実装する際、基本的な考え方として正しいのはどれですか？",
+    sampleCode:
+`function Form() {
+  const [value, setValue] = useState('');
+  return (
+    <form>
+      <input value={value} onChange={(e) => setValue(e.target.value)} />
+    </form>
+  );
+}`,
+    answerCode: 1,
+    explanation:
+      "制御コンポーネントでは、入力値をstateで管理し、onChangeイベントで更新することで、フォームの状態をReactで制御します。",
+    options: [
+      { number: 1, text: "入力値をstateで管理し、onChangeで更新する" },
+      { number: 2, text: "DOMから直接値を取得する" },
+      { number: 3, text: "value属性を省略して非制御コンポーネントとする" },
+      { number: 4, text: "フォームの状態は外部ライブラリで管理する" },
+    ],
+    tags: ["React", "フォーム", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "親子間のイベント伝搬",
+    difficulty: "初級",
+    content:
+      "Reactにおいて、親コンポーネントが子コンポーネントからのイベントを受け取る一般的な方法はどれですか？",
+    sampleCode:
+`function Parent() {
+  function handleChildEvent(data) {
+    console.log(data);
+  }
+  return <Child onEvent={handleChildEvent} />;
+}
+
+function Child({ onEvent }) {
+  return <button onClick={() => onEvent("Hello")}>Click</button>;
+}`,
+    answerCode: 2,
+    explanation:
+      "親コンポーネントから関数をpropsとして子コンポーネントに渡すことで、子のイベント発生時に親がそのイベントを処理できます。",
+    options: [
+      { number: 1, text: "子コンポーネント内で直接親のstateを変更する" },
+      { number: 2, text: "親コンポーネントから関数をpropsとして子に渡す" },
+      { number: 3, text: "React Contextを使用してイベントを共有する" },
+      { number: 4, text: "イベントは自動的に伝搬する" },
+    ],
+    tags: ["React", "イベント伝搬", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "条件付きレンダリングの && 演算子",
+    difficulty: "初級",
+    content:
+      "Reactで条件付きレンダリングを実装する際、&&演算子を使用する正しい方法はどれですか？",
+    sampleCode:
+`function Notification({ show }) {
+  return (
+    <div>
+      {show && <span>New Message</span>}
+    </div>
+  );
+}`,
+    answerCode: 1,
+    explanation:
+      "&&演算子は、左側の条件がtrueの場合にのみ右側の要素をレンダリングするために使用されます。",
+    options: [
+      { number: 1, text: "条件がtrueの場合にのみ後続の要素をレンダリングする" },
+      { number: 2, text: "条件がfalseの場合にのみ要素をレンダリングする" },
+      { number: 3, text: "常に要素をレンダリングする" },
+      { number: 4, text: "条件にかかわらずnullを返す" },
+    ],
+    tags: ["React", "条件付きレンダリング", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "コンポーネントの再レンダリングとstateの更新",
+    difficulty: "初級",
+    content:
+      "Reactでは、stateを更新した際にコンポーネントが再レンダリングされる理由として正しい説明はどれですか？",
+    sampleCode:
+`function Example() {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(count + 1)}>Increment</button>;
+}`,
+    answerCode: 2,
+    explanation:
+      "stateが更新されると、Reactはその変更を検知し、該当コンポーネントを再レンダリングして最新の状態を反映します。",
+    options: [
+      { number: 1, text: "stateの更新は再レンダリングをトリガーしない" },
+      { number: 2, text: "stateの更新によりReactが変更を検知して再レンダリングする" },
+      { number: 3, text: "stateは常に同じ値を返すため再レンダリングしない" },
+      { number: 4, text: "再レンダリングは手動で行う必要がある" },
+    ],
+    tags: ["React", "state", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "インラインスタイルの適用方法",
+    difficulty: "初級",
+    content:
+      "Reactでインラインスタイルを適用する際の正しい記述方法はどれですか？",
+    sampleCode:
+`function StyledDiv() {
+  return <div style={{ backgroundColor: 'blue', color: 'white' }}>Styled</div>;
+}`,
+    answerCode: 1,
+    explanation:
+      "インラインスタイルはオブジェクト形式でstyleプロパティに渡す必要があります。",
+    options: [
+      { number: 1, text: "オブジェクト形式でstyleプロパティに渡す" },
+      { number: 2, text: "文字列でstyle属性を指定する" },
+      { number: 3, text: "CSSクラスを直接記述する" },
+      { number: 4, text: "スタイルは外部CSSのみで適用する" },
+    ],
+    tags: ["React", "スタイル", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "スプレッド構文でのpropsの展開",
+    difficulty: "初級",
+    content:
+      "Reactでスプレッド構文を用いてpropsをコンポーネントに渡す正しい方法はどれですか？",
+    sampleCode:
+`function Component(props) {
+  return <div>{props.title}</div>;
+}
+
+const props = { title: "Hello", id: 1 };
+<Component {...props} />;`,
+    answerCode: 4,
+    explanation:
+      "スプレッド構文 {...props} を使用することで、オブジェクトの全プロパティを一度にコンポーネントへ渡すことができます。",
+    options: [
+      { number: 1, text: "propsを直接指定して渡す" },
+      { number: 2, text: "スプレッド構文は使用せず個別に指定する" },
+      { number: 3, text: "propsの値は直接ハードコーディングする" },
+      { number: 4, text: "スプレッド構文を使ってオブジェクトの全プロパティを展開する" },
+    ],
+    tags: ["React", "スプレッド構文", "初心者向け"],
+    collectionName: "React 初級",
+  },
+
+  // Set3: reactProblemsExtra (10問 ※重複している「JSXでの式展開の注意点」は除外)
+  {
+    title: "Classコンポーネントの作成方法",
+    difficulty: "初級",
+    content:
+      "Reactでクラスコンポーネントを作成する正しい方法はどれですか？",
+    sampleCode:
+`import React from 'react';
+
+class MyComponent extends React.Component {
+  render() {
     return <div>Hello</div>;
   }
-    `,
+}`,
     answerCode: 1,
-    explanation: 'useEffectフックは副作用を実行するために使われ、第二引数で実行タイミングを制御します。',
+    explanation:
+      "クラスコンポーネントはReact.Componentを継承し、renderメソッドを定義する必要があります。",
     options: [
-      { number: 1, text: 'useEffect' },
-      { number: 2, text: 'useState' },
-      { number: 3, text: 'useContext' },
-      { number: 4, text: 'useReducer' }
+      { number: 1, text: "class MyComponent extends React.Component { render() { return <div>Hello</div>; } }" },
+      { number: 2, text: "function MyComponent() { return <div>Hello</div>; }" },
+      { number: 3, text: "const MyComponent = () => <div>Hello</div>;" },
+      { number: 4, text: "class MyComponent extends Component { return <div>Hello</div>; }" },
     ],
-    tags: ['React', 'useEffect', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "クラスコンポーネント", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'フラグメントの使用',
-    difficulty: '初級',
-    content: '複数の子要素をラップするために、不要なDOM要素を追加しない方法はどれですか？',
-    sampleCode: `
-  function List() {
-    return (
-      ???
-      <Child1 />
-      <Child2 />
-      ???
-    );
+    title: "クラスコンポーネントでのstateの初期化",
+    difficulty: "初級",
+    content:
+      "クラスコンポーネントにおいて、stateを正しく初期化する方法はどれですか？",
+    sampleCode:
+`class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
   }
-    `,
-    answerCode: 2,
-    explanation: 'React.Fragmentや<>...</>を使って複数の要素をラップできます。',
-    options: [
-      { number: 1, text: '<div>...</div>' },
-      { number: 2, text: '<>...</>' },
-      { number: 3, text: '<span>...</span>' },
-      { number: 4, text: '<section>...</section>' }
-    ],
-    tags: ['React', 'Fragment', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '条件付きレンダリングの基本',
-    difficulty: '初級',
-    content: 'JSX内で条件に応じて要素を表示する正しい方法はどれですか？',
-    sampleCode: `
-  function App({ isLoggedIn }) {
-    return (
-      <div>
-        { isLoggedIn ? ??? : <p>ログインしてください</p> }
-      </div>
-    );
+  render() {
+    return <div>{this.state.count}</div>;
   }
-    `,
+}`,
     answerCode: 1,
-    explanation: '三項演算子を使って条件付きレンダリングが可能です。',
+    explanation:
+      "constructor内でsuper(props)を呼び、その後this.stateに初期値を設定するのが正しい方法です。",
     options: [
-      { number: 1, text: '<p>ようこそ</p>' },
-      { number: 2, text: '"ようこそ"' },
-      { number: 3, text: '<p>{ "ようこそ" }</p>' },
-      { number: 4, text: 'p("ようこそ")' }
+      { number: 1, text: "constructor(props) { super(props); this.state = { count: 0 }; }" },
+      { number: 2, text: "constructor() { this.state = { count: 0 }; }" },
+      { number: 3, text: "クラス外でstateを初期化する" },
+      { number: 4, text: "constructor(props) { this.state = { count: 0 }; }" },
     ],
-    tags: ['React', '条件付きレンダリング', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "state", "クラスコンポーネント", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'リストレンダリングとkey属性',
-    difficulty: '初級',
-    content: 'リストをレンダリングする際に、各要素にkey属性を付与する理由は何ですか？',
-    sampleCode: `
-  const items = [1,2,3];
-  const list = items.map(item => <li key={???}>{item}</li>);
-    `,
+    title: "PropTypesによるpropsの型チェック",
+    difficulty: "初級",
+    content:
+      "Reactでコンポーネントのpropsの型チェックを行う一般的な方法はどれですか？",
+    sampleCode:
+`import PropTypes from 'prop-types';
+
+function Greeting({ name }) {
+  return <h1>Hello, {name}</h1>;
+}
+
+Greeting.propTypes = {
+  name: PropTypes.string
+};`,
     answerCode: 2,
-    explanation: 'key属性は各要素の一意性を保証し、再レンダリング時の最適化に役立ちます。',
+    explanation:
+      "PropTypesを使用してpropsの型チェックを行うことで、型の不一致を検出できます。",
     options: [
-      { number: 1, text: 'スタイル指定のため' },
-      { number: 2, text: '要素の一意性を保証するため' },
-      { number: 3, text: 'イベントバインディングのため' },
-      { number: 4, text: 'デバッグ用のIDとして' }
+      { number: 1, text: "コンポーネントにdefaultPropsを設定する" },
+      { number: 2, text: "コンポーネントにpropTypesを設定する" },
+      { number: 3, text: "コンポーネントのstateを利用する" },
+      { number: 4, text: "React.createElementで型を指定する" },
     ],
-    tags: ['React', 'リストレンダリング', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "PropTypes", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'JSX内のコメントの書き方',
-    difficulty: '初級',
-    content: 'JSX内でコメントを書く正しい方法はどれですか？',
-    sampleCode: `
-  function App() {
-    return (
-      <div>
-        ???
-        <p>Hello</p>
-      </div>
-    );
+    title: "クラスコンポーネントでのイベントバインディング",
+    difficulty: "初級",
+    content:
+      "クラスコンポーネントでイベントハンドラを正しくバインドする方法はどれですか？",
+    sampleCode:
+`class Button extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
-    `,
+  handleClick() {
+    console.log("Clicked");
+  }
+  render() {
+    return <button onClick={this.handleClick}>Click me</button>;
+  }
+}`,
+    answerCode: 1,
+    explanation:
+      "constructor内でthis.handleClickを.bind(this)することで、正しくthisがバインドされます。",
+    options: [
+      { number: 1, text: "constructor内でthis.handleClick = this.handleClick.bind(this)" },
+      { number: 2, text: "onClickにthis.handleClick()を記述する" },
+      { number: 3, text: "イベントハンドラをarrow functionで定義しない" },
+      { number: 4, text: "bindを使用せずにそのままthis.handleClickを渡す" },
+    ],
+    tags: ["React", "イベントバインディング", "クラスコンポーネント", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "条件付きクラス名の適用",
+    difficulty: "初級",
+    content:
+      "Reactで条件に応じたクラス名を適用する正しい方法はどれですか？",
+    sampleCode:
+`function Item({ isActive }) {
+  return <div className={isActive ? "active" : "inactive"}>Item</div>;
+}`,
+    answerCode: 1,
+    explanation:
+      "三項演算子を使用して、条件に応じたクラス名を適用するのが一般的です。",
+    options: [
+      { number: 1, text: "className={isActive ? 'active' : 'inactive'}" },
+      { number: 2, text: "className={isActive && 'active'}" },
+      { number: 3, text: "className='active' && className='inactive'" },
+      { number: 4, text: "className={isActive ? 'inactive' : 'active'}" },
+    ],
+    tags: ["React", "クラス名", "条件付きレンダリング", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "JSX内での配列レンダリング",
+    difficulty: "初級",
+    content:
+      "JSX内で配列の要素をレンダリングする際、どの記述が正しいですか？",
+    sampleCode:
+`function List() {
+  return [
+    <li key="1">Item 1</li>,
+    <li key="2">Item 2</li>
+  ];
+}`,
+    answerCode: 2,
+    explanation:
+      "JSXでは配列の要素を返す際に、各要素に一意のkeyを付与する必要があります。",
+    options: [
+      { number: 1, text: "return <li>Item 1</li><li>Item 2</li>;" },
+      { number: 2, text: "return [<li key='1'>Item 1</li>, <li key='2'>Item 2</li>];" },
+      { number: 3, text: "return (<li key='1'>Item 1</li>, <li key='2'>Item 2</li>);" },
+      { number: 4, text: "return {<li key='1'>Item 1</li>, <li key='2'>Item 2</li>};" },
+    ],
+    tags: ["React", "JSX", "レンダリング", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "Reactでのrefの利用方法",
+    difficulty: "初級",
+    content:
+      "ReactでDOM要素に直接アクセスするために使用するフックはどれですか？",
+    sampleCode:
+`import React, { useRef } from 'react';
+
+function TextInput() {
+  const inputRef = useRef(null);
+  return <input ref={inputRef} />;
+}`,
     answerCode: 3,
-    explanation: 'JSX内では{/* コメント */}を使ってコメントを書く必要があります。',
+    explanation:
+      "useRefフックを利用することで、DOM要素に直接アクセスすることができます。",
     options: [
-      { number: 1, text: '<!-- コメント -->' },
-      { number: 2, text: '// コメント' },
-      { number: 3, text: '{/* コメント */}' },
-      { number: 4, text: '/* コメント */' }
+      { number: 1, text: "useState" },
+      { number: 2, text: "useEffect" },
+      { number: 3, text: "useRef" },
+      { number: 4, text: "useContext" },
     ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "ref", "Hooks", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'propsとstateの違い',
-    difficulty: '初級',
-    content: 'Reactにおけるpropsとstateの違いは何ですか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: 'propsは親から渡される読み取り専用のデータ、stateはコンポーネント内で管理される変更可能なデータです。',
-    options: [
-      { number: 1, text: 'どちらも変更可能なデータ' },
-      { number: 2, text: 'propsは読み取り専用、stateは変更可能' },
-      { number: 3, text: 'propsは関数、stateはオブジェクト' },
-      { number: 4, text: 'propsは外部API、stateは内部API' }
-    ],
-    tags: ['React', 'props', 'state', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'preventDefaultの使い方',
-    difficulty: '初級',
-    content: 'フォーム送信時にページリロードを防ぐためのメソッドはどれですか？',
-    sampleCode: `
-  function handleSubmit(e) {
-    ???
-    // フォーム送信処理
-  }
-    `,
+    title: "複数クラス名の結合方法",
+    difficulty: "初級",
+    content:
+      "Reactで複数のCSSクラスを適用する正しい方法はどれですか？",
+    sampleCode:
+`function Box({ isActive }) {
+  return <div className={\`box \${isActive ? 'active' : ''}\`}>Content</div>;
+}`,
     answerCode: 1,
-    explanation: 'e.preventDefault()を呼び出すことでデフォルトのフォーム送信動作を防げます。',
+    explanation:
+      "テンプレートリテラルを使用して、条件に応じた複数のクラス名を結合することが一般的です。",
     options: [
-      { number: 1, text: 'e.preventDefault()' },
-      { number: 2, text: 'e.stopPropagation()' },
-      { number: 3, text: 'return false' },
-      { number: 4, text: 'e.cancel()' }
+      { number: 1, text: "className={`box ${isActive ? 'active' : ''}`}" },
+      { number: 2, text: "className='box, active'" },
+      { number: 3, text: "className={'box' + isActive}" },
+      { number: 4, text: "className={['box', isActive && 'active']}" },
     ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "クラス名", "テンプレートリテラル", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'input要素のonChangeイベント',
-    difficulty: '初級',
-    content: 'テキスト入力の変更を検知するために使用するイベントはどれですか？',
-    sampleCode: `
-  <input type="text" ??? />
-    `,
+    title: "条件によりコンポーネントを非表示にする方法",
+    difficulty: "初級",
+    content:
+      "Reactで特定の条件下でコンポーネントを非表示にする一般的な方法はどれですか？",
+    sampleCode:
+`function HiddenComponent({ show }) {
+  if (!show) return null;
+  return <div>Visible</div>;
+}`,
     answerCode: 2,
-    explanation: 'onChangeイベントを使用して入力値の変更を検知します。',
+    explanation:
+      "条件に応じてnullを返すことで、コンポーネントを非表示にすることができます。",
     options: [
-      { number: 1, text: 'onInput' },
-      { number: 2, text: 'onChange' },
-      { number: 3, text: 'onKeyPress' },
-      { number: 4, text: 'onSubmit' }
+      { number: 1, text: "return <div></div>;" },
+      { number: 2, text: "if (!show) return null;" },
+      { number: 3, text: "return undefined;" },
+      { number: 4, text: "render() { return null; }" },
     ],
-    tags: ['React', 'フォーム', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "条件付きレンダリング", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  // ※ 重複のため「JSXでの式展開の注意点」は除外します
+
+  // Set4: reactProblemsMore (10問)
+  {
+    title: "フォーム送信時のpreventDefaultの利用方法",
+    difficulty: "初級",
+    content:
+      "Reactでフォーム送信時にページのリロードを防ぐため、イベントのデフォルト動作をキャンセルする正しい方法はどれですか？",
+    sampleCode:
+`function MyForm() {
+  function handleSubmit(event) {
+    event.preventDefault();
+    console.log("Form submitted");
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <button type="submit">Submit</button>
+    </form>
+  );
+}`,
+    answerCode: 2,
+    explanation:
+      "フォーム送信時にevent.preventDefault()を呼び出すことで、ブラウザのデフォルト動作であるページリロードを防ぎます。",
+    options: [
+      { number: 1, text: "handleSubmit関数内でreturn falseを返す" },
+      { number: 2, text: "handleSubmit関数内でevent.preventDefault()を呼び出す" },
+      { number: 3, text: "onSubmitイベントを削除する" },
+      { number: 4, text: "フォームのbuttonにtype='button'を指定する" },
+    ],
+    tags: ["React", "フォーム", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'JSXでのclassNameの使用',
-    difficulty: '初級',
-    content: 'JSXでHTMLのclass属性を指定する場合、どの属性名を使用すべきですか？',
-    sampleCode: `
-  <div ???="container"></div>
-    `,
+    title: "React.StrictModeの役割",
+    difficulty: "初級",
+    content:
+      "<React.StrictMode>を使用する主な目的は何でしょうか？以下の選択肢から正しいものを選んでください。",
+    sampleCode:
+`import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);`,
+    answerCode: 1,
+    explanation:
+      "<React.StrictMode>は、開発中に潜在的な問題を検出するための警告やチェックを行い、より安全なコードを書くために役立ちます。",
+    options: [
+      { number: 1, text: "潜在的な問題を検出し、開発環境で警告を表示する" },
+      { number: 2, text: "アプリケーションのパフォーマンスを向上させる" },
+      { number: 3, text: "グローバルなスタイルを適用する" },
+      { number: 4, text: "サーバーサイドレンダリングをサポートする" },
+    ],
+    tags: ["React", "StrictMode", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "componentDidMountの利用",
+    difficulty: "初級",
+    content:
+      "クラスコンポーネントで、コンポーネントがマウントされた直後に一度だけ呼ばれるライフサイクルメソッドはどれですか？",
+    sampleCode:
+`class MyComponent extends React.Component {
+  componentDidMount() {
+    console.log("Component mounted");
+  }
+  render() {
+    return <div>Hello</div>;
+  }
+}`,
+    answerCode: 1,
+    explanation:
+      "componentDidMountは、コンポーネントがDOMに挿入された直後に呼ばれるため、初期データの取得などに適しています。",
+    options: [
+      { number: 1, text: "componentDidMount" },
+      { number: 2, text: "componentWillMount" },
+      { number: 3, text: "componentDidUpdate" },
+      { number: 4, text: "componentWillUnmount" },
+    ],
+    tags: ["React", "ライフサイクル", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "React Routerの基本的な設定",
+    difficulty: "初級",
+    content:
+      "React Routerを使ってアプリ全体にルーティングを設定する際、全体をラップするために使用するコンポーネントはどれですか？",
+    sampleCode:
+`import { BrowserRouter, Route } from 'react-router-dom';
+import Home from './Home';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Route path="/" component={Home} />
+    </BrowserRouter>
+  );
+}`,
+    answerCode: 2,
+    explanation:
+      "<BrowserRouter>は、React Routerでルート全体を管理するために使用されるコンポーネントです。",
+    options: [
+      { number: 1, text: "<Router>" },
+      { number: 2, text: "<BrowserRouter>" },
+      { number: 3, text: "<Switch>" },
+      { number: 4, text: "<Link>" },
+    ],
+    tags: ["React", "React Router", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "JSXでHTML属性を指定する方法",
+    difficulty: "初級",
+    content:
+      "ReactのJSXで、HTMLのclass属性を指定する場合の正しい属性名はどれですか？",
+    sampleCode:
+`function MyComponent() {
+  return <div className="container">Content</div>;
+}`,
+    answerCode: 2,
+    explanation:
+      "JSXでは、HTMLのclass属性に対応するプロパティとしてclassNameを使用します。",
+    options: [
+      { number: 1, text: "class" },
+      { number: 2, text: "className" },
+      { number: 3, text: "classname" },
+      { number: 4, text: "cssClass" },
+    ],
+    tags: ["React", "JSX", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "React.memoの利用",
+    difficulty: "初級",
+    content:
+      "React.memoはどのような目的で使用されるでしょうか？",
+    sampleCode:
+`const MyComponent = React.memo(function({ value }) {
+  return <div>{value}</div>;
+});`,
     answerCode: 3,
-    explanation: 'JSXではclassは予約語であるため、classNameを使用します。',
+    explanation:
+      "React.memoは、同じpropsの場合に再レンダリングを防ぐことで、パフォーマンス向上に寄与します。",
     options: [
-      { number: 1, text: 'class' },
-      { number: 2, text: 'classname' },
-      { number: 3, text: 'className' },
-      { number: 4, text: 'cls' }
+      { number: 1, text: "コンポーネントの状態を管理するため" },
+      { number: 2, text: "副作用を実行するため" },
+      { number: 3, text: "不要な再レンダリングを防ぐため" },
+      { number: 4, text: "コンポーネントを非同期で読み込むため" },
     ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "パフォーマンス", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: '単一の親要素でのラップ',
-    difficulty: '初級',
-    content: 'JSXで複数の要素を返す場合、なぜ単一の親要素でラップする必要があるのですか？',
-    sampleCode: `
-  function App() {
-    return (
-      ??? 
-      <h1>Title</h1>
-      <p>Paragraph</p>
-      ???
-    );
-  }
-    `,
-    answerCode: 4,
-    explanation: 'JSXは単一の親要素を返す必要があり、Fragmentなどを使用してラップできます。',
-    options: [
-      { number: 1, text: '理由は特になし' },
-      { number: 2, text: 'ブラウザの制約' },
-      { number: 3, text: 'HTMLの仕様' },
-      { number: 4, text: 'JSXの構文ルールによる' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'コンポーネントの命名規則',
-    difficulty: '初級',
-    content: 'Reactコンポーネントの名前はどのように命名するのが一般的ですか？',
-    sampleCode: '',
-    answerCode: 1,
-    explanation: 'Reactコンポーネントは大文字で始まる名前が推奨されます。',
-    options: [
-      { number: 1, text: '大文字で始める' },
-      { number: 2, text: '小文字で始める' },
-      { number: 3, text: '数字で始める' },
-      { number: 4, text: '記号で始める' }
-    ],
-    tags: ['React', '命名規則', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'propsを利用したデータの受け渡し',
-    difficulty: '初級',
-    content: '親コンポーネントから子コンポーネントへデータを渡す方法はどれですか？',
-    sampleCode: `
-  function Parent() {
-    return <Child ???="Hello" />;
-  }
-  function Child(props) {
-    return <div>{props.message}</div>;
-  }
-    `,
+    title: "条件付きレンダリングでの || 演算子",
+    difficulty: "初級",
+    content:
+      "JSXで||演算子を使用した条件付きレンダリングの挙動として正しいものはどれですか？",
+    sampleCode:
+`function Message({ text }) {
+  return <div>{text || "Default message"}</div>;
+}`,
     answerCode: 2,
-    explanation: '親コンポーネントは子コンポーネントにpropsを介してデータを渡します。',
+    explanation:
+      "||演算子は、左側の値がfalsyの場合に右側の値を返すため、textがfalsyの場合に'Default message'が表示されます。",
     options: [
-      { number: 1, text: 'state' },
-      { number: 2, text: 'props' },
-      { number: 3, text: 'context' },
-      { number: 4, text: 'ref' }
+      { number: 1, text: "textが真の場合に'Default message'を表示する" },
+      { number: 2, text: "textが偽の場合に'Default message'を表示する" },
+      { number: 3, text: "常に'Default message'を表示する" },
+      { number: 4, text: "textの値に関係なくtextを表示する" },
     ],
-    tags: ['React', 'props', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "JSX", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: '状態変更と再レンダリング',
-    difficulty: '初級',
-    content: 'Reactコンポーネントでstateが更新されると再レンダリングが行われる理由は何ですか？',
-    sampleCode: '',
+    title: "stateとpropsの違い",
+    difficulty: "初級",
+    content:
+      "Reactにおいて、stateとpropsの主な違いとして正しいのはどれですか？",
+    sampleCode:
+`function Child({ name }) {
+  return <div>{name}</div>;
+}`,
     answerCode: 3,
-    explanation: 'stateの変更によりUIが最新の状態に更新されるため、再レンダリングが行われます。',
+    explanation:
+      "stateはコンポーネント内部で管理される変更可能なデータであり、propsは外部から渡される読み取り専用のデータです。",
     options: [
-      { number: 1, text: 'パフォーマンス向上のため' },
-      { number: 2, text: '開発者の指示がないと再レンダリングされない' },
-      { number: 3, text: '状態の変更を反映するため' },
-      { number: 4, text: 'エラー防止のため' }
+      { number: 1, text: "どちらも変更可能なデータである" },
+      { number: 2, text: "propsはコンポーネント内部で管理され、stateは外部から渡される" },
+      { number: 3, text: "stateは内部で変更可能なデータ、propsは外部から渡される読み取り専用のデータ" },
+      { number: 4, text: "stateは同期的に更新され、propsは非同期的に更新される" },
     ],
-    tags: ['React', 'state', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "state", "props", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'Stateless Functional Componentの特徴',
-    difficulty: '初級',
-    content: '状態を持たないReactコンポーネントは何と呼ばれますか？',
-    sampleCode: '',
-    answerCode: 4,
-    explanation: '状態を持たず、受け取ったpropsのみで描画するコンポーネントはStateless Functional Componentと呼ばれます。',
+    title: "アロー関数を使ったイベントハンドラの利点",
+    difficulty: "初級",
+    content:
+      "Reactのイベントハンドラでアロー関数を使用する際の主な利点はどれですか？",
+    sampleCode:
+`function MyButton() {
+  return <button onClick={() => console.log("Clicked")}>Click</button>;
+}`,
+    answerCode: 3,
+    explanation:
+      "アロー関数を使用することで、thisのバインディングを気にせずにイベントハンドラを定義でき、コードがシンプルになります。",
     options: [
-      { number: 1, text: 'クラスコンポーネント' },
-      { number: 2, text: '状態コンポーネント' },
-      { number: 3, text: 'ホットコンポーネント' },
-      { number: 4, text: 'ステートレスコンポーネント' }
+      { number: 1, text: "コードが短くなる" },
+      { number: 2, text: "パフォーマンスが向上する" },
+      { number: 3, text: "thisのバインディングが不要になる" },
+      { number: 4, text: "コンポーネントが自動的に再レンダリングされる" },
     ],
-    tags: ['React', 'Functional Component', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "イベント", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: '動的リスト生成の方法',
-    difficulty: '初級',
-    content: '配列のデータから動的にリストを生成する際に使用するメソッドはどれですか？',
-    sampleCode: `
-  const items = [1, 2, 3];
-  const list = items.???(item => <li key={item}>{item}</li>);
-    `,
+    title: "条件式の簡略化手法",
+    difficulty: "初級",
+    content:
+      "ReactのJSXで条件付きレンダリングを簡略化するために、よく使用される手法はどれですか？",
+    sampleCode:
+`function Alert({ show }) {
+  return <div>{show && <span>Alert!</span>}</div>;
+}`,
+    answerCode: 3,
+    explanation:
+      "&&演算子を使用することで、条件がtrueの場合のみ後続の要素をレンダリングする簡潔な記述が可能になります。",
+    options: [
+      { number: 1, text: "||演算子を使用する" },
+      { number: 2, text: "if文を直接JSX内に書く" },
+      { number: 3, text: "&&演算子を使用して条件付きレンダリングする" },
+      { number: 4, text: "switch文を使用する" },
+    ],
+    tags: ["React", "条件付きレンダリング", "初心者向け"],
+    collectionName: "React 初級",
+  },
+
+  // Set5: reactProblemsNext (10問)
+  {
+    title: "Reactコンポーネントの正しいインポート方法",
+    difficulty: "初級",
+    content:
+      "Reactで他のコンポーネントをインポートする際の正しい記述方法はどれですか？",
+    sampleCode:
+`// Header.js (default export)
+export default function Header() {
+  return <header>Header</header>;
+}
+
+// App.js
+import Header from './Header';
+
+function App() {
+  return <Header />;
+}`,
+    answerCode: 1,
+    explanation:
+      "default exportされたコンポーネントは、import時に任意の名前でインポート可能です。",
+    options: [
+      { number: 1, text: "import Header from './Header';" },
+      { number: 2, text: "import { Header } from './Header';" },
+      { number: 3, text: "require('./Header');" },
+      { number: 4, text: "include Header from './Header';" },
+    ],
+    tags: ["React", "インポート", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "React Hooksが使用できる場所",
+    difficulty: "初級",
+    content:
+      "React Hooksはどこで使用することができるか、正しい選択肢はどれですか？",
+    sampleCode:
+`function MyComponent() {
+  const [count, setCount] = useState(0);
+  return <div>{count}</div>;
+}`,
+    answerCode: 1,
+    explanation:
+      "Hooksは関数コンポーネントまたはカスタムフックの内部でのみ使用できます。",
+    options: [
+      { number: 1, text: "関数コンポーネントまたはカスタムフック内" },
+      { number: 2, text: "クラスコンポーネント内" },
+      { number: 3, text: "ループや条件分岐内でのみ" },
+      { number: 4, text: "どこでも使用可能" },
+    ],
+    tags: ["React", "Hooks", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "useStateで初期値に関数を渡す理由",
+    difficulty: "初級",
+    content:
+      "useStateフックで初期値として関数を渡すメリットはどれですか？",
+    sampleCode:
+`function computeInitial() {
+  // 複雑な計算処理
+  return 0;
+}
+
+function Counter() {
+  const [count, setCount] = useState(() => computeInitial());
+  return <div>{count}</div>;
+}`,
     answerCode: 2,
-    explanation: 'mapメソッドを使って配列の各要素からリストを生成します。',
+    explanation:
+      "初期値を関数として渡すことで、コンポーネントの初回レンダリング時にのみ計算が実行され、パフォーマンスが向上します。",
     options: [
-      { number: 1, text: 'forEach' },
-      { number: 2, text: 'map' },
-      { number: 3, text: 'filter' },
-      { number: 4, text: 'reduce' }
+      { number: 1, text: "毎回再計算される" },
+      { number: 2, text: "初回レンダリング時のみ計算され、パフォーマンスが向上する" },
+      { number: 3, text: "useStateは関数しか受け取れない" },
+      { number: 4, text: "初期値が固定される" },
     ],
-    tags: ['React', 'リスト', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "useState", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'onSubmitイベントの利用',
-    difficulty: '初級',
-    content: 'フォーム送信時に呼び出されるイベントハンドラはどれですか？',
-    sampleCode: `
-  <form ???={handleSubmit}>
-    <input type="text" />
-  </form>
-    `,
-    answerCode: 4,
-    explanation: 'フォームの送信はonSubmitイベントでハンドリングします。',
+    title: "カスタムフックの命名規則",
+    difficulty: "初級",
+    content:
+      "Reactでカスタムフックを定義する際の命名規則として正しいものはどれですか？",
+    sampleCode:
+`function useCustomHook() {
+  // カスタムフックのロジック
+}`,
+    answerCode: 1,
+    explanation:
+      "カスタムフックは必ず「use」で始める名前にする必要があります。",
     options: [
-      { number: 1, text: 'onClick' },
-      { number: 2, text: 'onChange' },
-      { number: 3, text: 'onKeyPress' },
-      { number: 4, text: 'onSubmit' }
+      { number: 1, text: "名前は必ず「use」で始める" },
+      { number: 2, text: "名前は必ず「hook」で始める" },
+      { number: 3, text: "特に規則はない" },
+      { number: 4, text: "大文字で始める必要がある" },
     ],
-    tags: ['React', 'フォーム', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "Hooks", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: '制御コンポーネントとは',
-    difficulty: '初級',
-    content: 'フォームの入力値をReactで状態管理するコンポーネントは何と呼ばれますか？',
-    sampleCode: `
-  function Form() {
-    const [value, setValue] = useState("");
-    return <input type="text" value={value} onChange={e => setValue(e.target.value)} />;
+    title: "childrenプロパティの役割",
+    difficulty: "初級",
+    content:
+      "Reactコンポーネントのchildrenプロパティはどのような役割を果たしますか？",
+    sampleCode:
+`function Container({ children }) {
+  return <div>{children}</div>;
+}`,
+    answerCode: 2,
+    explanation:
+      "childrenプロパティは、親コンポーネントから渡された要素を表示するために使用されます。",
+    options: [
+      { number: 1, text: "内部の状態を管理する" },
+      { number: 2, text: "親コンポーネントから渡された要素を表示する" },
+      { number: 3, text: "イベントを伝達する" },
+      { number: 4, text: "CSSスタイルを適用する" },
+    ],
+    tags: ["React", "children", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "リストレンダリングでインデックスをkeyに使用する際の注意点",
+    difficulty: "初級",
+    content:
+      "Reactでリストレンダリングを行う際、配列のインデックスをkeyとして使用する場合の注意点はどれですか？",
+    sampleCode:
+`function List({ items }) {
+  return (
+    <ul>
+      {items.map((item, index) => <li key={index}>{item}</li>)}
+    </ul>
+  );
+}`,
+    answerCode: 2,
+    explanation:
+      "インデックスをkeyとして使用すると、要素の順序が変化した場合に再レンダリング時のバグが発生する可能性があります。",
+    options: [
+      { number: 1, text: "パフォーマンスが向上する" },
+      { number: 2, text: "リストの順序が変わると予期せぬ再レンダリングが発生する可能性がある" },
+      { number: 3, text: "すべての要素がユニークになる" },
+      { number: 4, text: "エラーが発生する" },
+    ],
+    tags: ["React", "リスト", "key", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "React DevToolsの主な利用目的",
+    difficulty: "初級",
+    content:
+      "React DevToolsはどのような目的で使用されるでしょうか？",
+    sampleCode:
+`// React DevToolsを使用してコンポーネントツリーを検査する`,
+    answerCode: 2,
+    explanation:
+      "React DevToolsは、コンポーネントのツリー、props、stateなどをリアルタイムで検査・デバッグするために使用されます。",
+    options: [
+      { number: 1, text: "コンポーネントのレンダリングを最適化する" },
+      { number: 2, text: "リアルタイムのデバッグと状態の検査を行う" },
+      { number: 3, text: "自動テストを実行する" },
+      { number: 4, text: "サーバーサイドレンダリングの設定を行う" },
+    ],
+    tags: ["React", "DevTools", "初心者向け"],
+    collectionName: "React 初級",
+  },
+  {
+    title: "イベントハンドラに引数を渡す方法",
+    difficulty: "初級",
+    content:
+      "Reactでイベントハンドラに引数を渡す正しい方法はどれですか？",
+    sampleCode:
+`function MyButton({ value }) {
+  function handleClick(val) {
+    console.log(val);
   }
-    `,
-    answerCode: 1,
-    explanation: '入力値をstateで管理するコンポーネントは「制御コンポーネント」と呼ばれます。',
-    options: [
-      { number: 1, text: '制御コンポーネント' },
-      { number: 2, text: '非制御コンポーネント' },
-      { number: 3, text: '状態コンポーネント' },
-      { number: 4, text: '無状態コンポーネント' }
-    ],
-    tags: ['React', 'フォーム', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '論理演算子による条件レンダリング',
-    difficulty: '初級',
-    content: 'JSX内で論理AND (&&) を使った条件付きレンダリングの正しい書き方はどれですか？',
-    sampleCode: `
-  { isVisible && <p>表示されます</p> }
-    `,
-    answerCode: 1,
-    explanation: '&&演算子は条件がtrueの場合のみ後続の要素をレンダリングします。',
-    options: [
-      { number: 1, text: '{ isVisible && <p>表示されます</p> }' },
-      { number: 2, text: '{ isVisible || <p>表示されます</p> }' },
-      { number: 3, text: '{ isVisible ? null : <p>表示されます</p> }' },
-      { number: 4, text: '{ isVisible ? <p>表示されます</p> }' }
-    ],
-    tags: ['React', '条件付きレンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'アロー関数によるイベントハンドラの利点',
-    difficulty: '初級',
-    content: 'onClickイベント内でアロー関数を使用するメリットは何ですか？',
-    sampleCode: `
-  <button onClick={() => console.log("Clicked")}>
-    Click
-  </button>
-    `,
-    answerCode: 1,
-    explanation: 'アロー関数はthisのバインディングを必要とせず、シンプルに記述できるため好まれます。',
-    options: [
-      { number: 1, text: 'シンプルで記述が容易なため' },
-      { number: 2, text: 'パフォーマンスが向上するため' },
-      { number: 3, text: '自動でイベントがバインドされるため' },
-      { number: 4, text: '再レンダリングが防止されるため' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '条件付きクラスの設定',
-    difficulty: '初級',
-    content: 'JSXで条件に応じてクラス名を変更する一般的な方法はどれですか？',
-    sampleCode: `
-  <div className={ isActive ? "active" : "inactive" }>Content</div>
-    `,
-    answerCode: 1,
-    explanation: '三項演算子を使って条件に応じたクラス名を設定できます。',
-    options: [
-      { number: 1, text: 'className={ isActive ? "active" : "inactive" }' },
-      { number: 2, text: 'class={ isActive ? "active" : "inactive" }' },
-      { number: 3, text: 'className="isActive ? active : inactive"' },
-      { number: 4, text: 'class={isActive && "active"}' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'Fragmentの短縮記法',
-    difficulty: '初級',
-    content: 'React.Fragmentの短縮記法はどれですか？',
-    sampleCode: `
-  function List() {
-    return (
-      ??? 
-      <li>Item1</li>
-      <li>Item2</li>
-      ???
-    );
-  }
-    `,
+  return <button onClick={() => handleClick(value)}>Click me</button>;
+}`,
     answerCode: 2,
-    explanation: '<>と</>で囲むことでFragmentの短縮記法が使えます。',
+    explanation:
+      "アロー関数でラップすることで、イベントハンドラに引数を渡すことができます。",
     options: [
-      { number: 1, text: '<Fragment>...</Fragment>' },
-      { number: 2, text: '<>...</>' },
-      { number: 3, text: '<frag>...</frag>' },
-      { number: 4, text: '<React.Fragment>...</React.Fragment>' }
+      { number: 1, text: "onClick={handleClick(value)}" },
+      { number: 2, text: "onClick={() => handleClick(value)}" },
+      { number: 3, text: "onClick={handleClick}" },
+      { number: 4, text: "onClick={handleClick.bind(this, value)}" },
     ],
-    tags: ['React', 'Fragment', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "イベント", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'Functional ComponentとClass Componentの違い',
-    difficulty: '初級',
-    content: 'Reactコンポーネントを関数として定義する場合とクラスとして定義する場合の主な違いは何ですか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: '関数コンポーネントはシンプルでhooksが使え、クラスコンポーネントはライフサイクルメソッドを持ちます。',
+    title: "コンポーネントの分割の利点",
+    difficulty: "初級",
+    content:
+      "Reactでコンポーネントを小さく分割することの主な利点はどれですか？",
+    sampleCode:
+`function Header() { return <header>Header</header>; }
+function Footer() { return <footer>Footer</footer>; }
+function Layout() {
+  return (
+    <div>
+      <Header />
+      <main>Content</main>
+      <Footer />
+    </div>
+  );
+}`,
+    answerCode: 1,
+    explanation:
+      "小さなコンポーネントに分割することで、コードの再利用性と管理のしやすさが向上します。",
     options: [
-      { number: 1, text: '機能は全く同じである' },
-      { number: 2, text: '定義方法とライフサイクルの管理が異なる' },
-      { number: 3, text: '関数コンポーネントは状態を持たない' },
-      { number: 4, text: 'クラスコンポーネントは再利用できない' }
+      { number: 1, text: "コードの再利用性と管理のしやすさが向上する" },
+      { number: 2, text: "レンダリング速度が劇的に向上する" },
+      { number: 3, text: "コンポーネント間の依存関係がなくなる" },
+      { number: 4, text: "全てのコンポーネントがグローバルにアクセス可能になる" },
     ],
-    tags: ['React', 'コンポーネント', '初心者向け'],
-    collectionName: 'React 初級'
+    tags: ["React", "コンポーネント", "初心者向け"],
+    collectionName: "React 初級",
   },
   {
-    title: 'import/exportの基本',
-    difficulty: '初級',
-    content: 'Reactコンポーネントを他のファイルで使用するために必要な構文はどれですか？',
-    sampleCode: `
-  // MyComponent.js
-  export default MyComponent;
+    title: "条件付きスタイルの適用方法",
+    difficulty: "初級",
+    content:
+      "Reactで特定の条件に応じたスタイルを適用する正しい方法はどれですか？",
+    sampleCode:
+`function Alert({ type }) {
+  const style = { color: type === 'error' ? 'red' : 'green' };
+  return <div style={style}>Message</div>;
+}`,
+    answerCode: 1,
+    explanation:
+      "条件に応じたスタイルオブジェクトを作成し、style属性に渡すことで動的なスタイルの適用が可能になります。",
+    options: [
+      { number: 1, text: "条件に応じたオブジェクトを作成してstyle属性に渡す" },
+      { number: 2, text: "常に同じスタイルを適用する" },
+      { number: 3, text: "条件付きでCSSファイルをインポートする" },
+      { number: 4, text: "style属性に直接条件文を書く" },
+    ],
+    tags: ["React", "スタイル", "初心者向け"],
+    collectionName: "React 初級",
+  },  {
+    title: "useEffectのクリーンアップ関数の役割",
+    difficulty: "初級",
+    content:
+      "ReactのuseEffectフックにおいて、コンポーネントがアンマウントされる際に実行されるクリーンアップ関数の役割は何ですか？",
+    sampleCode:
+`import React, { useEffect } from 'react';
+
+function MyComponent() {
+  useEffect(() => {
+    const timer = setInterval(() => console.log("Tick"), 1000);
+    return () => {
+      clearInterval(timer);
+      console.log("Cleanup");
+    };
+  }, []);
   
-  // App.js
-  import MyComponent from './MyComponent';
-    `,
-    answerCode: 1,
-    explanation: 'ES6のexport/import構文を使ってコンポーネントを共有します。',
-    options: [
-      { number: 1, text: 'export default / import' },
-      { number: 2, text: 'module.exports / require' },
-      { number: 3, text: 'export / include' },
-      { number: 4, text: 'define / use' }
-    ],
-    tags: ['React', 'モジュール', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'React Developer Toolsの利用',
-    difficulty: '初級',
-    content: 'React Developer Toolsを使用する目的は何ですか？',
-    sampleCode: '',
+  return <div>Timer</div>;
+}`,
     answerCode: 3,
-    explanation: 'React Developer Toolsはコンポーネントツリーやstate、propsを確認するために使用します。',
-    options: [
-      { number: 1, text: 'コードの最適化' },
-      { number: 2, text: '新しいコンポーネントの作成' },
-      { number: 3, text: 'デバッグと状態の確認' },
-      { number: 4, text: 'CSSの編集' }
-    ],
-    tags: ['React', '開発ツール', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'onClickイベントの基本',
-    difficulty: '初級',
-    content: 'ボタンがクリックされた際に実行されるイベントハンドラの正しい記述はどれですか？',
-    sampleCode: `
-  <button ???={handleClick}>Click</button>
-    `,
-    answerCode: 2,
-    explanation: 'JSXではonClickプロパティに関数を渡してイベントハンドリングを行います。',
-    options: [
-      { number: 1, text: 'click={handleClick}' },
-      { number: 2, text: 'onClick={handleClick}' },
-      { number: 3, text: 'onclick="handleClick()"' },
-      { number: 4, text: 'on-click={handleClick}' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '条件付きレンダリング（&&演算子）',
-    difficulty: '初級',
-    content: 'JSXで&&演算子を使った条件付きレンダリングの例として正しいものはどれですか？',
-    sampleCode: `
-  { isLoggedIn && <p>Welcome</p> }
-    `,
-    answerCode: 1,
-    explanation: '&&演算子を使うと、条件がtrueの場合にのみ後続の要素がレンダリングされます。',
-    options: [
-      { number: 1, text: '{ isLoggedIn && <p>Welcome</p> }' },
-      { number: 2, text: '{ isLoggedIn || <p>Welcome</p> }' },
-      { number: 3, text: '{ isLoggedIn ? <p>Welcome</p> }' },
-      { number: 4, text: '{ isLoggedIn, <p>Welcome</p> }' }
-    ],
-    tags: ['React', '条件付きレンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの複数行テキスト表示',
-    difficulty: '初級',
-    content: 'JSXで複数行のテキストを表示する正しい方法はどれですか？',
-    sampleCode: `
-  function Text() {
-    return (
-      <p>
-        Line1
-        Line2
-      </p>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: '複数行のテキストは1つの要素内で改行して記述できます。',
-    options: [
-      { number: 1, text: '改行を含む1つの要素内で記述する' },
-      { number: 2, text: '各行ごとに<p>タグで囲む' },
-      { number: 3, text: '配列で返す' },
-      { number: 4, text: 'フラグメントで囲む' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '子から親へのイベント伝達',
-    difficulty: '初級',
-    content: '子コンポーネントから親コンポーネントにイベントを伝達する方法として正しいものはどれですか？',
-    sampleCode: `
-  function Parent() {
-    const handleChildEvent = () => { console.log("Event from child"); };
-    return <Child onEvent={handleChildEvent} />;
-  }
-  function Child({ onEvent }) {
-    return <button onClick={onEvent}>Click</button>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '親コンポーネントはコールバック関数を子に渡し、子で呼び出すことでイベントを伝達します。',
-    options: [
-      { number: 1, text: 'コールバック関数を渡す' },
-      { number: 2, text: 'stateで共有する' },
-      { number: 3, text: 'contextを使う' },
-      { number: 4, text: 'refを使用する' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '文字列リテラルとJSX内の式',
-    difficulty: '初級',
-    content: 'JSX内で文字列リテラルとJavaScript式を区別する方法は何ですか？',
-    sampleCode: `
-  <div>
-    "Hello" vs { "Hello" }
-  </div>
-    `,
-    answerCode: 2,
-    explanation: '文字列はダブルクォートで囲むが、式は波括弧で囲みます。',
-    options: [
-      { number: 1, text: 'どちらも同じ書き方' },
-      { number: 2, text: '文字列は""、式は{}で囲む' },
-      { number: 3, text: '文字列は{}、式は""で囲む' },
-      { number: 4, text: '違いはない' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'クラスコンポーネントのライフサイクル',
-    difficulty: '初級',
-    content: 'クラスコンポーネントで初回レンダリング後に呼ばれるライフサイクルメソッドはどれですか？',
-    sampleCode: `
-  class MyComponent extends React.Component {
-    componentDidMount() {
-      // 初回レンダリング後
-    }
-    render() {
-      return <div>Hello</div>;
-    }
-  }
-    `,
-    answerCode: 1,
-    explanation: 'componentDidMountはコンポーネントがマウントされた直後に呼ばれます。',
-    options: [
-      { number: 1, text: 'componentDidMount' },
-      { number: 2, text: 'componentWillMount' },
-      { number: 3, text: 'componentDidUpdate' },
-      { number: 4, text: 'render' }
-    ],
-    tags: ['React', 'ライフサイクル', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '論理AND演算子を使った条件レンダリング',
-    difficulty: '初級',
-    content: 'JSX内で論理AND (&&) 演算子を使用して要素を表示する場合、正しい記述はどれですか？',
-    sampleCode: `
-  { isLoggedIn && <p>Welcome</p> }
-    `,
-    answerCode: 1,
-    explanation: '&&演算子は条件がtrueの場合にのみ後続の要素をレンダリングします。',
-    options: [
-      { number: 1, text: '{ isLoggedIn && <p>Welcome</p> }' },
-      { number: 2, text: '{ isLoggedIn || <p>Welcome</p> }' },
-      { number: 3, text: '{ isLoggedIn ? <p>Welcome</p> }' },
-      { number: 4, text: '{ isLoggedIn, <p>Welcome</p> }' }
-    ],
-    tags: ['React', '条件付きレンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの複数行テキスト表示再確認',
-    difficulty: '初級',
-    content: 'JSXで複数行のテキストを表示するための正しい方法はどれですか？',
-    sampleCode: `
-  function Message() {
-    return (
-      <p>
-        Line1<br/>
-        Line2
-      </p>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: '改行タグやCSSを使って複数行のテキストを表現します。',
-    options: [
-      { number: 1, text: '改行タグを使用する' },
-      { number: 2, text: 'テキストは1行で表示される' },
-      { number: 3, text: '配列で返す' },
-      { number: 4, text: 'Fragmentで囲む' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '子から親へのイベント伝達再確認',
-    difficulty: '初級',
-    content: '子コンポーネントから親コンポーネントへイベントを伝達する正しい方法はどれですか？',
-    sampleCode: `
-  function Parent() {
-    const handleChildEvent = () => { console.log("Event from child"); };
-    return <Child onEvent={handleChildEvent} />;
-  }
-  function Child({ onEvent }) {
-    return <button onClick={onEvent}>Click</button>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '親はコールバック関数を子に渡し、子で呼び出すことでイベントを伝達します。',
-    options: [
-      { number: 1, text: 'コールバック関数を渡す' },
-      { number: 2, text: 'stateで共有する' },
-      { number: 3, text: 'contextを使う' },
-      { number: 4, text: 'refを使用する' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '文字列リテラルとJSX内の式再確認',
-    difficulty: '初級',
-    content: 'JSX内で文字列と変数を結合して表示する正しい方法はどれですか？',
-    sampleCode: `
-  function App() {
-    const name = "Bob";
-    return <div>{"Hello, " + ???}</div>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '文字列と変数の結合は+演算子で行います。',
-    options: [
-      { number: 1, text: 'name' },
-      { number: 2, text: '{name}' },
-      { number: 3, text: '"name"' },
-      { number: 4, text: 'greet(name)' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'イベントハンドラの引数渡し',
-    difficulty: '初級',
-    content: 'onClickイベントで関数に引数を渡す正しい方法はどれですか？',
-    sampleCode: `
-  function handleClick(id) {
-    console.log(id);
-  }
-  <button onClick={() => handleClick(5)}>Click</button>
-    `,
-    answerCode: 1,
-    explanation: 'アロー関数を使用して引数を渡すのが一般的な方法です。',
-    options: [
-      { number: 1, text: 'onClick={() => handleClick(5)}' },
-      { number: 2, text: 'onClick={handleClick(5)}' },
-      { number: 3, text: 'onClick={handleClick}' },
-      { number: 4, text: 'onClick={handleClick.bind(this, 5)}' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでのラッパー要素の必要性',
-    difficulty: '初級',
-    content: 'JSXで複数の要素を返す場合、なぜラッパー要素で囲む必要があるのでしょうか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: 'JSXは1つのルート要素を返す必要があるため、ラッパーで囲む必要があります。',
-    options: [
-      { number: 1, text: 'ブラウザの制約による' },
-      { number: 2, text: 'JSXの構文ルールにより単一要素が必要' },
-      { number: 3, text: 'パフォーマンスのため' },
-      { number: 4, text: '可読性向上のため' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'フォーム入力の制御',
-    difficulty: '初級',
-    content: 'Reactでフォームの入力値を制御する方法はどれですか？',
-    sampleCode: `
-  function Form() {
-    const [value, setValue] = useState("");
-    return <input type="text" value={value} onChange={e => setValue(e.target.value)} />;
-  }
-    `,
-    answerCode: 1,
-    explanation: '制御コンポーネントでは、入力値をstateで管理し、onChangeで更新します。',
-    options: [
-      { number: 1, text: '制御コンポーネントとして実装する' },
-      { number: 2, text: '非制御コンポーネントとして実装する' },
-      { number: 3, text: 'stateを使用しない' },
-      { number: 4, text: 'onSubmitのみで制御する' }
-    ],
-    tags: ['React', 'フォーム', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'onChangeイベントの基本',
-    difficulty: '初級',
-    content: '入力値の変更を検知するために、Reactで使用されるイベントはどれですか？',
-    sampleCode: `
-  <input type="text" onChange={handleChange} />
-    `,
-    answerCode: 1,
-    explanation: 'onChangeイベントが入力値の変更を検知するために使用されます。',
-    options: [
-      { number: 1, text: 'onChange' },
-      { number: 2, text: 'onInput' },
-      { number: 3, text: 'onKeyDown' },
-      { number: 4, text: 'onSubmit' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの複数行文字列の表示',
-    difficulty: '初級',
-    content: 'JSX内で複数行のテキストを表示するために必要な方法はどれですか？',
-    sampleCode: `
-  function Message() {
-    return (
-      <p>
-        Line1<br/>
-        Line2
-      </p>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: '改行タグやCSSを使って複数行のテキストを表現します。',
-    options: [
-      { number: 1, text: '改行タグを使用する' },
-      { number: 2, text: 'テキストは1行で表示される' },
-      { number: 3, text: '配列で返す' },
-      { number: 4, text: 'Fragmentで囲む' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'シンプルなボタンコンポーネントの作成',
-    difficulty: '初級',
-    content: '関数コンポーネントとしてシンプルなボタンを作成する正しい方法はどれですか？',
-    sampleCode: `
-  function Button({ onClick, label }) {
-    return <button onClick={onClick}>{label}</button>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '関数コンポーネントはpropsを受け取り、JSXを返すシンプルな構造です。',
-    options: [
-      { number: 1, text: '関数コンポーネントとして定義する' },
-      { number: 2, text: 'クラスコンポーネントとして定義する' },
-      { number: 3, text: 'HTMLの<button>タグのみ使用する' },
-      { number: 4, text: 'divタグでラップする' }
-    ],
-    tags: ['React', 'コンポーネント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'defaultPropsの設定方法',
-    difficulty: '初級',
-    content: 'Reactでコンポーネントのpropsにデフォルト値を設定する正しい方法はどれですか？',
-    sampleCode: `
-  function Greeting({ message }) {
-    return <p>{message}</p>;
-  }
-  Greeting.defaultProps = {
-    message: "Hello"
-  };
-    `,
-    answerCode: 1,
-    explanation: 'defaultPropsを利用してpropsのデフォルト値を設定できます。',
-    options: [
-      { number: 1, text: 'ComponentName.defaultProps = { ... }' },
-      { number: 2, text: 'ComponentName.props = { ... }' },
-      { number: 3, text: 'defaultProps = { ... }' },
-      { number: 4, text: 'props.default = { ... }' }
-    ],
-    tags: ['React', 'props', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの属性値の設定',
-    difficulty: '初級',
-    content: 'JSXで文字列とJavaScript式の属性値を設定する際の違いは何ですか？',
-    sampleCode: `
-  <div id="main" data-value={123}></div>
-    `,
-    answerCode: 4,
-    explanation: '文字列はダブルクォート、JavaScript式は波括弧で囲みます。',
-    options: [
-      { number: 1, text: 'どちらも波括弧で囲む' },
-      { number: 2, text: 'どちらもダブルクォートで囲む' },
-      { number: 3, text: '文字列は波括弧、式はダブルクォート' },
-      { number: 4, text: '文字列はダブルクォート、式は波括弧' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'Functional vs Class Componentの違い',
-    difficulty: '初級',
-    content: 'Reactコンポーネントを関数として定義する場合とクラスとして定義する場合の主な違いは何ですか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: '関数コンポーネントはシンプルでhooksが使え、クラスコンポーネントはライフサイクルメソッドを持ちます。',
-    options: [
-      { number: 1, text: '機能は全く同じである' },
-      { number: 2, text: '定義方法とライフサイクルの管理が異なる' },
-      { number: 3, text: '関数コンポーネントは状態を持たない' },
-      { number: 4, text: 'クラスコンポーネントは再利用できない' }
-    ],
-    tags: ['React', 'コンポーネント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'import/exportの基本',
-    difficulty: '初級',
-    content: 'Reactコンポーネントを他のファイルで使用するために必要な構文はどれですか？',
-    sampleCode: `
-  // MyComponent.js
-  export default MyComponent;
-  
-  // App.js
-  import MyComponent from './MyComponent';
-    `,
-    answerCode: 1,
-    explanation: 'ES6のexport/import構文を使ってコンポーネントを共有します。',
-    options: [
-      { number: 1, text: 'export default / import' },
-      { number: 2, text: 'module.exports / require' },
-      { number: 3, text: 'export / include' },
-      { number: 4, text: 'define / use' }
-    ],
-    tags: ['React', 'モジュール', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'React Developer Toolsの利用',
-    difficulty: '初級',
-    content: 'React Developer Toolsを使用する目的は何ですか？',
-    sampleCode: '',
-    answerCode: 3,
-    explanation: 'React Developer Toolsはコンポーネントツリーやstate、propsを確認するために使用します。',
-    options: [
-      { number: 1, text: 'コードの最適化' },
-      { number: 2, text: '新しいコンポーネントの作成' },
-      { number: 3, text: 'デバッグと状態の確認' },
-      { number: 4, text: 'CSSの編集' }
-    ],
-    tags: ['React', '開発ツール', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'onClickイベントの基本',
-    difficulty: '初級',
-    content: 'ボタンがクリックされた際に実行されるイベントハンドラの正しい記述はどれですか？',
-    sampleCode: `
-  <button ???={handleClick}>Click</button>
-    `,
-    answerCode: 2,
-    explanation: 'JSXではonClickプロパティに関数を渡してイベントハンドリングを行います。',
-    options: [
-      { number: 1, text: 'click={handleClick}' },
-      { number: 2, text: 'onClick={handleClick}' },
-      { number: 3, text: 'onclick="handleClick()"' },
-      { number: 4, text: 'onClick="handleClick()"' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '条件付きレンダリング（&&演算子）再確認',
-    difficulty: '初級',
-    content: 'JSXで&&演算子を使った条件付きレンダリングの例として正しいものはどれですか？',
-    sampleCode: `
-  { isLoggedIn && <p>Welcome</p> }
-    `,
-    answerCode: 1,
-    explanation: '&&演算子を使うと、条件がtrueの場合にのみ後続の要素がレンダリングされます。',
-    options: [
-      { number: 1, text: '{ isLoggedIn && <p>Welcome</p> }' },
-      { number: 2, text: '{ isLoggedIn || <p>Welcome</p> }' },
-      { number: 3, text: '{ isLoggedIn ? <p>Welcome</p> }' },
-      { number: 4, text: '{ isLoggedIn, <p>Welcome</p> }' }
-    ],
-    tags: ['React', '条件付きレンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの複数行テキスト表示再確認',
-    difficulty: '初級',
-    content: 'JSXで複数行のテキストを表示するための正しい方法はどれですか？',
-    sampleCode: `
-  function Message() {
-    return (
-      <p>
-        Line1<br/>
-        Line2
-      </p>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: '改行タグやCSSを使って複数行のテキストを表現します。',
-    options: [
-      { number: 1, text: '改行タグを使用する' },
-      { number: 2, text: 'テキストは1行で表示される' },
-      { number: 3, text: '配列で返す' },
-      { number: 4, text: 'Fragmentで囲む' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '子から親へのイベント伝達再確認',
-    difficulty: '初級',
-    content: '子コンポーネントから親コンポーネントにイベントを伝達する正しい方法はどれですか？',
-    sampleCode: `
-  function Parent() {
-    const handleChildEvent = () => { console.log("Event from child"); };
-    return <Child onEvent={handleChildEvent} />;
-  }
-  function Child({ onEvent }) {
-    return <button onClick={onEvent}>Click</button>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '親はコールバック関数を子に渡し、子で呼び出すことでイベントを伝達します。',
-    options: [
-      { number: 1, text: 'コールバック関数を渡す' },
-      { number: 2, text: 'stateで共有する' },
-      { number: 3, text: 'contextを使う' },
-      { number: 4, text: 'refを使用する' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '文字列リテラルとJSX内の式',
-    difficulty: '初級',
-    content: 'JSX内で文字列リテラルとJavaScript式を区別する方法は何ですか？',
-    sampleCode: `
-  <div>
-    "Hello" vs { "Hello" }
-  </div>
-    `,
-    answerCode: 2,
-    explanation: '文字列はダブルクォートで囲むが、式は波括弧で囲みます。',
-    options: [
-      { number: 1, text: 'どちらも同じ書き方' },
-      { number: 2, text: '文字列は""、式は{}で囲む' },
-      { number: 3, text: '文字列は{}、式は""で囲む' },
-      { number: 4, text: '違いはない' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'クラスコンポーネントのライフサイクル再確認',
-    difficulty: '初級',
-    content: 'クラスコンポーネントで初回レンダリング後に呼ばれるライフサイクルメソッドはどれですか？',
-    sampleCode: `
-  class MyComponent extends React.Component {
-    componentDidMount() {
-      // 初回レンダリング後
-    }
-    render() {
-      return <div>Hello</div>;
-    }
-  }
-    `,
-    answerCode: 1,
-    explanation: 'componentDidMountはコンポーネントがマウントされた直後に呼ばれます。',
-    options: [
-      { number: 1, text: 'componentDidMount' },
-      { number: 2, text: 'componentWillMount' },
-      { number: 3, text: 'componentDidUpdate' },
-      { number: 4, text: 'render' }
-    ],
-    tags: ['React', 'ライフサイクル', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '論理AND演算子を使った条件レンダリング再確認',
-    difficulty: '初級',
-    content: 'JSX内で論理AND (&&) 演算子を使用して要素を表示する場合、正しい記述はどれですか？',
-    sampleCode: `
-  { isLoggedIn && <p>Welcome</p> }
-    `,
-    answerCode: 1,
-    explanation: '&&演算子は条件がtrueの場合にのみ後続の要素がレンダリングされます。',
-    options: [
-      { number: 1, text: '{ isLoggedIn && <p>Welcome</p> }' },
-      { number: 2, text: '{ isLoggedIn || <p>Welcome</p> }' },
-      { number: 3, text: '{ isLoggedIn ? <p>Welcome</p> }' },
-      { number: 4, text: '{ isLoggedIn, <p>Welcome</p> }' }
-    ],
-    tags: ['React', '条件付きレンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの要素のネスト',
-    difficulty: '初級',
-    content: 'JSXで複数の要素を正しくネストするためのルールは何ですか？',
-    sampleCode: `
-  function App() {
-    return (
-      <div>
-        <h1>Title</h1>
-        <p>Paragraph</p>
-      </div>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: 'JSXでは複数の要素は単一の親要素でラップする必要があります。',
-    options: [
-      { number: 1, text: '単一の親要素でラップする' },
-      { number: 2, text: '複数の親要素で囲む' },
-      { number: 3, text: '直接返す' },
-      { number: 4, text: 'ネストは不要' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの要素の正しい閉じ方',
-    difficulty: '初級',
-    content: 'JSXで必ず閉じる必要がある要素はどれですか？',
-    sampleCode: `
-  // 以下の中で自己閉じタグとして正しいものは？
-    `,
-    answerCode: 3,
-    explanation: '自己閉じタグは開始タグの末尾に/を付けて記述します。',
-    options: [
-      { number: 1, text: '<div>' },
-      { number: 2, text: '<span>' },
-      { number: 3, text: '<img />' },
-      { number: 4, text: '<p>' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '再レンダリングのトリガー',
-    difficulty: '初級',
-    content: 'Reactコンポーネントが再レンダリングされる主な原因は何ですか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: 'propsやstateの変更により再レンダリングが発生します。',
-    options: [
-      { number: 1, text: 'コンポーネントの初期化' },
-      { number: 2, text: 'propsまたはstateの変更' },
-      { number: 3, text: 'コンポーネントの分割' },
-      { number: 4, text: 'レンダリング関数の呼び出しがない' }
-    ],
-    tags: ['React', '再レンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'stateの変更時の挙動',
-    difficulty: '初級',
-    content: 'useStateで管理されるstateが更新されると、コンポーネントはどのように動作しますか？',
-    sampleCode: `
-  const [value, setValue] = useState(0);
-  setValue(value + 1);
-    `,
-    answerCode: 3,
-    explanation: 'stateの更新後、コンポーネントは再レンダリングされ、新しいstateが反映されます。',
-    options: [
-      { number: 1, text: '更新前のまま維持される' },
-      { number: 2, text: 'エラーが発生する' },
-      { number: 3, text: '再レンダリングされる' },
-      { number: 4, text: '初期状態に戻る' }
-    ],
-    tags: ['React', 'state', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの複数属性の指定方法',
-    difficulty: '初級',
-    content: 'JSXでHTML要素に複数の属性を指定する際の正しい書き方はどれですか？',
-    sampleCode: `
-  <input type="text" placeholder="Enter text" />
-    `,
-    answerCode: 1,
-    explanation: 'JSXではHTML属性をカンマ区切りではなく、スペースで区切って指定します。',
-    options: [
-      { number: 1, text: 'スペースで区切る' },
-      { number: 2, text: 'カンマで区切る' },
-      { number: 3, text: 'セミコロンで区切る' },
-      { number: 4, text: '改行で区切る' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'コンポーネント名の大文字ルール',
-    difficulty: '初級',
-    content: 'なぜReactコンポーネントの名前は大文字で始める必要があるのでしょうか？',
-    sampleCode: '',
-    answerCode: 4,
-    explanation: '大文字で始まることで、JSXがそれをコンポーネントとして認識します。',
-    options: [
-      { number: 1, text: '慣習だから' },
-      { number: 2, text: 'パフォーマンス向上のため' },
-      { number: 3, text: '自動補完のため' },
-      { number: 4, text: 'JSXがコンポーネントと認識するため' }
-    ],
-    tags: ['React', '命名規則', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '子コンポーネントへのプロパティ渡し',
-    difficulty: '初級',
-    content: '親コンポーネントから子コンポーネントへ値を渡す際、どのプロパティ名を使うのが一般的ですか？',
-    sampleCode: `
-  <Child message="Hello" />
-    `,
-    answerCode: 2,
-    explanation: 'propsを使って親から子へデータを渡します。',
-    options: [
-      { number: 1, text: 'state' },
-      { number: 2, text: 'props' },
-      { number: 3, text: 'context' },
-      { number: 4, text: 'ref' }
-    ],
-    tags: ['React', 'props', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'イベントハンドラのバインディング不要',
-    difficulty: '初級',
-    content: '関数コンポーネントではなぜイベントハンドラのthisバインディングが不要なのですか？',
-    sampleCode: '',
-    answerCode: 1,
-    explanation: '関数コンポーネントはthisを持たず、関数内の変数として定義されるためバインディングが不要です。',
-    options: [
-      { number: 1, text: '関数コンポーネントはthisを持たないから' },
-      { number: 2, text: '自動でバインドされるから' },
-      { number: 3, text: 'バインディングが必要な状況がないから' },
-      { number: 4, text: 'イベントが発生しないから' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'コンポーネント内の変数定義のスコープ',
-    difficulty: '初級',
-    content: '関数コンポーネント内で定義された変数はどこで利用可能ですか？',
-    sampleCode: `
-  function App() {
-    const greeting = "Hello";
-    return <p>{greeting}</p>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '変数はその関数内でのみ有効です。',
-    options: [
-      { number: 1, text: 'コンポーネント内でのみ利用可能' },
-      { number: 2, text: '全体で利用可能' },
-      { number: 3, text: '他のコンポーネントでも利用可能' },
-      { number: 4, text: 'グローバル変数になる' }
-    ],
-    tags: ['React', 'JavaScript', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSX内での配列出力',
-    difficulty: '初級',
-    content: '配列をJSX内で直接出力する場合、どのような結果になりますか？',
-    sampleCode: `
-  const items = ["A", "B", "C"];
-  function List() {
-    return <div>{items}</div>;
-  }
-    `,
-    answerCode: 3,
-    explanation: '配列内の各要素が連結されて出力されます。',
-    options: [
-      { number: 1, text: 'エラーになる' },
-      { number: 2, text: '空白で区切られる' },
-      { number: 3, text: '連結されて表示される' },
-      { number: 4, text: '配列として表示される' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでのif文の利用',
-    difficulty: '初級',
-    content: 'JSX内で直接if文を使用できない理由は何ですか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: 'JSXは式を評価するため、if文のような文は使用できません。',
-    options: [
-      { number: 1, text: '構文エラーになるから' },
-      { number: 2, text: 'JSXは式しか評価しないため' },
-      { number: 3, text: 'if文は非同期処理だから' },
-      { number: 4, text: '特に理由はない' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'useStateの初期値設定',
-    difficulty: '初級',
-    content: 'useStateフックで状態の初期値を設定する方法はどれですか？',
-    sampleCode: `
-  const [value, setValue] = useState(???);
-    `,
-    answerCode: 1,
-    explanation: 'useStateの引数に初期値を渡すことで状態を初期化します。',
-    options: [
-      { number: 1, text: '初期値を引数に渡す' },
-      { number: 2, text: 'setValueで初期化する' },
-      { number: 3, text: '初期値は自動で0になる' },
-      { number: 4, text: '初期値をstateに直接代入する' }
-    ],
-    tags: ['React', 'useState', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'インラインスタイルの注意点',
-    difficulty: '初級',
-    content: 'JSXでインラインスタイルを設定する際に気を付けるべき点は何ですか？',
-    sampleCode: `
-  <div style={{ backgroundColor: "blue" }}>Content</div>
-    `,
-    answerCode: 3,
-    explanation: 'CSSプロパティはキャメルケースで記述し、値は文字列として指定します。',
-    options: [
-      { number: 1, text: 'CSSファイルを別に用意する必要がある' },
-      { number: 2, text: 'スタイルは常にクラスで指定する' },
-      { number: 3, text: 'プロパティ名はキャメルケースで記述する' },
-      { number: 4, text: 'JavaScriptオブジェクトは使えない' }
-    ],
-    tags: ['React', 'スタイル', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'コンポーネント再利用のためのprops',
-    difficulty: '初級',
-    content: '同じコンポーネントを異なるデータで再利用する際に重要な仕組みは何ですか？',
-    sampleCode: `
-  function Card({ title, content }) {
-    return (
-      <div>
-        <h2>{title}</h2>
-        <p>{content}</p>
-      </div>
-    );
-  }
-    `,
-    answerCode: 2,
-    explanation: 'propsを使うことで、コンポーネントに異なるデータを渡し再利用性を高めます。',
-    options: [
-      { number: 1, text: 'state' },
-      { number: 2, text: 'props' },
-      { number: 3, text: 'context' },
-      { number: 4, text: 'ref' }
-    ],
-    tags: ['React', 'props', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '親コンポーネントからのデータ共有',
-    difficulty: '初級',
-    content: '複数の子コンポーネントに同じデータを渡すために一般的に使用される方法はどれですか？',
-    sampleCode: '',
-    answerCode: 3,
-    explanation: '親コンポーネントから各子にpropsを渡すことでデータ共有が行われます。',
-    options: [
-      { number: 1, text: 'stateを直接共有する' },
-      { number: 2, text: '各子で個別に定義する' },
-      { number: 3, text: '親からpropsとして渡す' },
-      { number: 4, text: 'グローバル変数を使用する' }
-    ],
-    tags: ['React', 'props', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSX内での式の評価タイミング',
-    difficulty: '初級',
-    content: 'JSX内で記述されたJavaScript式はいつ評価されますか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: 'JSX内の式はレンダリング時に評価されます。',
-    options: [
-      { number: 1, text: 'ビルド時に評価される' },
-      { number: 2, text: 'レンダリング時に評価される' },
-      { number: 3, text: '初期化時に評価される' },
-      { number: 4, text: 'イベント発生時に評価される' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'シンプルなカウンターコンポーネントの作成',
-    difficulty: '初級',
-    content: 'useStateを用いてカウンターを実装する際、正しい初期化と更新方法はどれですか？',
-    sampleCode: `
-  function Counter() {
-    const [count, setCount] = useState(0);
-    return (
-      <div>
-        <p>{count}</p>
-        <button onClick={???}>Increment</button>
-      </div>
-    );
-  }
-    `,
-    answerCode: 4,
-    explanation: 'ボタンのクリックでsetCountを呼び出し、countを更新します。',
-    options: [
-      { number: 1, text: 'setCount(count)' },
-      { number: 2, text: 'count++' },
-      { number: 3, text: 'setCount(1)' },
-      { number: 4, text: 'setCount(count + 1)' }
-    ],
-    tags: ['React', 'useState', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSX内での関数呼び出し',
-    difficulty: '初級',
-    content: 'JSX内で関数を呼び出す場合、正しい記述方法はどれですか？',
-    sampleCode: `
-  function greet() {
-    return "Hello";
-  }
-  function App() {
-    return <div>{???}</div>;
-  }
-    `,
-    answerCode: 2,
-    explanation: 'JSX内では関数呼び出しは波括弧内に記述します。',
-    options: [
-      { number: 1, text: 'greet' },
-      { number: 2, text: 'greet()' },
-      { number: 3, text: '"greet()"' },
-      { number: 4, text: '{greet}' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'レンダリング再実行のタイミング',
-    difficulty: '初級',
-    content: 'Reactコンポーネントはどのタイミングで再レンダリングされますか？',
-    sampleCode: '',
-    answerCode: 3,
-    explanation: 'コンポーネントはpropsやstateが変更された際に再レンダリングされます。',
-    options: [
-      { number: 1, text: '常に一定間隔で再レンダリングされる' },
-      { number: 2, text: '初回レンダリングのみ行われる' },
-      { number: 3, text: 'propsまたはstateの変更時に再レンダリングされる' },
-      { number: 4, text: 'ユーザーの操作に関係なく再レンダリングされない' }
-    ],
-    tags: ['React', 'レンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '簡単なリスト表示の作成',
-    difficulty: '初級',
-    content: '配列からリストを生成する際、正しい記述はどれですか？',
-    sampleCode: `
-  const items = ["Apple", "Banana", "Cherry"];
-  function FruitList() {
-    return (
-      <ul>
-        { items.map((item, index) => <li key={index}>{item}</li>) }
-      </ul>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: 'map関数を使用して、各要素にkey属性を指定しながらリストを生成します。',
-    options: [
-      { number: 1, text: 'map関数を使用する' },
-      { number: 2, text: 'for文を使用する' },
-      { number: 3, text: 'while文を使用する' },
-      { number: 4, text: '直接配列を出力する' }
-    ],
-    tags: ['React', 'リスト', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの式と文字列の結合',
-    difficulty: '初級',
-    content: 'JSX内で文字列と変数を結合して表示する正しい方法はどれですか？',
-    sampleCode: `
-  function App() {
-    const name = "Bob";
-    return <div>{"Hello, " + ???}</div>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '文字列と変数の結合は+演算子で行います。',
-    options: [
-      { number: 1, text: 'name' },
-      { number: 2, text: '{name}' },
-      { number: 3, text: '"name"' },
-      { number: 4, text: 'greet(name)' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'イベントハンドラの引数渡し',
-    difficulty: '初級',
-    content: 'onClickイベントで関数に引数を渡す正しい方法はどれですか？',
-    sampleCode: `
-  function handleClick(id) {
-    console.log(id);
-  }
-  <button onClick={() => handleClick(5)}>Click</button>
-    `,
-    answerCode: 1,
-    explanation: 'アロー関数を使用して引数を渡すのが一般的な方法です。',
-    options: [
-      { number: 1, text: 'onClick={() => handleClick(5)}' },
-      { number: 2, text: 'onClick={handleClick(5)}' },
-      { number: 3, text: 'onClick={handleClick}' },
-      { number: 4, text: 'onClick={handleClick.bind(this, 5)}' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでのラッパー要素の必要性',
-    difficulty: '初級',
-    content: 'JSXで複数の要素を返す場合、なぜラッパー要素で囲む必要があるのでしょうか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: 'JSXは1つのルート要素を返す必要があるため、ラッパーで囲む必要があります。',
-    options: [
-      { number: 1, text: 'ブラウザの制約による' },
-      { number: 2, text: 'JSXの構文ルールにより単一要素が必要' },
-      { number: 3, text: 'パフォーマンスのため' },
-      { number: 4, text: '可読性向上のため' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'フォーム入力の制御',
-    difficulty: '初級',
-    content: 'Reactでフォームの入力値を制御する方法はどれですか？',
-    sampleCode: `
-  function Form() {
-    const [value, setValue] = useState("");
-    return <input type="text" value={value} onChange={e => setValue(e.target.value)} />;
-  }
-    `,
-    answerCode: 1,
-    explanation: '制御コンポーネントでは、入力値をstateで管理し、onChangeで更新します。',
-    options: [
-      { number: 1, text: '制御コンポーネントとして実装する' },
-      { number: 2, text: '非制御コンポーネントとして実装する' },
-      { number: 3, text: 'stateを使用しない' },
-      { number: 4, text: 'onSubmitのみで制御する' }
-    ],
-    tags: ['React', 'フォーム', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'onChangeイベントの基本',
-    difficulty: '初級',
-    content: '入力値の変更を検知するために、Reactで使用されるイベントはどれですか？',
-    sampleCode: `
-  <input type="text" onChange={handleChange} />
-    `,
-    answerCode: 1,
-    explanation: 'onChangeイベントが入力値の変更を検知するために使用されます。',
-    options: [
-      { number: 1, text: 'onChange' },
-      { number: 2, text: 'onInput' },
-      { number: 3, text: 'onKeyDown' },
-      { number: 4, text: 'onSubmit' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの複数行文字列の表示',
-    difficulty: '初級',
-    content: 'JSX内で複数行のテキストを表示するために必要な方法はどれですか？',
-    sampleCode: `
-  function Message() {
-    return (
-      <p>
-        Line1<br/>
-        Line2
-      </p>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: '改行タグやCSSを使って複数行のテキストを表現します。',
-    options: [
-      { number: 1, text: '改行タグを使用する' },
-      { number: 2, text: 'テキストは1行で表示される' },
-      { number: 3, text: '配列で返す' },
-      { number: 4, text: 'Fragmentで囲む' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'シンプルなボタンコンポーネントの作成',
-    difficulty: '初級',
-    content: '関数コンポーネントとしてシンプルなボタンを作成する正しい方法はどれですか？',
-    sampleCode: `
-  function Button({ onClick, label }) {
-    return <button onClick={onClick}>{label}</button>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '関数コンポーネントはpropsを受け取り、JSXを返すシンプルな構造です。',
-    options: [
-      { number: 1, text: '関数コンポーネントとして定義する' },
-      { number: 2, text: 'クラスコンポーネントとして定義する' },
-      { number: 3, text: 'HTMLの<button>タグのみ使用する' },
-      { number: 4, text: 'divタグでラップする' }
-    ],
-    tags: ['React', 'コンポーネント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'defaultPropsの設定方法再確認',
-    difficulty: '初級',
-    content: 'Reactでコンポーネントのpropsにデフォルト値を設定する正しい方法はどれですか？',
-    sampleCode: `
-  function Greeting({ message }) {
-    return <p>{message}</p>;
-  }
-  Greeting.defaultProps = {
-    message: "Hello"
-  };
-    `,
-    answerCode: 1,
-    explanation: 'defaultPropsを利用して、propsのデフォルト値を設定できます。',
-    options: [
-      { number: 1, text: 'ComponentName.defaultProps = { ... }' },
-      { number: 2, text: 'ComponentName.props = { ... }' },
-      { number: 3, text: 'defaultProps = { ... }' },
-      { number: 4, text: 'props.default = { ... }' }
-    ],
-    tags: ['React', 'props', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSXでの属性名のキャメルケース',
-    difficulty: '初級',
-    content: 'JSXでHTMLの属性を指定する際、なぜキャメルケースを使用するのですか？',
-    sampleCode: `
-  <div tabIndex={0}></div>
-    `,
-    answerCode: 1,
-    explanation: 'JSXではJavaScriptのオブジェクトとして扱うため、キャメルケースで指定します。',
-    options: [
-      { number: 1, text: 'JavaScriptのオブジェクト記法に合わせるため' },
-      { number: 2, text: 'HTMLの仕様に合わせるため' },
-      { number: 3, text: 'ブラウザの制約のため' },
-      { number: 4, text: '特に理由はない' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'フラグメントの使用理由',
-    difficulty: '初級',
-    content: 'Reactで余分なDOMノードを追加せずに複数要素を返す方法はどれですか？',
-    sampleCode: `
-  function List() {
-    return (
-      ???
-      <li>Item1</li>
-      <li>Item2</li>
-      ???
-    );
-  }
-    `,
-    answerCode: 2,
-    explanation: 'React.Fragmentまたは短縮記法を使用して、不要なDOM要素を作成しないようにします。',
-    options: [
-      { number: 1, text: '<div>' },
-      { number: 2, text: 'Fragmentまたは<> </>' },
-      { number: 3, text: '<span>' },
-      { number: 4, text: '<section>' }
-    ],
-    tags: ['React', 'Fragment', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSX内での式の評価タイミング再確認',
-    difficulty: '初級',
-    content: 'JSX内で記述されたJavaScript式はいつ評価されますか？',
-    sampleCode: '',
-    answerCode: 2,
-    explanation: 'JSX内の式はレンダリング時に評価されます。',
-    options: [
-      { number: 1, text: 'ビルド時に評価される' },
-      { number: 2, text: 'レンダリング時に評価される' },
-      { number: 3, text: '初期化時に評価される' },
-      { number: 4, text: 'イベント発生時に評価される' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'シンプルなカウンターの作成再確認',
-    difficulty: '初級',
-    content: 'useStateを利用してシンプルなカウンターコンポーネントを実装する正しい方法はどれですか？',
-    sampleCode: `
-  function Counter() {
-    const [count, setCount] = useState(0);
-    return (
-      <div>
-        <p>{count}</p>
-        <button onClick={() => setCount(count + 1)}>Increment</button>
-      </div>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: 'useStateを使い、状態更新関数でカウンターの値を更新します。',
-    options: [
-      { number: 1, text: '正しい実装' },
-      { number: 2, text: 'stateを直接変更する' },
-      { number: 3, text: 'setStateを使用する' },
-      { number: 4, text: 'propsを更新する' }
-    ],
-    tags: ['React', 'useState', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSX内での関数呼び出し再確認',
-    difficulty: '初級',
-    content: 'JSX内で関数を呼び出す際、正しく評価される方法はどれですか？',
-    sampleCode: `
-  function getMessage() {
-    return "Hello, World!";
-  }
-  function App() {
-    return <div>{getMessage()}</div>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '関数呼び出しは波括弧内で実行し、返り値が表示されます。',
-    options: [
-      { number: 1, text: '{getMessage()}' },
-      { number: 2, text: 'getMessage()' },
-      { number: 3, text: '"getMessage()"' },
-      { number: 4, text: '{getMessage}' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'レンダリング再実行のタイミング再確認',
-    difficulty: '初級',
-    content: 'コンポーネントはいつ再レンダリングされるか、正しいものを選んでください。',
-    sampleCode: '',
-    answerCode: 3,
-    explanation: 'propsやstateの変更時にコンポーネントは再レンダリングされます。',
-    options: [
-      { number: 1, text: '常に1秒ごとに再レンダリングされる' },
-      { number: 2, text: '初回レンダリングのみ行われる' },
-      { number: 3, text: 'propsまたはstateが変更されたとき' },
-      { number: 4, text: 'ユーザーが操作したときのみ' }
-    ],
-    tags: ['React', 'レンダリング', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: '簡単なHello Worldコンポーネント',
-    difficulty: '初級',
-    content: 'Reactで"Hello, World!"を表示するシンプルなコンポーネントを作成する正しい方法はどれですか？',
-    sampleCode: `
-  function HelloWorld() {
-    return <h1>Hello, World!</h1>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '関数コンポーネントとしてシンプルにJSXを返す実装です。',
-    options: [
-      { number: 1, text: 'function HelloWorld() { return <h1>Hello, World!</h1>; }' },
-      { number: 2, text: 'class HelloWorld extends React.Component { render() { return <h1>Hello, World!</h1>; } }' },
-      { number: 3, text: 'const HelloWorld = <h1>Hello, World!</h1>;' },
-      { number: 4, text: 'function HelloWorld() { <h1>Hello, World!</h1>; }' }
-    ],
-    tags: ['React', 'Hello World', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'JSX内での式と文字列の結合再確認',
-    difficulty: '初級',
-    content: 'JSX内で文字列と変数を結合して表示する正しい方法はどれですか？',
-    sampleCode: `
-  function App() {
-    const name = "Charlie";
-    return <div>{"Welcome, " + name}</div>;
-  }
-    `,
-    answerCode: 1,
-    explanation: '文字列と変数は+演算子で結合します。',
-    options: [
-      { number: 1, text: '{"Welcome, " + name}' },
-      { number: 2, text: '{"Welcome, " + {name}}' },
-      { number: 3, text: '"Welcome, " + "name"' },
-      { number: 4, text: '{ "Welcome, " + name }' }
-    ],
-    tags: ['React', 'JSX', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'イベントハンドラの正しい設定',
-    difficulty: '初級',
-    content: 'JSXでボタンのクリックイベントを正しく設定する方法はどれですか？',
-    sampleCode: `
-  <button ???={handleClick}>Submit</button>
-    `,
-    answerCode: 2,
-    explanation: 'onClickイベントをcamelCaseで設定し、関数を渡します。',
-    options: [
-      { number: 1, text: 'onclick={handleClick}' },
-      { number: 2, text: 'onClick={handleClick}' },
-      { number: 3, text: 'click={handleClick}' },
-      { number: 4, text: 'onClick="handleClick()"' }
-    ],
-    tags: ['React', 'イベント', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'コンポーネントの初期状態設定',
-    difficulty: '初級',
-    content: 'useStateを使ってコンポーネントの初期状態を設定する方法はどれですか？',
-    sampleCode: `
-  const [text, setText] = useState("default");
-    `,
-    answerCode: 1,
-    explanation: 'useStateの引数に初期値を渡すことで状態を設定します。',
-    options: [
-      { number: 1, text: 'useState("default")' },
-      { number: 2, text: 'setText("default")' },
-      { number: 3, text: 'state = "default"' },
-      { number: 4, text: 'defaultState = "default"' }
-    ],
-    tags: ['React', 'useState', '初心者向け'],
-    collectionName: 'React 初級'
-  },
-  {
-    title: 'シンプルなフォームの作成',
-    difficulty: '初級',
-    content: 'Reactでシンプルなフォームを作成する際、正しい制御コンポーネントの実装はどれですか？',
-    sampleCode: `
-  function Form() {
-    const [value, setValue] = useState("");
-    return (
-      <form>
-        <input type="text" value={value} onChange={e => setValue(e.target.value)} />
-      </form>
-    );
-  }
-    `,
-    answerCode: 1,
-    explanation: '制御コンポーネントとして、stateで入力値を管理し、onChangeで更新します。',
-    options: [
-      { number: 1, text: '制御コンポーネントとして実装する' },
-      { number: 2, text: '非制御コンポーネントとして実装する' },
-      { number: 3, text: 'stateを使用しない' },
-      { number: 4, text: 'onSubmitのみで制御する' }
-    ],
-    tags: ['React', 'フォーム', '初心者向け'],
-    collectionName: 'React 初級'
-  }
-]
+    explanation:
+      "useEffectのクリーンアップ関数は、コンポーネントがアンマウントされる際に、不要になったタイマーやサブスクリプションなどのリソースを解放するために実行されます。",
+    options: [
+      { number: 1, text: "クリーンアップ関数は、コンポーネントがマウントされる前に初期化処理を行う" },
+      { number: 2, text: "クリーンアップ関数は、コンポーネントの再レンダリング時に毎回実行される" },
+      { number: 3, text: "クリーンアップ関数は、コンポーネントがアンマウントされる際にリソースの解放などの後始末を行う" },
+      { number: 4, text: "クリーンアップ関数は、useEffectの実行を停止するために使用される" },
+    ],
+    tags: ["React", "useEffect", "Hooks", "初心者向け"],
+    collectionName: "React 初級",
+  },
+];
+
 
 export default  problemsReactBeginner;
