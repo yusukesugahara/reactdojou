@@ -81,12 +81,12 @@ export default function DashboardPage() {
                             <div
                               className="bg-blue-500 h-2 rounded-full"
                               style={{
-                                width: `${(((collection.currentIndex ?? 1) - 1) / (collection.totalQuestions || 100)) * 100}%`
+                                width: `${(((collection.currentIndex ?? 1) - 1) / (collection.totalQuestions || 50)) * 100}%`
                               }}
                             />
                           </div>
                           <span className="ml-2 text-gray-500">
-                            {((collection.currentIndex ?? 1) - 1)}/{collection.totalQuestions || 100}問
+                            {((collection.currentIndex ?? 1) - 1)}/{collection.totalQuestions || 50}問
                           </span>
                         </div>
                       </div>

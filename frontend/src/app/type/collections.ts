@@ -1,3 +1,5 @@
+import { Question } from './questions';
+
 export interface Collection {
   id: string;
   name: string;
@@ -8,4 +10,5 @@ export interface Collection {
   totalQuestions?: number;
   completedQuestions?: number;
   questionCount?: number;
+  questions: Array<Question>;
 }
