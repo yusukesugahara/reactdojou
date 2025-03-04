@@ -8,7 +8,6 @@ async function safeFetch(url: string, options: RequestInit) {
     const response = await fetch(url, options);
     return { response, error: null };
   } catch (error) {
-    console.error(`フェッチエラー (${url}):`, error);
     return { 
       response: null, 
       error: error instanceof Error ? error : new Error('フェッチに失敗しました') 
@@ -59,40 +58,31 @@ export async function signup(_state: FormState, formData: FormData) : Promise<Fo
 
     // フェッチ自体が失敗した場合
     if (error) {
-      console.error('ネットワークエラー:', error);
       return {
         success: false,
         errors: {
-          general: ['ネットワークエラーが発生しました', error.message || 'サーバーに接続できません']
+          general: ['ネットワークエラーが発生しました']
         }
       };
     }
 
-    // レスポンスが失敗した場合
-    if (!response.ok) {
-      let errorData;
-      try {
-        errorData = await response.json();
-      } catch (e) {
-        console.error('JSONパース失敗:', e);
-        errorData = { message: `${response.status}: ${response.statusText}` };
-      }
-      
+   if (response.ok) {
+    return { success: true , errors: {} };
+    }else{
       return {
         errors: {
-          general: [errorData.message || 'サインアップに失敗しました'],
+          general: ['サインアップに失敗しました'],
         },
         success: false
-      };
+      }; 
     }
 
-    return { success: true , errors: {} }
   } catch (error: unknown) {
     console.error('予期せぬエラー:', error);
     return {
       success: false,
       errors: {
-        general: ['予期せぬエラーが発生しました', (error as Error).message || '不明なエラー']
+        general: ['予期せぬエラーが発生しました']
       }
     };
   }
@@ -116,7 +106,6 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
 
   try {
     const API_BASE_URL = getBackendUrl();
-    console.log('ログイン試行URL:', `${API_BASE_URL}/api/auth/login`);
     
     const { response, error } = await safeFetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
@@ -128,28 +117,19 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
     });
 
     if (error) {
-      console.error('ネットワークエラー:', error);
       return {
         success: false,
         errors: {
-          general: ['サーバーに接続できません', error.message]
+          general: ['サーバーに接続できませんでした']
         }
       };
     }
 
     if (!response.ok) {
-      let errorData;
-      try {
-        errorData = await response.json();
-      } catch (e) {
-        console.error('JSONパース失敗:', e);
-        errorData = { message: `${response.status}: ${response.statusText}` };
-      }
-      
       return {
         success: false,
         errors: {
-          general: [errorData.message || 'ログインに失敗しました']
+          general: ['ログインに失敗しました']
         }
       };
     }
@@ -196,12 +176,11 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
     });
 
     return { success: true, errors: {} };
-  } catch (error) {
-    console.error('予期せぬエラー:', error);
+  } catch {
     return {
       success: false,
       errors: {
-        general: ['予期せぬエラーが発生しました', (error as Error).message || '不明なエラー']
+        general: ['予期せぬエラーが発生しました']
       }
     };
   }
@@ -267,11 +246,10 @@ export async function resetPassword(_state: FormState, formData: FormData) {
     })
 
     if (!res.ok) {
-      const error = await res.json()
       return {
         success: false,
         errors: {
-          general: error.message || 'パスワードのリセットに失敗しました'
+          general: ['パスワードのリセットに失敗しました']
         }
       }
     }
