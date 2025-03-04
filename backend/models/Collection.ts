@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { Question } from './Question'; // Question 型をインポート（型として）
+import { Question } from '../type/question'; // デフォルトエクスポートとしてインポート
 
 interface Collection extends Document {
   name: string;
@@ -7,7 +7,7 @@ interface Collection extends Document {
   currentIndex: number;
   completed: boolean;
   timesCompleted: number;
-  questions: Array<Question>;
+  questions: Array<Question>; // ここで Question 型を使用
 }
 
 const collectionSchema = new Schema<Collection>({

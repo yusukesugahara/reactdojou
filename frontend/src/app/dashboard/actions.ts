@@ -1,6 +1,7 @@
 // app/serverActions.js
 "use server";
 
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 // 環境変数から正しいバックエンドURLを取得
@@ -11,6 +12,10 @@ export async function checkAuth() {
   try {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken');
+
+    if (!authToken) {
+      redirect('/login');
+    }
 
     const res = await fetch(`${API_BASE_URL}/api/auth/check`, {
       method: 'GET',
