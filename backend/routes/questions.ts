@@ -5,6 +5,7 @@ import Question from '../models/Question';
 import Collection from '../models/Collection';
 import Progress from '../models/Progress';
 import Result from '../models/Result';
+import { Question as QuestionType } from '../type/question';
 const router = express.Router();
 
 
@@ -49,7 +50,7 @@ router.get('/:collectionId', async (req: Request, res: Response): Promise<void> 
 
     if (!progress) {
       // 2) なければ新規作成 (問題をシャッフルして最初の問題を返す想定)
-      const questions = await Question.find({ collectionId }).select('_id');
+      const questions: QuestionType[] = await Question.find({ collectionId }).select('_id');
       if (questions.length === 0) {
         res.status(404).json({ message: '問題が存在しません' });
         return ;
@@ -57,7 +58,7 @@ router.get('/:collectionId', async (req: Request, res: Response): Promise<void> 
 
       // 必ず100問とする運用であれば判定は省略可。ここでは省いている。
       // ランダムシャッフル
-      const questionIds = questions.map(q => q._id.toString());
+      const questionIds = questions.map((q: QuestionType) => q._id.toString());
       questionIds.sort(() => Math.random() - 0.5);
 
       progress = await Progress.create({
