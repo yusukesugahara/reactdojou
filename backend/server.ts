@@ -51,5 +51,5 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-// Vercel用のエクスポート追加
-module.exports = app;
+// 重要: Vercelのサーバーレス環境用にアプリケーションをエクスポート
+export default app;
