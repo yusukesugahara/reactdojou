@@ -4,18 +4,6 @@ import { cookies } from 'next/headers'
 import { apiClient } from '@/app/lib/apiClient'
 import { getBackendUrl } from '@/app/utils/backendUrl'
 
-// 安全なフェッチ関数の実装
-async function safeFetch(url: string, options: RequestInit) {
-  try {
-    const response = await fetch(url, options);
-    return { response, error: null };
-  } catch (error) {
-    return { 
-      response: null, 
-      error: error instanceof Error ? error : new Error('フェッチに失敗しました') 
-    };
-  }
-}
 // ★ サインアップ
 export async function signup(formData: FormData): Promise<FormState> {
   const backendUrl = getBackendUrl();
@@ -37,13 +25,13 @@ export async function signup(formData: FormData): Promise<FormState> {
   const { name, email, password } = validatedFields.data;
 
   try {
-    const response = await apiClient.post(`${backendUrl}/api/auth/signup`, {
+    const res = await apiClient.post(`${backendUrl}/api/auth/signup`, {
       name,
       email,
       password,
     });
 
-    console.log(response);
+    console.log(res);
 
     return { success: true, errors: {} };
   } catch (error) {
@@ -75,48 +63,15 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
   const { email, password } = validatedFields.data;
 
   try {
-    const { response, error } = await safeFetch(`${backendUrl}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ email, password }),
+    const res = await apiClient.post(`${backendUrl}/api/auth/login`, {
+      email,
+      password,
     });
 
-    if (error) {
-      return {
-        success: false,
-        errors: {
-          general: ['サーバーに接続できませんでした']
-        }
-      };
-    }
-
-    if (!response.ok) {
-      return {
-        success: false,
-        errors: {
-          general: ['ログインに失敗しました']
-        }
-      };
-    }
-
-    let data;
-    try {
-      data = await response.json();
-    } catch (e) {
-      console.error('レスポンスJSONパース失敗:', e);
-      return {
-        success: false,
-        errors: {
-          general: ['サーバーからの応答形式が不正です']
-        }
-      };
-    }
+    console.log(res);
 
     // データの存在確認
-    if (!data.token || !data.userId) {
+    if (!res.token || !res.userId) {
       return {
         success: false,
         errors: {
@@ -127,7 +82,7 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
 
     // サーバーサイドでHTTPOnlyクッキーを設定
     const cookieStore = await cookies();
-    cookieStore.set('authToken', data.token, {
+    cookieStore.set('authToken', res.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -135,7 +90,7 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
       maxAge: 24 * 60 * 60
     });
 
-    cookieStore.set('userId', data.userId, {
+    cookieStore.set('userId', res.userId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -175,10 +130,9 @@ export async function requestPasswordReset(_state: FormState, formData: FormData
   const email = formData.get('email') as string
   const backendUrl = getBackendUrl();
   try {
-    const res = await fetch(`${backendUrl}/api/auth/request-reset`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
+
+    const res = await apiClient.post(`${backendUrl}/api/auth/request-reset`, {
+      email
     })
 
     if (!res.ok) {
@@ -207,10 +161,9 @@ export async function resetPassword(_state: FormState, formData: FormData) {
   const newPassword = formData.get('newPassword') as string
   const backendUrl = getBackendUrl();
   try {
-    const res = await fetch(`${backendUrl}/api/auth/reset-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, newPassword })
+    const res = await apiClient.post(`${backendUrl}/api/auth/reset-password`, {
+      token,
+      newPassword
     })
 
     if (!res.ok) {
