@@ -131,8 +131,7 @@ router.get('/:collectionId', async (req: Request, res: Response): Promise<void> 
       question: currentQuestion,
     });
     return ;
-  } catch (error) {
-    console.error('次の問題取得エラー:', error);
+  } catch {
     res.status(500).json({ message: '次の問題取得に失敗しました' });
   }
 });
@@ -160,8 +159,7 @@ router.post('/submit', async (req: Request, res: Response, next: NextFunction): 
       correctNumber: question.answerCode,
     });
 
-  } catch (error) {
-    console.error('正解判定エラー:', error);
+  } catch {
     res.status(500).json({ message: '正解判定に失敗しました' });
   }
 });
