@@ -1,95 +1,53 @@
 "use server"
 import { SignupFormSchema, LoginFormSchema, FormState } from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
-
-// 安全なフェッチ関数の実装
-async function safeFetch(url: string, options: RequestInit) {
-  try {
-    const response = await fetch(url, options);
-    return { response, error: null };
-  } catch (error) {
-    return { 
-      response: null, 
-      error: error instanceof Error ? error : new Error('フェッチに失敗しました') 
-    };
-  }
-}
-
-// クライアントサイドとサーバーサイドで異なる値を使用
-const getBackendUrl = () => {
-  // サーバーサイドレンダリング時はコンテナ名を使用
-  if (typeof window === 'undefined') {
-    return process.env.BACKEND_URL || 'http://backend:5000';
-  }
-  // ブラウザからのアクセス時はホスト名を使用
-  return process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-};
+import { apiClient } from '@/app/lib/apiClient'
+import { getBackendUrl } from '@/app/utils/backendUrl'
 
 // ★ サインアップ
-export async function signup(_state: FormState, formData: FormData) : Promise<FormState> {
+export async function signup(formData: FormData): Promise<FormState> {
+  const backendUrl = getBackendUrl();
+
+  // フォームデータを検証
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
-  })
+  });
 
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      success: false
-    }
+    };
   }
 
-  // データを取り出す
-  const { name, email, password } = validatedFields.data
+  const { name, email, password } = validatedFields.data;
 
   try {
-    const backendUrl = getBackendUrl();
-    
-    const { response, error } = await safeFetch(`${backendUrl}/api/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // ★ Cookie の送受信用
-      credentials: 'include',
-      body: JSON.stringify({ name, email, password }),
+    const res = await apiClient.post(`${backendUrl}/api/auth/signup`, {
+      name,
+      email,
+      password,
     });
 
-    // フェッチ自体が失敗した場合
-    if (error) {
-      return {
-        success: false,
-        errors: {
-          general: ['ネットワークエラーが発生しました']
-        }
-      };
-    }
+    console.log(res);
 
-   if (response.ok) {
-    return { success: true , errors: {} };
-    }else{
-      return {
-        errors: {
-          general: ['サインアップに失敗しました'],
-        },
-        success: false
-      }; 
-    }
-
-  } catch (error: unknown) {
-    console.error('予期せぬエラー:', error);
+    return { success: true, errors: {} };
+  } catch (error) {
+    console.error('サインアップエラー:', error);
     return {
       success: false,
       errors: {
-        general: ['予期せぬエラーが発生しました']
-      }
+        general: ['サインアップに失敗しました'],
+      },
     };
   }
 }
 
 // ★ ログイン
 export async function login(_state: FormState, formData: FormData): Promise<FormState> {
+  const backendUrl = getBackendUrl();
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -105,50 +63,15 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
   const { email, password } = validatedFields.data;
 
   try {
-    const API_BASE_URL = getBackendUrl();
-    
-    const { response, error } = await safeFetch(`${API_BASE_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ email, password }),
+    const res = await apiClient.post(`${backendUrl}/api/auth/login`, {
+      email,
+      password,
     });
 
-    if (error) {
-      return {
-        success: false,
-        errors: {
-          general: ['サーバーに接続できませんでした']
-        }
-      };
-    }
-
-    if (!response.ok) {
-      return {
-        success: false,
-        errors: {
-          general: ['ログインに失敗しました']
-        }
-      };
-    }
-
-    let data;
-    try {
-      data = await response.json();
-    } catch (e) {
-      console.error('レスポンスJSONパース失敗:', e);
-      return {
-        success: false,
-        errors: {
-          general: ['サーバーからの応答形式が不正です']
-        }
-      };
-    }
+    console.log(res);
 
     // データの存在確認
-    if (!data.token || !data.userId) {
+    if (!res.token || !res.userId) {
       return {
         success: false,
         errors: {
@@ -159,7 +82,7 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
 
     // サーバーサイドでHTTPOnlyクッキーを設定
     const cookieStore = await cookies();
-    cookieStore.set('authToken', data.token, {
+    cookieStore.set('authToken', res.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -167,7 +90,7 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
       maxAge: 24 * 60 * 60
     });
 
-    cookieStore.set('userId', data.userId, {
+    cookieStore.set('userId', res.userId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -205,12 +128,11 @@ export async function logout(): Promise<{ success: boolean }> {
 // パスワードリセットメールの送信
 export async function requestPasswordReset(_state: FormState, formData: FormData) {
   const email = formData.get('email') as string
-
+  const backendUrl = getBackendUrl();
   try {
-    const res = await fetch(`${getBackendUrl()}/api/auth/request-reset`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
+
+    const res = await apiClient.post(`${backendUrl}/api/auth/request-reset`, {
+      email
     })
 
     if (!res.ok) {
@@ -237,12 +159,11 @@ export async function requestPasswordReset(_state: FormState, formData: FormData
 export async function resetPassword(_state: FormState, formData: FormData) {
   const token = formData.get('token') as string
   const newPassword = formData.get('newPassword') as string
-
+  const backendUrl = getBackendUrl();
   try {
-    const res = await fetch(`${getBackendUrl()}/api/auth/reset-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, newPassword })
+    const res = await apiClient.post(`${backendUrl}/api/auth/reset-password`, {
+      token,
+      newPassword
     })
 
     if (!res.ok) {
