@@ -10,7 +10,7 @@ export async function verifyEmail(token: string) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token })
     })
-
+    
     if (!res.ok) {
       return { success: false }
     }

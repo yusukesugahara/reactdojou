@@ -154,7 +154,7 @@ router.post('/submit', async (req: Request, res: Response, next: NextFunction): 
     const result = new Result({ userId, questionId, isCorrect });
     await result.save();
 
-    res.json({
+    res.status(200).json({
       message: "回答が記録されました",
       isCorrect,
       correctNumber: question.answerCode,

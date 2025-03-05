@@ -21,12 +21,12 @@ export async function getQuestionServerAction(collectionId: string) {
     },
   });
 
-  if (!res.ok) {
-    console.error("問題取得エラー:", await res.text());
+  if (!res.success) {
+    console.error("問題取得エラー:", await res);
     throw new Error("問題取得エラー");
   }
 
-  return await res.json();
+  return await res;
 }
 
 
@@ -48,11 +48,11 @@ export async function getQuestionAnswerServerAction(collectionId: string, questi
     questionId,
     answer: selectedOption
   });
-
-  if (!res.ok) {
-    console.error("問題取得エラー:", await res.text());
+  console.log(res);
+  if (res.status === 500 || res.status === 404) {
+    console.error("問題取得エラー:");
     throw new Error("問題取得エラー");
   }
 
-  return await res.json();
+  return await res;
 }

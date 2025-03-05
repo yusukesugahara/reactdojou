@@ -23,5 +23,5 @@ export async function getLearningStats() {
     userId,
   });
 
-  return await res.json();
+  return await res;
 }
