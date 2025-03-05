@@ -43,7 +43,10 @@ app.use("/api/questions", questionRoutes);
 app.use("/api/collections", collectionRoutes);
 app.use("/api/results", resultsRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`サーバーがポート${PORT}で起動しました`);
-});
+// ローカル開発環境でのみサーバーを起動
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = 5000;
+  app.listen(PORT, () => {
+    console.log(`サーバーがポート${PORT}で起動しました`);
+  });
+}
