@@ -5,7 +5,7 @@ import { apiClient } from '@/app/lib/apiClient'
 import { getBackendUrl } from '@/app/utils/backendUrl'
 
 // ★ サインアップ
-export async function signup(formData: FormData): Promise<FormState> {
+export async function signup(_state: FormState, formData: FormData): Promise<FormState> {
   const backendUrl = getBackendUrl();
 
   // フォームデータを検証
@@ -62,51 +62,40 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
 
   const { email, password } = validatedFields.data;
 
-  try {
-    const res = await apiClient.post(`${backendUrl}/api/auth/login`, {
-      email,
-      password,
-    });
+  const res = await apiClient.post(`${backendUrl}/api/auth/login`, {
+    email,
+    password,
+  });
 
-    console.log(res);
-
-    // データの存在確認
-    if (!res.token || !res.userId) {
-      return {
-        success: false,
-        errors: {
-          general: ['認証情報が不完全です']
-        }
-      };
-    }
-
-    // サーバーサイドでHTTPOnlyクッキーを設定
-    const cookieStore = await cookies();
-    cookieStore.set('authToken', res.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 24 * 60 * 60
-    });
-
-    cookieStore.set('userId', res.userId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 24 * 60 * 60
-    });
-
-    return { success: true, errors: {} };
-  } catch {
+  // データの存在確認
+  if (!res.token || !res.userId) {
     return {
       success: false,
       errors: {
-        general: ['予期せぬエラーが発生しました']
+        general: ['認証情報が不完全です']
       }
     };
   }
+
+  // サーバーサイドでHTTPOnlyクッキーを設定
+  const cookieStore = await cookies();
+  cookieStore.set('authToken', res.token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 24 * 60 * 60
+  });
+
+  cookieStore.set('userId', res.userId, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 24 * 60 * 60
+  });
+
+  return { success: true, errors: {} };
 }
 
 // ログアウト処理を修正

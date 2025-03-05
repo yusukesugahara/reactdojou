@@ -23,8 +23,8 @@ async function connectDB() {
       useUnifiedTopology: true,
     });
     console.log('MongoDBに接続されました');
-  } catch (error) {
-    console.error('MongoDB接続エラー:', error);
+  } catch {
+    console.error('MongoDB接続エラー:');
     process.exit(1);
   }
 }
@@ -75,8 +75,8 @@ async function seedDatabase() {
 
     await Question.insertMany(questionsWithCollectionIds);
     console.log('問題を挿入しました');
-  } catch (error) {
-    console.error('データ挿入エラー:', error);
+  } catch {
+    console.error('データ挿入エラー:');
   } finally {
     mongoose.connection.close();
     console.log('MongoDB接続を終了しました');

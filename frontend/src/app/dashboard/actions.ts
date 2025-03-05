@@ -1,37 +1,35 @@
 // app/serverActions.js
 "use server";
-
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-
-// 環境変数から正しいバックエンドURLを取得
-const API_BASE_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+import { apiClient } from "@/app/lib/apiClient";
+import { getBackendUrl } from "@/app/utils/backendUrl";
 
 // 認証チェック用のアクション
 export async function checkAuth() {
   try {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken');
+    const userId = cookieStore.get('userId');
+    const backendUrl = getBackendUrl();
 
     if (!authToken) {
       redirect('/login');
     }
 
-    const res = await fetch(`${API_BASE_URL}/api/auth/check`, {
-      method: 'GET',
+    const res = await apiClient.get(`${backendUrl}/api/auth/check`, {
       headers: {
         "Content-Type": "application/json",
         "Cookie": `authToken=${authToken?.value || ''}`
       },
       cache: 'no-store'  // キャッシュを無効化
     });
-    
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || "認証エラーが発生しました");
+
+    if (res.user.id !== userId?.value) {
+      throw new Error(res.message || "認証エラーが発生しました");
     }
     
-    return await res.json();
+    return res;
   } catch (error) {
     console.error("認証チェックエラー:", error);
     throw error;
@@ -42,19 +40,19 @@ export async function checkAuth() {
 export async function getCollections() {
   const cookieStore = await cookies();
   const authToken = cookieStore.get('authToken');
+  const backendUrl = getBackendUrl();
 
-  const res = await fetch(`${API_BASE_URL}/api/collections`, {
-    method: 'GET',
+  const res = await apiClient.get(`${backendUrl}/api/collections`, {
     headers: {
       "Content-Type": "application/json",
       "Cookie": `authToken=${authToken?.value || ''}`
     },
     cache: 'no-store'
   });
-  
-  if (!res.ok) {
+
+  if (res.status === 500 || res.status === 401) {
     throw new Error("問題集の取得に失敗しました");
   }
   
-  return res.json();
+  return res;
 }

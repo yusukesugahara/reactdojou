@@ -1,14 +1,16 @@
 'use server'
 
+import { apiClient } from "@/app/lib/apiClient";
+import { getBackendUrl } from "@/app/utils/backendUrl";
+
 export async function verifyEmail(token: string) {
   try {
-    const API_BASE_URL = process.env.BACKEND_URL
-    const res = await fetch(`${API_BASE_URL}/api/auth/verify-email`, {
-      method: 'POST',
+    const backendUrl = getBackendUrl();
+    const res = await apiClient.post(`${backendUrl}/api/auth/verify-email`, {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token })
     })
-
+    
     if (!res.ok) {
       return { success: false }
     }

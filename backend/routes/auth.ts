@@ -175,7 +175,7 @@ router.get("/check", async (req: Request, res: Response, next: NextFunction): Pr
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
     res.json({ message: "ログイン中", user: decoded });
     return;
-  } catch (err) {
+  } catch {
     res.status(401).json({ message: "トークンが無効です" });
   }
 });
@@ -184,8 +184,7 @@ router.get("/check", async (req: Request, res: Response, next: NextFunction): Pr
 router.post('/verify-email', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     await authController.verifyEmail(req, res);
-  } catch (error) {
-    console.error("メール認証エラー:", error);
+  } catch {
     res.status(500).json({ message: "メール認証中にエラーが発生しました" });
   }
 });
@@ -193,8 +192,7 @@ router.post('/verify-email', async (req: Request, res: Response, next: NextFunct
 router.post('/resend-verification', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     await authController.resendVerification(req, res);
-  } catch (error) {
-    console.error("認証メール再送信エラー:", error);
+  } catch {
     res.status(500).json({ message: "認証メールの再送信中にエラーが発生しました" });
   }
 });
@@ -203,8 +201,7 @@ router.post('/resend-verification', async (req: Request, res: Response, next: Ne
 router.post('/request-reset', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     await authController.requestPasswordReset(req, res);
-  } catch (error) {
-    console.error("パスワードリセットメール送信エラー:", error);
+  } catch {
     res.status(500).json({ message: "パスワードリセットメールの送信中にエラーが発生しました" });
   }
 });
@@ -213,8 +210,7 @@ router.post('/request-reset', async (req: Request, res: Response, next: NextFunc
 router.post('/reset-password', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     await authController.resetPassword(req, res);
-  } catch (error) {
-    console.error("パスワードリセットエラー:", error);
+  } catch {
     res.status(500).json({ message: "パスワードのリセット中にエラーが発生しました" });
   }
 });

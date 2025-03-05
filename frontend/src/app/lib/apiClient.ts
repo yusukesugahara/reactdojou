@@ -2,15 +2,15 @@ export const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localho
 
 export const apiClient = {
   get: async (url: string, options: RequestInit = {}) => {
-    const response = await fetch(url, {
+    const res = await fetch(url, {
       ...options,
       method: 'GET',
     });
-    return handleResponse(response);
+    return handleResponse(res);
   },
 
   post: async (url: string, body: Record<string, unknown>, options: RequestInit = {}) => {
-    const response = await fetch(url, {
+    const res = await fetch(url, {
       ...options,
       method: 'POST',
       headers: {
@@ -19,16 +19,16 @@ export const apiClient = {
       },
       body: JSON.stringify(body),
     });
-    return handleResponse(response);
+    return handleResponse(res);
   },
 
   // 他のHTTPメソッドも必要に応じて追加
 };
 
-async function handleResponse(response: Response) {
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error || 'APIリクエストに失敗しました');
+async function handleResponse(res: Response) {
+  if (!res.ok) {
+    const error = await res.json();
+    return { success: false, error: error.message || 'APIリクエストに失敗しました' };
   }
-  return response.json();
-} 
+  return res.json();
+}

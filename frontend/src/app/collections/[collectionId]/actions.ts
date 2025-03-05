@@ -1,6 +1,8 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { apiClient } from "@/app/lib/apiClient";
+import { getBackendUrl } from "@/app/utils/backendUrl";
 
 /** Server Action */
 export async function getQuestionServerAction(collectionId: string) {
@@ -8,23 +10,23 @@ export async function getQuestionServerAction(collectionId: string) {
   // クライアントの Cookie からトークンを取得
   const cookieStore = await cookies();
   const authToken = cookieStore.get("authToken")?.value || "";
+  const backendUrl = getBackendUrl();
 
   // 外部の Express API にリクエスト
-  const backendUrl = process.env.BACKEND_URL;
-  const res = await fetch(`${backendUrl}/api/questions/${collectionId}`, {
-    method: "GET",
+
+  const res = await apiClient.get(`${backendUrl}/api/questions/${collectionId}`, {
     headers: {
       "Content-Type": "application/json",
-      Cookie: `authToken=${authToken}`, 
+      Cookie: `authToken=${authToken}`,
     },
   });
 
-  if (!res.ok) {
-    console.error("問題取得エラー:", await res.text());
+  if (!res.success) {
+    console.error("問題取得エラー:", await res);
     throw new Error("問題取得エラー");
   }
 
-  return await res.json();
+  return await res;
 }
 
 
@@ -36,24 +38,21 @@ export async function getQuestionAnswerServerAction(collectionId: string, questi
   const userId = cookieStore.get("userId")?.value || "";
 
   // 外部の Express API にリクエスト
-  const backendUrl = process.env.BACKEND_URL;
-  const res = await fetch(`${backendUrl}/api/questions/submit`, {
-    method: "POST",
+  const backendUrl = getBackendUrl();
+  const res = await apiClient.post(`${backendUrl}/api/questions/submit`, {
     headers: {
       "Content-Type": "application/json",
       Cookie: `authToken=${authToken}`, 
     },
-    body: JSON.stringify({
-      userId,
-      questionId,
-      answer: selectedOption
-     }),
+    userId,
+    questionId,
+    answer: selectedOption
   });
-
-  if (!res.ok) {
-    console.error("問題取得エラー:", await res.text());
+  console.log(res);
+  if (res.status === 500 || res.status === 404) {
+    console.error("問題取得エラー:");
     throw new Error("問題取得エラー");
   }
 
-  return await res.json();
+  return await res;
 }

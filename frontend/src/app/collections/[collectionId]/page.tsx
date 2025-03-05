@@ -57,7 +57,7 @@ export default function QuizPage({ params }: { params: Promise<{ collectionId: s
         setQuestions(data.questions);
       }
     } catch {
-      console.error("クイズの取得に失敗:");
+
       setError("クイズの取得に失敗しました");
     } finally {
       setLoading(false);

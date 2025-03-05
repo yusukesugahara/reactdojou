@@ -75,8 +75,7 @@ router.post("/", async (req: Request, res: Response): Promise<void> =>  {
     });
 
     res.json({ monthlyStats, totalStats });
-  } catch (error) {
-    console.error("成績集計エラー:", error);
+  } catch {
     res.status(500).json({ message: "成績集計に失敗しました" });
   }
 });

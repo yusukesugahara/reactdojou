@@ -1,6 +1,8 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { apiClient } from "@/app/lib/apiClient";
+import { getBackendUrl } from "@/app/utils/backendUrl";
 
 export async function getLearningStats() {
   // クライアントの Cookie からトークンを取得
@@ -12,19 +14,14 @@ export async function getLearningStats() {
     throw new Error("認証情報が見つかりません");
   }
 
-  const backendUrl = process.env.BACKEND_URL;
-  const res = await fetch(`${backendUrl}/api/results/`, {
-    method: "POST",
+  const backendUrl = getBackendUrl();
+  const res = await apiClient.post(`${backendUrl}/api/results/`, {
     headers: {
       "Content-Type": "application/json",
       Cookie: `authToken=${authToken}`,
     },
-    body: JSON.stringify({
-      userId,
-     }),
+    userId,
   });
 
-  console.log(res);
-
-  return await res.json();
+  return await res;
 }

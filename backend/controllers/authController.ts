@@ -25,7 +25,7 @@ export class AuthController {
       await user.save();
       
       res.json({ message: 'メール認証が完了しました' });
-    } catch (error) {
+    } catch {
       res.status(400).json({ message: '無効なトークンです' });
     }
   }
@@ -47,7 +47,7 @@ export class AuthController {
 
       await this.emailService.sendVerificationEmail(email, token);
       res.json({ message: '認証メールを再送信しました' });
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'メール送信に失敗しました' });
     }
   }
@@ -74,7 +74,7 @@ export class AuthController {
 
       await this.emailService.sendPasswordResetEmail(email, token);
       res.json({ message: 'パスワードリセットメールを送信しました' });
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'パスワードリセットメールの送信に失敗しました' });
     }
   }
@@ -101,7 +101,7 @@ export class AuthController {
       await user.save();
 
       res.json({ message: 'パスワードが正常にリセットされました' });
-    } catch (error) {
+    } catch {
       res.status(400).json({ message: '無効なトークンです' });
     }
   }
