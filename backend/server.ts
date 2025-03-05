@@ -50,3 +50,6 @@ if (process.env.NODE_ENV !== 'production') {
     console.log(`サーバーがポート${PORT}で起動しました`);
   });
 }
+
+// 重要: Vercelのサーバーレス環境用にアプリケーションをエクスポート
+export default app;
