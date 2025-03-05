@@ -18,10 +18,7 @@ const questions = [
 // MongoDB接続
 async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URI as string);
     console.log('MongoDBに接続されました');
   } catch {
     console.error('MongoDB接続エラー:');
