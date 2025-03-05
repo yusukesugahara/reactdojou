@@ -1,24 +1,22 @@
 // app/serverActions.js
 "use server";
-
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-
-// 環境変数から正しいバックエンドURLを取得
-const API_BASE_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+import { apiClient } from "@/app/lib/apiClient";
+import { getBackendUrl } from "@/app/utils/backendUrl";
 
 // 認証チェック用のアクション
 export async function checkAuth() {
   try {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken');
+    const backendUrl = getBackendUrl();
 
     if (!authToken) {
       redirect('/login');
     }
 
-    const res = await fetch(`${API_BASE_URL}/api/auth/check`, {
-      method: 'GET',
+    const res = await apiClient.get(`${backendUrl}/api/auth/check`, {
       headers: {
         "Content-Type": "application/json",
         "Cookie": `authToken=${authToken?.value || ''}`
@@ -42,9 +40,9 @@ export async function checkAuth() {
 export async function getCollections() {
   const cookieStore = await cookies();
   const authToken = cookieStore.get('authToken');
+  const backendUrl = getBackendUrl();
 
-  const res = await fetch(`${API_BASE_URL}/api/collections`, {
-    method: 'GET',
+  const res = await apiClient.get(`${backendUrl}/api/collections`, {
     headers: {
       "Content-Type": "application/json",
       "Cookie": `authToken=${authToken?.value || ''}`
