@@ -1,6 +1,8 @@
 "use server"
 import { SignupFormSchema, LoginFormSchema, FormState } from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
+import { apiClient } from '@/app/lib/apiClient'
+import { getBackendUrl } from '@/app/utils/backendUrl'
 
 // 安全なフェッチ関数の実装
 async function safeFetch(url: string, options: RequestInit) {
@@ -14,82 +16,50 @@ async function safeFetch(url: string, options: RequestInit) {
     };
   }
 }
-
-// クライアントサイドとサーバーサイドで異なる値を使用
-const getBackendUrl = () => {
-  // サーバーサイドレンダリング時はコンテナ名を使用
-  if (typeof window === 'undefined') {
-    return process.env.BACKEND_URL || 'http://backend:5000';
-  }
-  // ブラウザからのアクセス時はホスト名を使用
-  return process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-};
-
 // ★ サインアップ
-export async function signup(_state: FormState, formData: FormData) : Promise<FormState> {
+export async function signup(formData: FormData): Promise<FormState> {
+  const backendUrl = getBackendUrl();
+
+  // フォームデータを検証
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
-  })
+  });
 
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      success: false
-    }
+    };
   }
 
-  // データを取り出す
-  const { name, email, password } = validatedFields.data
+  const { name, email, password } = validatedFields.data;
 
   try {
-    const backendUrl = getBackendUrl();
-    
-    const { response, error } = await safeFetch(`${backendUrl}/api/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // ★ Cookie の送受信用
-      credentials: 'include',
-      body: JSON.stringify({ name, email, password }),
+    const response = await apiClient.post(`${backendUrl}/api/auth/signup`, {
+      name,
+      email,
+      password,
     });
 
-    // フェッチ自体が失敗した場合
-    if (error) {
-      return {
-        success: false,
-        errors: {
-          general: ['ネットワークエラーが発生しました']
-        }
-      };
-    }
+    console.log(response);
 
-   if (response.ok) {
-    return { success: true , errors: {} };
-    }else{
-      return {
-        errors: {
-          general: ['サインアップに失敗しました'],
-        },
-        success: false
-      }; 
-    }
-
-  } catch (error: unknown) {
-    console.error('予期せぬエラー:', error);
+    return { success: true, errors: {} };
+  } catch (error) {
+    console.error('サインアップエラー:', error);
     return {
       success: false,
       errors: {
-        general: ['予期せぬエラーが発生しました']
-      }
+        general: ['サインアップに失敗しました'],
+      },
     };
   }
 }
 
 // ★ ログイン
 export async function login(_state: FormState, formData: FormData): Promise<FormState> {
+  const backendUrl = getBackendUrl();
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -105,9 +75,7 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
   const { email, password } = validatedFields.data;
 
   try {
-    const API_BASE_URL = getBackendUrl();
-    
-    const { response, error } = await safeFetch(`${API_BASE_URL}/api/auth/login`, {
+    const { response, error } = await safeFetch(`${backendUrl}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -205,9 +173,9 @@ export async function logout(): Promise<{ success: boolean }> {
 // パスワードリセットメールの送信
 export async function requestPasswordReset(_state: FormState, formData: FormData) {
   const email = formData.get('email') as string
-
+  const backendUrl = getBackendUrl();
   try {
-    const res = await fetch(`${getBackendUrl()}/api/auth/request-reset`, {
+    const res = await fetch(`${backendUrl}/api/auth/request-reset`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
@@ -237,9 +205,9 @@ export async function requestPasswordReset(_state: FormState, formData: FormData
 export async function resetPassword(_state: FormState, formData: FormData) {
   const token = formData.get('token') as string
   const newPassword = formData.get('newPassword') as string
-
+  const backendUrl = getBackendUrl();
   try {
-    const res = await fetch(`${getBackendUrl()}/api/auth/reset-password`, {
+    const res = await fetch(`${backendUrl}/api/auth/reset-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, newPassword })
