@@ -29,3 +29,10 @@ export interface FormState {
   };
   success?: boolean;
 }
+
+export interface FromState {
+  success: boolean;
+  error?: {
+    message: string;
+  };
+}
