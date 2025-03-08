@@ -24,7 +24,7 @@ export default function AdminLogin() {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">管理者ログイン</h1>
         
-        {state.error && (
+        {state?.error?.message && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {state.error.message}
           </div>
