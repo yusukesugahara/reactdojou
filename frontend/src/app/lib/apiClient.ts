@@ -2,7 +2,7 @@ export const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localho
 
 export const apiClient = {
   get: async (url: string, options: RequestInit = {}) => {
-    const res = await fetch(url, {
+    const res = await fetch(backendUrl + url, {
       ...options,
       method: 'GET',
     });
@@ -10,7 +10,7 @@ export const apiClient = {
   },
 
   post: async (url: string, body: Record<string, unknown>, options: RequestInit = {}) => {
-    const res = await fetch(url, {
+    const res = await fetch(backendUrl + url, {
       ...options,
       method: 'POST',
       headers: {

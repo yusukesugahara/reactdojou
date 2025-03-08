@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers";
 import { apiClient } from "@/app/lib/apiClient";
-import { getBackendUrl } from "@/app/utils/backendUrl";
 
 /** Server Action */
 export async function getQuestionServerAction(collectionId: string) {
@@ -10,11 +9,10 @@ export async function getQuestionServerAction(collectionId: string) {
   // クライアントの Cookie からトークンを取得
   const cookieStore = await cookies();
   const authToken = cookieStore.get("authToken")?.value || "";
-  const backendUrl = getBackendUrl();
 
   // 外部の Express API にリクエスト
 
-  const res = await apiClient.get(`${backendUrl}/api/questions/${collectionId}`, {
+  const res = await apiClient.get(`/api/questions/${collectionId}`, {
     headers: {
       "Content-Type": "application/json",
       Cookie: `authToken=${authToken}`,

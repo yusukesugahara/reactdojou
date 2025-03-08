@@ -2,11 +2,9 @@
 import { SignupFormSchema, LoginFormSchema, FormState } from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
 import { apiClient } from '@/app/lib/apiClient'
-import { getBackendUrl } from '@/app/utils/backendUrl'
 
 // ★ サインアップ
 export async function signup(_state: FormState, formData: FormData): Promise<FormState> {
-  const backendUrl = getBackendUrl();
 
   // フォームデータを検証
   const validatedFields = SignupFormSchema.safeParse({
@@ -25,7 +23,7 @@ export async function signup(_state: FormState, formData: FormData): Promise<For
   const { name, email, password } = validatedFields.data;
 
   try {
-    const res = await apiClient.post(`${backendUrl}/api/auth/signup`, {
+    const res = await apiClient.post(`/api/auth/signup`, {
       name,
       email,
       password,
@@ -47,7 +45,6 @@ export async function signup(_state: FormState, formData: FormData): Promise<For
 
 // ★ ログイン
 export async function login(_state: FormState, formData: FormData): Promise<FormState> {
-  const backendUrl = getBackendUrl();
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -62,7 +59,7 @@ export async function login(_state: FormState, formData: FormData): Promise<Form
 
   const { email, password } = validatedFields.data;
 
-  const res = await apiClient.post(`${backendUrl}/api/auth/login`, {
+  const res = await apiClient.post(`/api/auth/login`, {
     email,
     password,
   });
@@ -117,10 +114,9 @@ export async function logout(): Promise<{ success: boolean }> {
 // パスワードリセットメールの送信
 export async function requestPasswordReset(_state: FormState, formData: FormData) {
   const email = formData.get('email') as string
-  const backendUrl = getBackendUrl();
   try {
 
-    const res = await apiClient.post(`${backendUrl}/api/auth/request-reset`, {
+    const res = await apiClient.post(`/api/auth/request-reset`, {
       email
     })
 
@@ -148,9 +144,8 @@ export async function requestPasswordReset(_state: FormState, formData: FormData
 export async function resetPassword(_state: FormState, formData: FormData) {
   const token = formData.get('token') as string
   const newPassword = formData.get('newPassword') as string
-  const backendUrl = getBackendUrl();
   try {
-    const res = await apiClient.post(`${backendUrl}/api/auth/reset-password`, {
+    const res = await apiClient.post(`/api/auth/reset-password`, {
       token,
       newPassword
     })
