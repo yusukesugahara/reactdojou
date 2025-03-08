@@ -21,6 +21,8 @@ tags:
     description: 進捗関連の操作
   - name: Result
     description: 結果関連の操作
+  - name: Auth
+    description: 認証関連の操作
 paths:
   /:
     get:
@@ -36,7 +38,7 @@ paths:
             application/json:
               schema:
                 type: object
-  /login:
+  /auth/login:
     post:
       tags:
         - Auth
@@ -85,7 +87,7 @@ paths:
                 properties:
                   message:
                     type: string  
-  /signup:
+  /auth/signup:
     post:
       tags:
         - Auth
@@ -148,6 +150,58 @@ paths:
                 properties:
                   message:
                     type: string
+  /api/auth/check:
+    get:
+      tags:
+        - Authentication
+      summary: 認証トークンの確認
+      description: ユーザーの認証トークンを確認します。
+      operationId: checkAuthToken
+      parameters:
+        - name: Cookie
+          in: header
+          required: true
+          description: 認証トークンを含むクッキー
+          schema:
+            type: string
+            example: authToken=your_auth_token
+      responses:
+        '200':
+          description: 認証成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: ユーザーID
+                      name:
+                        type: string
+                        description: ユーザー名
+        '401':
+          description: 認証失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "認証に失敗しました。"
+        '500':
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "サーバーエラーが発生しました。"
   /collections:
     get:
       tags:
@@ -190,22 +244,6 @@ paths:
           description: コレクションが見つかりません
         '500':
           description: サーバーエラー
-  /questions:
-    get:
-      tags:
-        - Question
-      summary: 質問のリストを取得
-      description: 登録されているすべての質問のリストを取得します。
-      operationId: getQuestions
-      responses:
-        '200':
-          description: 質問のリスト
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Question'
   /questions/{questionId}:
     get:
       tags:
