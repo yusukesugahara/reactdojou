@@ -3,7 +3,6 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { apiClient } from "@/app/lib/apiClient";
-import { getBackendUrl } from "@/app/utils/backendUrl";
 
 // 認証チェック用のアクション
 export async function checkAuth() {
@@ -11,13 +10,12 @@ export async function checkAuth() {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken');
     const userId = cookieStore.get('userId');
-    const backendUrl = getBackendUrl();
 
     if (!authToken) {
       redirect('/login');
     }
 
-    const res = await apiClient.get(`${backendUrl}/api/auth/check`, {
+    const res = await apiClient.get(`/api/auth/check`, {
       headers: {
         "Content-Type": "application/json",
         "Cookie": `authToken=${authToken?.value || ''}`
@@ -40,9 +38,8 @@ export async function checkAuth() {
 export async function getCollections() {
   const cookieStore = await cookies();
   const authToken = cookieStore.get('authToken');
-  const backendUrl = getBackendUrl();
 
-  const res = await apiClient.get(`${backendUrl}/api/collections`, {
+  const res = await apiClient.get(`/api/collections`, {
     headers: {
       "Content-Type": "application/json",
       "Cookie": `authToken=${authToken?.value || ''}`
