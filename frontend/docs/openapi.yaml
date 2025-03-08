@@ -22,23 +22,132 @@ tags:
   - name: Result
     description: 結果関連の操作
 paths:
-
-  /users:
+  /:
     get:
       tags:
-        - User
-      summary: ユーザーのリストを取得
-      description: 登録されているすべてのユーザーのリストを取得します。
-      operationId: getUsers
+        - Home
+      summary: ホーム画面
+      description: ホーム画面を表示します。
+      operationId: getHome
       responses:
         '200':
-          description: ユーザーのリスト
+          description: ホーム画面
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                type: object
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: ログイン
+      description: ログインします。
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: ログイン成功 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: トークン
+                  user:
+                    type: object
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: ログイン失敗
+        '404':
+          description: ユーザーが見つかりません
+        '500':
+          description: サーバーエラー
+        '400':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string  
+  /signup:
+    post:
+      tags:
+        - Auth
+      summary: 新規登録
+      description: 新規登録します。
+      operationId: signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: 新規登録成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: トークン
+                  user:
+                    type: object
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '409':
+          description: ユーザーが既に存在します
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   /collections:
     get:
       tags:
@@ -55,6 +164,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Collection'
+  /collections/{collectionId}:
+    get:
+      tags:
+        - Collection
+      summary: コレクションを取得
+      description: 指定されたコレクションの詳細を取得します。
+      operationId: getCollectionById
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+      responses:
+        '200':
+          description: コレクション
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Collection'
+        '404':
+          description: コレクションが見つかりません
+        '500':
+          description: サーバーエラー
   /questions:
     get:
       tags:
@@ -71,6 +206,78 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Question'
+  /questions/{questionId}:
+    get:
+      tags:
+        - Question
+      summary: 質問を取得
+      description: 指定された質問の詳細を取得します。
+      operationId: getQuestionById
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+      responses:
+        '200':
+          description: 質問
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Question'
+        '404':
+          description: 質問が見つかりません
+        '500':
+          description: サーバーエラー
+  /questions/{questionId}/submit:
+    post:
+      tags:
+        - Question
+      summary: 質問を提出
+      description: 指定された質問を提出します。
+      operationId: submitQuestion
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answer:
+                  type: string
+                  description: 回答
+                userId:
+                  type: string
+                  format: objectId
+                  description: ユーザーID
+                questionId:
+                  type: string
+                  format: objectId
+                  description: 質問ID
+      responses:
+        '200':
+          description: 質問を提出しました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: 質問が見つかりません
+        '500':
+          description: サーバーエラー
   /progress:
     get:
       tags:
@@ -103,6 +310,58 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Result'
+  /results/{resultId}:
+    get:
+      tags:
+        - Result
+      summary: 結果を取得
+      description: 指定された結果の詳細を取得します。
+      operationId: getResultById
+      parameters:
+        - name: resultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+      responses:
+        '200':
+          description: 結果
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Result'
+        '404':
+          description: 結果が見つかりません
+        '500':
+          description: サーバーエラー
+  /progress/{progressId}:
+    get:
+      tags:
+        - Progress
+      summary: 進捗を取得
+      description: 指定された進捗の詳細を取得します。
+      operationId: getProgressById
+      parameters:
+        - name: progressId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+      responses:
+        '200':
+          description: 進捗
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Progress'
+        '404':
+          description: 進捗が見つかりません
+        '500':
+          description: サーバーエラー
 components:
   schemas:
     User:
