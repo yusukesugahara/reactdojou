@@ -1,0 +1,312 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+  description: ユーザー管理APIのドキュメント
+  contact:
+    name: APIサポート
+    url: http://www.example.com/support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+tags:
+  - name: User
+    description: ユーザー関連の操作
+  - name: Collection
+    description: コレクション関連の操作
+  - name: Question
+    description: 質問関連の操作
+  - name: Progress
+    description: 進捗関連の操作
+  - name: Result
+    description: 結果関連の操作
+paths:
+
+  /users:
+    get:
+      tags:
+        - User
+      summary: ユーザーのリストを取得
+      description: 登録されているすべてのユーザーのリストを取得します。
+      operationId: getUsers
+      responses:
+        '200':
+          description: ユーザーのリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /collections:
+    get:
+      tags:
+        - Collection
+      summary: コレクションのリストを取得
+      description: 登録されているすべてのコレクションのリストを取得します。
+      operationId: getCollections
+      responses:
+        '200':
+          description: コレクションのリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Collection'
+  /questions:
+    get:
+      tags:
+        - Question
+      summary: 質問のリストを取得
+      description: 登録されているすべての質問のリストを取得します。
+      operationId: getQuestions
+      responses:
+        '200':
+          description: 質問のリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+  /progress:
+    get:
+      tags:
+        - Progress
+      summary: 進捗のリストを取得
+      description: 登録されているすべての進捗のリストを取得します。
+      operationId: getProgress
+      responses:
+        '200':
+          description: 進捗のリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Progress'
+  /results:
+    get:
+      tags:
+        - Result
+      summary: 結果のリストを取得
+      description: 登録されているすべての結果のリストを取得します。
+      operationId: getResults
+      responses:
+        '200':
+          description: 結果のリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Result'
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: ユーザーの一意識別子（MongoDB ID）
+        name:
+          type: string
+          description: ユーザー名
+        email:
+          type: string
+          format: email
+          description: ユーザーのメールアドレス（一意）
+        password:
+          type: string
+          format: password
+          description: ユーザーのパスワード（ハッシュ化されたもの）
+        createdAt:
+          type: string
+          format: date-time
+          description: アカウント作成日時
+        isEmailVerified:
+          type: boolean
+          default: false
+          description: メール確認済みかどうか
+        verificationToken:
+          type: string
+          nullable: true
+          description: メール確認用トークン
+        verificationTokenExpires:
+          type: string
+          format: date-time
+          nullable: true
+          description: メール確認用トークンの有効期限
+        resetPasswordToken:
+          type: string
+          nullable: true
+          description: パスワードリセット用トークン
+        resetPasswordExpires:
+          type: string
+          format: date-time
+          nullable: true
+          description: パスワードリセット用トークンの有効期限
+    Collection:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: コレクションの一意識別子（MongoDB ID）
+        name:
+          type: string
+          description: コレクション名
+        description:
+          type: string
+          description: コレクションの説明
+        currentIndex:
+          type: integer
+          default: 1
+          description: 現在のインデックス
+        completed:
+          type: boolean
+          default: false
+          description: コレクションが完了したかどうか
+        timesCompleted:
+          type: integer
+          default: 0
+          description: コレクションが完了した回数
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          description: 質問のリスト
+    Question:
+      type: object
+      required:
+        - title
+        - difficulty
+        - content
+        - answerCode
+        - explanation
+        - options
+        - collectionId
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: 質問の一意識別子（MongoDB ID）
+        title:
+          type: string
+          description: 質問のタイトル
+        difficulty:
+          type: string
+          description: 質問の難易度
+        content:
+          type: string
+          description: 質問の内容
+        sampleCode:
+          type: string
+          nullable: true
+          description: サンプルコード
+        answerCode:
+          type: integer
+          description: 正解のコード
+        explanation:
+          type: string
+          description: 質問の説明
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+          description: 選択肢のリスト
+        tags:
+          type: array
+          items:
+            type: string
+          description: 質問に関連するタグ
+        collectionId:
+          type: string
+          format: objectId
+          description: 関連するコレクションのID
+        createdAt:
+          type: string
+          format: date-time
+          description: 質問の作成日時
+    Progress:
+      type: object
+      required:
+        - userId
+        - collectionId
+        - questionOrder
+        - currentIndex
+        - completed
+        - completedQuestions
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: 進捗の一意識別子（MongoDB ID）
+        userId:
+          type: string
+          description: ユーザーID
+        collectionId:
+          type: string
+          description: 問題集ID
+        questionOrder:
+          type: array
+          items:
+            type: string
+          description: 問題ID配列(ランダム順)
+        currentIndex:
+          type: integer
+          description: 現在のインデックス
+        completed:
+          type: boolean
+          description: 進捗が完了したかどうか
+        completedQuestions:
+          type: integer
+          description: 完了した質問の数
+    Result:
+      type: object
+      required:
+        - userId
+        - questionId
+        - isCorrect
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: 結果の一意識別子（MongoDB ID）
+        userId:
+          type: string
+          format: objectId
+          description: ユーザーID
+        questionId:
+          type: string
+          format: objectId
+          description: 質問ID
+        isCorrect:
+          type: boolean
+          description: 回答が正解かどうか
+        createdAt:
+          type: string
+          format: date-time
+          description: 結果の作成日時
+    Option:
+      type: object
+      required:
+        - number
+        - text
+      properties:
+        number:
+          type: integer
+          description: 選択肢の番号
+        text:
+          type: string
+          description: 選択肢のテキスト
