@@ -14,8 +14,7 @@ export async function getLearningStats() {
     throw new Error("認証情報が見つかりません");
   }
 
-  const backendUrl = getBackendUrl();
-  const res = await apiClient.post(`${backendUrl}/api/results/`, {
+  const res = await apiClient.post(`/api/results/`, {
     headers: {
       "Content-Type": "application/json",
       Cookie: `authToken=${authToken}`,
