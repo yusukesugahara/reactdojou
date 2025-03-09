@@ -49,8 +49,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> =>  {
     );
 
     res.json(result);
-  } catch (error) {
-    console.error('問題集の取得エラー:', error);
+  } catch {
     res.status(500).json({ message: '問題集の取得に失敗しました' });
   }
 });
@@ -72,8 +71,7 @@ router.post('/:collectionId/questions/:questionId/submit', async (req: Request, 
       correct: isCorrect,
       correctAnswer: question.answerCode,
     });
-  } catch (error) {
-    console.error('回答送信エラー:', error);
+  } catch {
     res.status(500).json({ message: '回答の送信に失敗しました' });
   }
 });

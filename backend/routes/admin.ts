@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-
+import Collection from "../models/Collection";
 
 const router = express.Router();
 
@@ -23,6 +23,11 @@ router.get("/admin/auth/login", async (req: Request, res: Response, next: NextFu
   }
 });
 
+
+
+router.get("/admin/dashboard", async (req: Request, res: Response, next: NextFunction) => {
+  const collections = await Collection.find();
+  res.status(200).json(collections);
+});
+
 export default router;
-
-
