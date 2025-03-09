@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Collection } from '@/app/type/collections';
-import { getCollections } from '@/app/admin/dashboard/action';
+import { getCollections } from './action';
 
 export default function AdminDashboard() {
   const [collections, setCollections] = useState<Array<Collection>>([]);
@@ -34,6 +34,7 @@ export default function AdminDashboard() {
             <div className="flex-grow">
               <h4 className="text-xl font-bold text-white mb-2">{collection.name}</h4>
               <p className="text-gray-300 mb-4">{collection.description}</p>
+              
             </div>
           </div>
         ))}

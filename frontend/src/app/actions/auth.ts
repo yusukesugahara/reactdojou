@@ -1,10 +1,22 @@
 "use server"
-import { SignupFormSchema, LoginFormSchema, FormState } from '@/app/lib/definitions'
+import { SignupFormSchema, LoginFormSchema} from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
 import { apiClient } from '@/app/lib/apiClient'
 
+
+interface signupFormState {
+  success: boolean;
+  errors?: {
+    name?: string[];
+    email?: string[];
+    password?: string[];
+    general?: string[];
+  };
+}
+
+
 // ★ サインアップ
-export async function signup(_state: FormState, formData: FormData): Promise<FormState> {
+export async function signup(_state: signupFormState, formData: FormData): Promise<signupFormState> {
 
   // フォームデータを検証
   const validatedFields = SignupFormSchema.safeParse({
@@ -30,7 +42,7 @@ export async function signup(_state: FormState, formData: FormData): Promise<For
     });
 
 
-    if (!res.status === 201) {
+    if (res.status === 400) {
       return {
         success: false,
         errors: {
@@ -52,10 +64,19 @@ export async function signup(_state: FormState, formData: FormData): Promise<For
       },
     };
   }
+  return { success: true, errors: {} };
 }
 
+interface loginFormState {
+  success: boolean;
+  errors?: {
+    email?: string[];
+    password?: string[];
+    general?: string[];
+  };
+}
 // ★ ログイン
-export async function login(_state: FormState, formData: FormData): Promise<FormState> {
+export async function login(_state: loginFormState, formData: FormData): Promise<loginFormState> {
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -122,6 +143,12 @@ export async function logout(): Promise<{ success: boolean }> {
   }
 }
 
+interface FormState {
+  success: boolean;
+  error?: {
+    message: string;
+  };
+}
 // パスワードリセットメールの送信
 export async function requestPasswordReset(_state: FormState, formData: FormData) {
   const email = formData.get('email') as string
