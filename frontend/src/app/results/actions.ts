@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers";
 import { apiClient } from "@/app/lib/apiClient";
-import { getBackendUrl } from "@/app/utils/backendUrl";
 
 export async function getLearningStats() {
   // クライアントの Cookie からトークンを取得

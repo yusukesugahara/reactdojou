@@ -36,3 +36,10 @@ export interface FromState {
     message: string;
   };
 }
+
+export interface AdminFormState {
+  success: boolean;
+  error?: {
+    message: string;
+  };
+}

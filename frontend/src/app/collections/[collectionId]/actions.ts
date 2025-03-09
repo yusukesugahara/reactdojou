@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers";
 import { apiClient } from "@/app/lib/apiClient";
-import { getBackendUrl } from "@/app/utils/backendUrl";
 
 /** Server Action */
 export async function getQuestionServerAction(collectionId: string) {
