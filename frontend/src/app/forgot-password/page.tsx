@@ -18,7 +18,7 @@ export default function ForgotPasswordPage() {
 
     try {
       // _stateに適切な初期値を渡す
-      await requestPasswordReset({ success: false, errors: {} }, formData) // ここで2つの引数を渡す
+      await requestPasswordReset({ success: false, error: { message: '' } }, formData) // ここで2つの引数を渡す
       setStatus('success')
       setMessage('パスワードリセットメールを送信しました')
     } catch {
