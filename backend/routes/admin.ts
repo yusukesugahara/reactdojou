@@ -64,4 +64,14 @@
     }
   }); 
 
+  router.delete("/admin/collections/:collectionId", async (req: Request, res: Response, next: NextFunction) => {
+    const { collectionId } = req.params;
+    const collection = await Collection.findByIdAndDelete(collectionId);
+    if (!collection) {
+      res.status(404).json({ message: "コレクションが見つかりません" });
+      return;   
+    }
+    res.status(200).json({ message: "コレクションが削除されました" });
+  });
+
   export default router;

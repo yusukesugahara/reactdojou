@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useActionState, useEffect } from 'react';
-import { editCollection, getCollection } from '../action';
+import { editCollection, getCollection, deleteCollection } from '../action';
 import { useParams } from 'next/navigation';
+import router from 'next/router';
 
 export default function EditCollectionForm() {
   const params = useParams();
@@ -31,6 +32,17 @@ export default function EditCollectionForm() {
     },
   });
 
+  const handleDelete = async () => {
+    const res = await deleteCollection(collectionId);
+    if (res.success) {
+      router.push('/admin/collections');
+    }
+    if (res.errors) {
+      setErrors({
+        general: res.errors.general || [],
+      });
+    }
+  };
   useEffect(() => {
     const fetchCollection = async () => {
       const res = await getCollection(collectionId);
@@ -119,6 +131,13 @@ export default function EditCollectionForm() {
             className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {isPending ? '編集中...' : '編集'}
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            削除
           </button>
         </form>
       </div>

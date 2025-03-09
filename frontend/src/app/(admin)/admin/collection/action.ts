@@ -153,3 +153,18 @@ export async function editCollection(_state: CollectionFormState, formData: Form
     },
   };
 }
+
+export async function deleteCollection(collectionId: string): Promise<{ success: boolean, errors?: { general: string[] } }> {
+  try {
+    const res = await apiClient.delete(`/api/admin/collections/${collectionId}`);
+    if (res.status === 200) {
+      return { success: true };
+    }
+    if (res.status === 404) {
+      return { success: false, errors: { general: ['コレクションが見つかりません'] } };
+    }
+    return { success: false, errors: { general: ['コレクションの削除に失敗しました'] } };
+  } catch {
+    return { success: false, errors: { general: ['コレクションの削除に失敗しました'] } };
+  }
+}
