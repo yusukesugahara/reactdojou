@@ -400,6 +400,31 @@ paths:
           description: 進捗が見つかりません
         '500':
           description: サーバーエラー
+  /admin/auth/login:
+    post:
+      tags:
+        - Admin
+      summary: ログイン
+      description: ログインします。
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: ログイン成功
+        '400':
+          description: ログイン失敗
 components:
   schemas:
     User:

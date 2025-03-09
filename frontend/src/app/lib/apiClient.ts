@@ -22,7 +22,26 @@ export const apiClient = {
     return handleResponse(res);
   },
 
-  // 他のHTTPメソッドも必要に応じて追加
+  put: async (url: string, body: Record<string, unknown>, options: RequestInit = {}) => {
+    const res = await fetch(backendUrl + url, {
+      ...options,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      body: JSON.stringify(body),
+    });
+    return handleResponse(res);
+  },
+
+  delete: async (url: string, options: RequestInit = {}) => {
+    const res = await fetch(backendUrl + url, {
+      ...options,
+      method: 'DELETE',
+    });
+    return handleResponse(res);
+  },
 };
 
 async function handleResponse(res: Response) {
