@@ -30,4 +30,10 @@ router.get("/admin/dashboard", async (req: Request, res: Response, next: NextFun
   res.status(200).json(collections);
 });
 
+router.post("/admin/collections", async (req: Request, res: Response, next: NextFunction) => {
+  const { name, description } = req.body;
+  const collection = new Collection({ name, description });
+  await collection.save();
+  res.status(200).json(collection);
+});
 export default router;
