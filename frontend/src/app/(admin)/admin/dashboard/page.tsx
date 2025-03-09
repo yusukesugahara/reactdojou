@@ -34,7 +34,7 @@ export default function AdminDashboard() {
             <div className="flex-grow">
               <h4 className="text-xl font-bold text-white mb-2">{collection.name}</h4>
               <p className="text-gray-300 mb-4">{collection.description}</p>
-              
+              <a href={`/admin/problems/${collection.id}`} className="text-blue-500 hover:text-blue-700">問題を作成</a>
             </div>
           </div>
         ))}
