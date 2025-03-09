@@ -167,4 +167,7 @@ export async function deleteCollection(collectionId: string): Promise<{ success:
   } catch {
     return { success: false, errors: { general: ['コレクションの削除に失敗しました'] } };
   }
+
+  // デフォルトの戻り値を追加
+  return { success: false, errors: { general: ['予期しないエラーが発生しました'] } };
 }
