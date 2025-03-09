@@ -1,6 +1,6 @@
   import express, { Request, Response, NextFunction } from "express";
   import Collection from "../models/Collection";
-
+  import jwt from "jsonwebtoken";
   const router = express.Router();
 
   router.get("/admin/auth/login", async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +19,8 @@
     }
 
     if (email === admin_user_email && password === admin_user_password) {
-      res.status(200).json({ message: "ログイン成功" });
+      const token = jwt.sign({ email: admin_user_email }, process.env.JWT_SECRET || 'secret', { expiresIn: '1d' });
+      res.status(200).json({ message: "ログイン成功", token });
     }
   });
 
