@@ -29,9 +29,20 @@ export async function signup(_state: FormState, formData: FormData): Promise<For
       password,
     });
 
-    console.log(res);
 
-    return { success: true, errors: {} };
+    if (!res.status === 201) {
+      return {
+        success: false,
+        errors: {
+          general: ['サインアップに失敗しました']
+        }
+      }
+    }
+
+    if (res.status === 200) {
+      return { success: true, errors: {} };
+    }
+    
   } catch (error) {
     console.error('サインアップエラー:', error);
     return {

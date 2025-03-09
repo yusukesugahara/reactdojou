@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth";
 import questionRoutes from "./routes/questions";
 import collectionRoutes from "./routes/collections";
 import resultsRoutes from "./routes/results";
+import adminRoutes from "./routes/admin";
 
 dotenv.config();
 
@@ -42,6 +43,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/collections", collectionRoutes);
 app.use("/api/results", resultsRoutes);
+app.use("/api/admin", adminRoutes);
+
 
 // ローカル開発環境でのみサーバーを起動
 if (process.env.NODE_ENV !== 'production') {

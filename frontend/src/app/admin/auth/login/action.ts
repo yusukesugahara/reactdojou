@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { apiClient } from "@/app/lib/apiClient";
 import { FromState } from '@/app/lib/definitions';
+import { cookies } from 'next/headers';
 
 const adminLoginSchema = z.object({
   email: z.string().email(),
@@ -42,5 +43,18 @@ export async function adminLogin(_prevState: FromState, formData: FormData): Pro
     password: validatedPassword,
   });
 
-  return response.data; 
+  if (response.status === 200) {
+    const cookieStore = await cookies();
+    cookieStore.set('admin_token', response.data.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 30, // 30日
+      path: '/',
+    });
+  }
+
+  return {
+    success: true,
+    error: undefined,
+  }; 
 }
