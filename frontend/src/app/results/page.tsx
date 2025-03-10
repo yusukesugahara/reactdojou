@@ -76,7 +76,7 @@ export default function ResultsPage() {
     );
   }
 
-  const { monthlyStats, totalStats } = statsData;
+  const { monthlyStats = {}, totalStats = { correct: 0, total: 0, collections: {} } } = statsData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
