@@ -2,7 +2,7 @@
 import { SignupFormSchema, LoginFormSchema} from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
 import { apiClient } from '@/app/lib/apiClient'
-
+import { redirect } from 'next/navigation'
 
 interface signupFormState {
   success: boolean;
@@ -90,13 +90,12 @@ export async function login(_state: loginFormState, formData: FormData): Promise
   }
 
   const { email, password } = validatedFields.data;
-
-  const res = await apiClient.post(`/api/auth/login`, {
-    email,
-    password,
-  });
-
-  // データの存在確認
+  try {
+    const res = await apiClient.post(`/api/auth/login`, {
+      email,
+      password,
+    });
+      // データの存在確認
   if (!res.token || !res.userId) {
     return {
       success: false,
@@ -124,7 +123,18 @@ export async function login(_state: loginFormState, formData: FormData): Promise
     maxAge: 24 * 60 * 60
   });
 
-  return { success: true, errors: {} };
+  redirect('/dashboard');
+  } catch (error) {
+    console.error('ログインエラー:', error);
+    return {
+      success: false,
+      errors: {
+        general: ['ログインに失敗しました']
+      },
+    };
+  }
+
+
 }
 
 // ログアウト処理を修正

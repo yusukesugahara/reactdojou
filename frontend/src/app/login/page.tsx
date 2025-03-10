@@ -1,8 +1,7 @@
 "use client";
 
 import { login } from "@/app/actions/auth"
-import { useEffect, useActionState } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState } from "react";
 import { ErrorResponse } from "@/app/type/errorResponse"; 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -13,14 +12,6 @@ export default function LoginPage() {
     success: false,
     errors: {} as ErrorResponse
   });
-
-  const router = useRouter();
-  
-  useEffect(() => {
-    if (state.success) {
-      router.push("/dashboard");
-    }
-  }, [state.success, router]);
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-12 px-4 sm:px-6 lg:px-8">
