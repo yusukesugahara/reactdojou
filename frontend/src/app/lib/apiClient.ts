@@ -1,4 +1,4 @@
-export const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+export const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 
 export const apiClient = {
   get: async (url: string, options: RequestInit = {}) => {

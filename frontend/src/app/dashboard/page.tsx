@@ -9,35 +9,10 @@ import Header from "@/app/components/Header";
 import { motion } from "framer-motion";
 import { FaBook, FaArrowRight, FaCheckCircle, FaSpinner, FaExclamationTriangle } from "react-icons/fa";
 
-export async function getServerSideProps() {
-  try {
-    await checkAuth();
-    const data = await getCollections();
-    return {
-      props: {
-        initialCollections: data,
-        initialError: null,
-      },
-    };
-  } catch (error) {
-    console.error("エラー:", error);
-    return {
-      props: {
-        initialCollections: [],
-        initialError: error instanceof Error ? error.message : "認証エラーが発生しました",
-      },
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-}
-
-export default function DashboardPage({ initialCollections, initialError }: { initialCollections: Collection[], initialError: string | null }) {
-  const [collections, setCollections] = useState<Array<Collection>>(initialCollections);
-  const [error, setError] = useState<string | null>(initialError);
-  const [loading, setLoading] = useState(false);
+export default function DashboardPage() {
+  const [collections, setCollections] = useState<Array<Collection>>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {

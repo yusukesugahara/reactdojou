@@ -90,7 +90,7 @@ export async function login(_state: loginFormState, formData: FormData): Promise
   }
 
   const { email, password } = validatedFields.data;
-  try {
+
     const res = await apiClient.post(`/api/auth/login`, {
       email,
       password,
@@ -124,17 +124,6 @@ export async function login(_state: loginFormState, formData: FormData): Promise
   });
 
   redirect('/dashboard');
-  } catch (error) {
-    console.error('ログインエラー:', error);
-    return {
-      success: false,
-      errors: {
-        general: ['ログインに失敗しました']
-      },
-    };
-  }
-
-
 }
 
 // ログアウト処理を修正
